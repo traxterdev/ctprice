@@ -11,68 +11,114 @@
  * IMPORTANTE: nenhum destes dados deve ser digitado manualmente em nenhuma página ou include —
  * sempre ler a partir deste arquivo. Ver docs/architecture-proposal.md (seções 3 e 13).
  *
- * Nesta etapa (scaffold estrutural) os valores NÃO foram preenchidos, para não inventar dados.
- * A auditoria (docs/reference/site-inventory.md, seção 4) encontrou divergências reais entre
- * páginas do site atual para telefone/WhatsApp — cada campo abaixo está marcado com TODO
- * explicando o que falta confirmar antes de preencher.
+ * Consolidação de dados (2026-08-17): valores confirmados por inspeção direta do site atual
+ * (Chrome DevTools MCP) em todas as 10 páginas institucionais e nos 3 posts de blog foram
+ * preenchidos abaixo. Campos com divergência real entre páginas permanecem `null`/TODO — ver
+ * o levantamento completo em docs/reference/global-data-conflicts.md antes de decidir um valor.
  */
 
 return [
 
-    'razao_social' => null, // TODO: confirmar grafia oficial (site atual usa "CT Price Organização Contábil")
+    // Confirmado sem divergência: idêntico no <title>/copyright de todas as páginas verificadas
+    // e corroborado pela ficha do Google Maps (ver docs/reference/global-data-conflicts.md, seção 3).
+    'razao_social' => 'CT Price Organização Contábil',
 
     'whatsapp_principal' => null,
-    // TODO: DIVERGÊNCIA ENCONTRADA NA AUDITORIA — a Home usa (67) 99261-6117, enquanto todas as
-    // demais páginas internas verificadas (Sobre Nós, Clientes, Parcerias, Fale Conosco, Área
-    // Restrita) usam (67) 99232-4097. Confirmar número canônico com o cliente antes de preencher.
+    // TODO: DIVERGÊNCIA CONFIRMADA — 3 números diferentes encontrados no site atual, variando por
+    // página e por posição (topbar vs. botão flutuante). Levantamento completo em
+    // docs/reference/global-data-conflicts.md, seção 1. Não escolher um valor sem decisão do cliente.
     // Ver docs/architecture-proposal.md, seção 14.1, item 1.
 
-    'telefone_fixo' => null,
-    // TODO: (67) 3313-7300 aparece no site atual — confirmar se é o número oficial antes de preencher.
+    // Confirmado sem divergência: idêntico no topbar de todas as 10 páginas institucionais e dos
+    // 3 posts de blog verificados.
+    'telefone_fixo' => '(67) 3313-7300',
 
     'endereco' => [
-        'logradouro' => null,        // TODO: confirmar formatação oficial completa
-        'bairro' => null,            // TODO
-        'cep' => null,               // TODO
-        'cidade' => null,            // TODO
-        'uf' => null,                // TODO
-        'google_maps_url' => null,       // TODO: link curto (goo.gl/maps/...)
-        'google_maps_embed_url' => null, // TODO: URL de embed do iframe
+        // Confirmado sem divergência (logradouro/cidade/uf idênticos em todas as páginas e no
+        // link do Google Maps).
+        'logradouro' => 'R. José Antônio, 2.777',
+        'cidade' => 'Campo Grande',
+        'uf' => 'MS',
+
+        'bairro' => null,
+        // TODO: DIVERGÊNCIA CONFIRMADA — texto do site diz "Monte Castelo"; a URL do mapa
+        // incorporado no footer usa "Vila Rosa Pires". Ver global-data-conflicts.md, seção 3.
+
+        'cep' => null,
+        // TODO: DIVERGÊNCIA CONFIRMADA — texto do site diz "79.010-190"; a URL do mapa
+        // incorporado no footer usa "79002-400". Ver global-data-conflicts.md, seção 3.
+
+        // Confirmado funcional (link aberto e verificado — resolve para a ficha do Google Maps
+        // "CT Price Organização Contábil").
+        'google_maps_url' => 'https://goo.gl/maps/eYes1Vqbyzw6hBYy8',
+
+        // Registrado como está usado no site atual (dado funcional). O texto humano do endereço
+        // embutido nesta URL diverge do texto exibido no topbar/footer — ver TODOs de bairro/cep acima.
+        'google_maps_embed_url' => 'https://maps.google.com/maps?q=R.%20Jos%C3%A9%20Ant%C3%B4nio%2C%202777%20-%20Vila%20Rosa%20Pires%2C%20Campo%20Grande%20-%20MS%2C%2079002-400&t=m&z=15&output=embed&iwloc=near',
     ],
 
+    // Confirmado sem divergência: idêntico no topbar/footer de todas as páginas verificadas.
     'emails' => [
-        'contato' => null,         // TODO
-        'protecao_dados' => null,  // TODO
+        'contato' => 'contato@ctpricems.com.br',
+        'protecao_dados' => 'protecaodedados@ctpricems.com.br',
     ],
 
+    // Confirmado sem divergência: idêntico no footer de todas as páginas verificadas.
     'responsavel_tecnico' => [
-        'nome' => null,     // TODO
-        'registro' => null, // TODO (ex.: CRC)
+        'nome' => 'Marcelo Barbosa da Silva',
+        'registro' => 'CRC MS 7986-O',
     ],
 
+    // Confirmado sem divergência: cada contato aparece uma única vez, só na página Fale Conosco
+    // (diretório por departamento). Números em formato de telefone; usar com o prefixo 55 + DDD
+    // ao montar o link de WhatsApp, como já é feito no site atual.
     'departamentos' => [
-        // TODO: no site atual, a página "Fale Conosco" lista contatos próprios por departamento
-        // (Comercial, Pessoal, Fiscal, Contábil, Central/Empresarial), cada um com telefone/WhatsApp
-        // distinto. Confirmar todos os números antes de preencher esta lista.
+        'comercial' => [
+            'label' => 'Comercial',
+            'telefone' => '(67) 99232-4097',
+        ],
+        'pessoal' => [
+            'label' => 'Pessoal',
+            'telefone' => '(67) 3313-7301',
+        ],
+        'fiscal' => [
+            'label' => 'Fiscal',
+            'telefone' => '(67) 3313-7302',
+        ],
+        'contabil' => [
+            'label' => 'Contábil',
+            'telefone' => '(67) 3313-7304',
+        ],
+        'central_empresarial' => [
+            'label' => 'Central/Empresarial',
+            'telefone' => '(67) 3313-7300',
+        ],
     ],
 
-    'redes_sociais' => [
-        // TODO: nenhuma rede social foi identificada nas auditorias realizadas até o momento.
-        // Confirmar com o cliente se existem perfis oficiais a incluir.
-    ],
+    // Investigado nesta revisão: nenhuma rede social oficial da CT Price foi encontrada em
+    // nenhuma página do site atual. Os únicos links de redes sociais existentes no site (na
+    // página Depoimentos) pertencem a clientes individuais citados nos depoimentos, não à CT
+    // Price — não devem ser confundidos com este campo. Ver global-data-conflicts.md, seção 4.
+    'redes_sociais' => [],
 
     'sistemas_externos' => [
-        'recrutamento' => null,
-        // TODO: https://recrutamento.ctprice.com.br/vagas no site atual — confirmar se é mantido.
+        // Confirmado funcional (aberto nesta revisão — carrega normalmente, título
+        // "CT Price - Gestão de Currículos").
+        'recrutamento' => 'https://recrutamento.ctprice.com.br/vagas',
 
         'area_restrita_clientes' => null,
-        // TODO: destino atual (ctprice.com.br/documentos) está QUEBRADO (404) — aguardando URL correta.
+        // TODO: destino atual (ctprice.com.br/documentos) confirmado QUEBRADO (404 puro de
+        // servidor) nesta revisão — não registrado como válido. Aguardando URL correta.
 
         'area_restrita_colaboradores' => null,
-        // TODO: destino atual (ctprice.com.br/sh-admin) está QUEBRADO/EXPOSTO — aguardando URL correta.
+        // TODO: destino atual (ctprice.com.br/sh-admin) confirmado QUEBRADO/EXPOSTO (listagem
+        // crua de diretório, sem aplicação funcional) nesta revisão — não registrado como válido.
+        // Aguardando URL correta.
 
         'agencia_desenvolvimento' => null,
-        // TODO: agencialester.com.br no site atual (crédito de rodapé) — confirmar se mantém.
+        // TODO: agencialester.com.br — tentativa de acesso resultou em timeout de navegação
+        // nesta revisão (mesmo resultado da auditoria anterior); não confirmado como destino
+        // válido, portanto não registrado.
     ],
 
     // Ano de copyright: calculado dinamicamente para não "envelhecer" como o site atual (que
