@@ -1,0 +1,13 @@
+/**
+ * assets/css/responsive.css
+ *
+ * Responsabilidade: ajustes responsivos gerais que não pertencem a um único componente.
+ *
+ * Breakpoints reais confirmados no site original (a preservar, não unificar — ver
+ * docs/architecture-proposal.md, seção 2, categoria B): max-width:1024px (menu) e
+ * max-width:767px (grids de conteúdo, container boxed).
+ *
+ * Referência de medição: docs/reference/home-tablet-audit.md e docs/reference/home-mobile-audit.md.
+ *
+ * Nenhuma regra implementada ainda nesta etapa.
+ */

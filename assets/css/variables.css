@@ -1,0 +1,12 @@
+/**
+ * assets/css/variables.css
+ *
+ * Responsabilidade: tokens de design como custom properties em :root — cores, famílias e
+ * tamanhos de tipografia, espaçamentos, border-radius, sombras, durações de transição e
+ * breakpoints.
+ *
+ * Valores devem vir de docs/reference/home-desktop-audit.md (seções 6, 7 e 9) — medidos,
+ * nunca estimados.
+ *
+ * Nenhum valor foi implementado ainda nesta etapa.
+ */

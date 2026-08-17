@@ -1,0 +1,12 @@
+/**
+ * assets/css/header.css
+ *
+ * Responsabilidade: estilos da topbar + header + menu (logo, navegação, botão "Área
+ * Restrita"), incluindo o breakpoint de max-width:1024px em que o menu horizontal vira
+ * hambúrguer.
+ *
+ * Referência de medição: docs/reference/home-desktop-audit.md (seção 2) e
+ * docs/reference/home-tablet-audit.md (confirmação exata do breakpoint do menu).
+ *
+ * Nenhuma regra implementada ainda nesta etapa.
+ */
