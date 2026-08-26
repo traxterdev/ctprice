@@ -1,0 +1,122 @@
+/**
+ * assets/css/flat-icon-box-section.css
+ *
+ * Bloco "heading + grid de icon-boxes planos" (components/flat-icon-box-section.php) — terceiro
+ * padrão de icon-box do site (ver comentário no componente).
+ *
+ * Fonte de medição: reinspeção direta via Chrome DevTools MCP em 1440x900/900x1200/390x844.
+ *
+ * Container: 1140px (mesmo valor próprio já usado em image-text-section.css — não o token
+ * global de 1200px). Grid de 3 colunas fluidas (`1fr 1fr 1fr`, não colunas fixas de 360px —
+ * confirmado que a largura de cada coluna acompanha o container em 900px), gap 20px.
+ *
+ * Breakpoint: `max-width:767px`, confirmado independentemente para este componente (testado
+ * 767/768) — colapsa direto para 1 coluna, sem estágio intermediário de 2 colunas.
+ *
+ * Sem animação de entrada por scroll (confirmado: nenhum widget desta seção tem
+ * `data-settings`/classe `elementor-invisible` no original) — por isso não usa
+ * assets/js/scroll-reveal.js. O único efeito existente é um "pop" de hover no ícone
+ * (`scale(1.2)` a meio da transição, 0.3s), reproduzido aqui em CSS puro.
+ */
+
+.flat-icon-box-section {
+    margin: 50px 0;
+    padding: 0 10px;
+}
+
+.flat-icon-box-section__inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 10px 0;
+}
+
+.flat-icon-box-section__heading {
+    /* margin-top negativo confirmado por medição direta no original (o widget de heading do
+       Elementor aplica -15px por padrão) — sem isso, o heading fica 15px mais baixo do que o
+       medido. */
+    margin: -15px 0 0;
+    font-family: var(--font-secondary);
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 32px;
+    color: var(--color-brand-green);
+    text-align: center;
+}
+
+.flat-icon-box-section__grid {
+    /*
+     * margin-top: no original, o heading e o grid são dois itens de um flex column com
+     * gap:20px, e o grid TEM AINDA a sua própria margin-top:25px (widget do Elementor) — os
+     * dois se somam (25+20=45). Aqui não há flex/gap entre heading e grid (fluxo de bloco
+     * simples), então os 45px são aplicados de uma vez só no margin-top do grid, reproduzindo
+     * a mesma posição final medida (sem inventar um valor "artificial" — é a soma de dois
+     * espaçamentos reais do original).
+     */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 45px 0 5px;
+    padding: 10px;
+}
+
+.flat-icon-box {
+    /*
+     * padding:20px 10px medido diretamente no original (`.elementor-widget-container`). Como o
+     * grid é `display:grid` (stretch por padrão), todos os cards ficam com a mesma altura do
+     * mais alto dos três — o espaço sobrando nos cards mais curtos fica em branco após o
+     * conteúdo (mesmo comportamento medido no original, não uma decisão de design nova).
+     */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 20px 10px;
+    text-align: center;
+}
+
+.flat-icon-box__icon {
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+}
+
+.flat-icon-box__icon svg {
+    display: block;
+    width: 80px;
+    height: 80px;
+    fill: var(--color-dark-teal);
+}
+
+@keyframes flat-icon-box-pop {
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+.flat-icon-box__icon:hover svg {
+    animation: flat-icon-box-pop 0.3s linear 1;
+}
+
+.flat-icon-box__title {
+    margin: 8px 0 16px;
+    font-family: var(--font-secondary);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 33.6px;
+    color: var(--color-accent-green);
+}
+
+.flat-icon-box__text {
+    margin: 0;
+    font-family: var(--font-primary);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    color: var(--color-text-gray);
+}
+
+@media (max-width: 767px) {
+    .flat-icon-box-section__grid {
+        grid-template-columns: 1fr;
+    }
+}
