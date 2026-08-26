@@ -1,0 +1,137 @@
+/**
+ * assets/css/welcome-section.css
+ *
+ * Estilos da seção "Bem-vindo à CT Price" — primeira seção de conteúdo após o Hero da Home.
+ *
+ * Fonte de medição: docs/reference/home-desktop-audit.md (seção 3),
+ * docs/reference/home-tablet-audit.md e docs/reference/home-mobile-audit.md (seção
+ * "Bem-vindo à CT Price"). Breakpoint real do grid: max-width:767px (conteúdo) — não
+ * inventado nem antecipado em 1024px, confirmado nos 3 viewports auditados.
+ */
+
+.welcome-section {
+    padding: 0 10px;
+    margin: 50px 0;
+}
+
+.welcome-section__container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.welcome-section__heading {
+    margin: 0;
+    font-family: var(--font-primary);
+    font-size: 50px;
+    font-weight: 900;
+    line-height: 50px;
+    color: var(--color-dark-green);
+    text-align: left;
+}
+
+.welcome-section__lead {
+    width: 43%;
+    margin: 0 auto;
+    padding-bottom: 0.9em;
+    font-family: var(--font-primary);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    color: var(--color-text-gray);
+    text-align: center;
+}
+
+.welcome-section__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: start;
+    gap: 20px;
+    padding: 10px;
+}
+
+.welcome-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    text-align: center;
+    opacity: 0; /* estado inicial antes da animação de entrada — ver assets/js/scroll-reveal.js */
+}
+
+.welcome-card.is-visible {
+    animation: welcome-card-fade-in-left 1.25s both;
+}
+
+.welcome-card__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 106px;
+    height: 106px;
+    border: 3px solid var(--color-brand-green);
+    border-radius: 50%;
+    color: var(--color-brand-green);
+}
+
+.welcome-card__icon svg {
+    width: 50px;
+    height: 50px;
+    fill: var(--color-brand-green);
+}
+
+.welcome-card__title {
+    margin: 8px 0 10px;
+    font-family: var(--font-primary);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 33.6px;
+    color: var(--color-brand-green);
+}
+
+.welcome-card__text {
+    margin: 0;
+    font-family: var(--font-primary);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    color: var(--color-text-gray);
+}
+
+/* Animação de entrada confirmada no original (data-settings: _animation:"fadeInLeft",
+   duração 1.25s). Reproduzida com uma keyframe própria — não é carregada nenhuma biblioteca
+   de animação. */
+@keyframes welcome-card-fade-in-left {
+    0% {
+        opacity: 0;
+        transform: translate3d(-100%, 0, 0);
+    }
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .welcome-card {
+        opacity: 1;
+    }
+
+    .welcome-card.is-visible {
+        animation: none;
+    }
+}
+
+/* Breakpoint real de conteúdo do site (grid -> coluna única) */
+@media (max-width: 767px) {
+    .welcome-section__container {
+        max-width: min(100%, 767px);
+    }
+
+    .welcome-section__grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -19,10 +19,11 @@
     --color-white: #FFFFFF;
     --color-off-white: #FEFEFE;     /* texto do topbar */
 
-    /* Tipografia global confirmada */
+    /* Tipografia global confirmada — famílias e pesos hospedados em assets/css/fonts.css */
     --font-primary: "Roboto", sans-serif;
     --font-secondary: "Poppins", sans-serif;
     --font-topbar: "Roboto Flex", sans-serif;
+    --font-tertiary: "Roboto Slab", serif; /* depoimentos (autor) e metadados de post — ainda não implementados */
 
     /* Container "boxed" usado na maior parte das seções do site */
     --container-width: 1200px;
