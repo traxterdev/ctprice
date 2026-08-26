@@ -10,15 +10,16 @@
  * O Hero é renderizado por components/hero-slider.php, a seção "Bem-vindo à CT Price" por
  * components/welcome-section.php, "Ética, agilidade..." (vídeo institucional) por
  * components/video-section.php, "Nossos Serviços" por components/services-section.php,
- * "O que dizem nossos clientes" por components/testimonials-section.php, "Por que nos
- * escolher?" por components/why-choose-us-section.php, "Últimas notícias" por
- * components/blog-section.php e "Quer receber um contato?" por components/contact-section.php —
- * esta página só define os dados de cada um (conteúdo real e confirmado do site original) e
- * inclui os componentes. O footer (includes/footer.php) é global e reutilizado por todas as
- * páginas do site, não específico da Home.
+ * "O que dizem nossos clientes" por components/testimonials-section.php, o carrossel de
+ * clientes/parceiros por components/clients-carousel-section.php, "Por que nos escolher?" por
+ * components/why-choose-us-section.php, "Últimas notícias" por components/blog-section.php e
+ * "Quer receber um contato?" por components/contact-section.php — esta página só define os
+ * dados de cada um (conteúdo real e confirmado do site original) e inclui os componentes. O
+ * footer (includes/footer.php) é global e reutilizado por todas as páginas do site, não
+ * específico da Home.
  *
- * Seção do baseline ainda ausente (ver docs/reference/home-final-validation.md): Carrossel de
- * clientes/parceiros (logos) — fora do escopo desta etapa.
+ * Com esta seção, todas as 13 seções de nível superior documentadas no baseline
+ * (docs/reference/home-desktop-audit.md, seção 1) estão implementadas.
  */
 require __DIR__ . '/config/bootstrap.php';
 
@@ -140,6 +141,95 @@ $testimonials = [
     ],
 ];
 
+// 82 logos válidos do carrossel de clientes/parceiros, na ordem original (index 0-84 do widget
+// "Image Carousel" original), com 3 arquivos 404 já removidos (defeito conhecido categoria C,
+// docs/reference/home-desktop-audit.md seção 16: mv.jpg, modelo.jpg, logo_0020_Camada16.jpg —
+// não baixados nem reproduzidos). Servidos de assets/images/clients/home-carousel/.
+$clientLogos = [
+    ['file' => 'vitrine.jpg', 'alt' => 'vitrine'],
+    ['file' => 'uniao.jpeg', 'alt' => 'uniao'],
+    ['file' => 'termo-truck.jpg', 'alt' => 'termo-truck'],
+    ['file' => 'techagro.jpg', 'alt' => 'techagro'],
+    ['file' => 'tcm.jpg', 'alt' => 'tcm'],
+    ['file' => 'suprimed.jpeg', 'alt' => 'suprimed'],
+    ['file' => 'studio-vip.jpg', 'alt' => 'studio-vip'],
+    ['file' => 'so-sal.jpg', 'alt' => 'so-sal'],
+    ['file' => 'soman.jpg', 'alt' => 'soman'],
+    ['file' => 'smartfit.jpg', 'alt' => 'smartfit'],
+    ['file' => 'sermix.jpg', 'alt' => 'sermix'],
+    ['file' => 'santana-haddad.jpg', 'alt' => 'santana-haddad'],
+    ['file' => 'saborzitos-removebg-preview_c63b3438.png', 'alt' => 'saborzitos-removebg-preview_c63b3438'],
+    ['file' => 'pro-nutri.jpg', 'alt' => 'pro-nutri'],
+    ['file' => 'paoetal.jpg', 'alt' => 'paoetal'],
+    ['file' => 'omegamed_bacc5628.png', 'alt' => 'omegamed_bacc5628'],
+    ['file' => 'natus_f072d16c.png', 'alt' => 'natus_f072d16c'],
+    ['file' => 'multi-coisas.jpg', 'alt' => 'multi-coisas'],
+    ['file' => 'mix.jpg', 'alt' => 'mix'],
+    ['file' => 'meta.jpg', 'alt' => 'meta'],
+    ['file' => 'macal.jpg', 'alt' => 'macal'],
+    ['file' => 'lopes.jpg', 'alt' => 'lopes'],
+    ['file' => 'logo-zornimat_2ae545f4.png', 'alt' => 'logo-zornimat_2ae545f4'],
+    ['file' => 'logo_0034_Camada2.jpg', 'alt' => 'logo_0034_Camada2'],
+    ['file' => 'logo_0024_Camada12.jpg', 'alt' => 'logo_0024_Camada12'],
+    ['file' => 'logo_0022_Camada14.jpg', 'alt' => 'logo_0022_Camada14'],
+    ['file' => 'logo_0018_Camada18.jpg', 'alt' => 'logo_0018_Camada18'],
+    ['file' => 'logo_0017_Camada19.jpg', 'alt' => 'logo_0017_Camada19'],
+    ['file' => 'logo_0014_Camada22.jpg', 'alt' => 'logo_0014_Camada22'],
+    ['file' => 'logo_0003_Camada33.jpg', 'alt' => 'logo_0003_Camada33'],
+    ['file' => 'logo_0002_Camada34.jpg', 'alt' => 'logo_0002_Camada34'],
+    ['file' => 'liquida-1.png', 'alt' => 'líquida'],
+    ['file' => 'lider-aco.jpg', 'alt' => 'lider-aco'],
+    ['file' => 'ki-karnes.jpeg', 'alt' => 'ki-karnes'],
+    ['file' => 'kardol.png', 'alt' => 'kardol'],
+    ['file' => 'js-distribuidora_6a23f49f.jpeg', 'alt' => 'js-distribuidora_6a23f49f'],
+    ['file' => 'infomacal-1.jpeg', 'alt' => 'infomacal'],
+    ['file' => 'infogala-1.jpeg', 'alt' => 'infogala'],
+    ['file' => 'infofruteli-1.jpeg', 'alt' => 'infofruteli'],
+    ['file' => 'infoendosurgical-1.png', 'alt' => 'infoendosurgical'],
+    ['file' => 'infoarkad-1.jpeg', 'alt' => 'infoarkad'],
+    ['file' => 'imbra.jpg', 'alt' => 'imbra'],
+    ['file' => 'image-14.png', 'alt' => 'image-14'],
+    ['file' => 'image-13_785c1623.png', 'alt' => 'image-13_785c1623'],
+    ['file' => 'image-12_2a5c8312.png', 'alt' => 'image-12_2a5c8312'],
+    ['file' => 'image-11_e554fb56.png', 'alt' => 'image-11_e554fb56'],
+    ['file' => 'image-10_1bc2a900.png', 'alt' => 'image-10_1bc2a900'],
+    ['file' => 'image-9.png', 'alt' => 'image-9'],
+    ['file' => 'image-4_c1b84f9b.png', 'alt' => 'image-4_c1b84f9b'],
+    ['file' => 'image-3_8b445a2e.png', 'alt' => 'image-3_8b445a2e'],
+    ['file' => 'ifa-1.png', 'alt' => 'ifa'],
+    ['file' => 'hvm_9ecc1df3.png', 'alt' => 'hvm_9ecc1df3'],
+    ['file' => 'hr-rodan.jpg', 'alt' => 'hr-rodan'],
+    ['file' => 'homeo.jpeg', 'alt' => 'homeo'],
+    ['file' => 'hm_80f2d712.png', 'alt' => 'hm_80f2d712'],
+    ['file' => 'health-brasil_d0fe5f29.jpeg', 'alt' => 'health-brasil_d0fe5f29'],
+    ['file' => 'groupacj.jpg', 'alt' => 'groupacj'],
+    ['file' => 'gmad_4c26933a.png', 'alt' => 'gmad_4c26933a'],
+    ['file' => 'giocondo.jpg', 'alt' => 'giocondo'],
+    ['file' => 'genos.jpg', 'alt' => 'genos'],
+    ['file' => 'g.png', 'alt' => 'g'],
+    ['file' => 'figueira.png', 'alt' => 'figueira'],
+    ['file' => 'farmacias-associadas.jpeg', 'alt' => 'farmacias-associadas'],
+    ['file' => 'eco-park_b21bb592.jpg', 'alt' => 'eco-park_b21bb592'],
+    ['file' => 'estoque_627cc681.jpg', 'alt' => 'estoque_627cc681'],
+    ['file' => 'domine_b50ea254.jpg', 'alt' => 'domine_b50ea254'],
+    ['file' => 'dimaq.jpg', 'alt' => 'dimaq'],
+    ['file' => 'dib.png', 'alt' => 'dib'],
+    ['file' => 'dale.jpg', 'alt' => 'dale'],
+    ['file' => 'corujao_9251c69f.jpeg', 'alt' => 'corujao_9251c69f'],
+    ['file' => 'comak.jpg', 'alt' => 'comak'],
+    ['file' => 'close-up-person-working-call-center-scaled.jpg', 'alt' => 'close-up-person-working-call-center'],
+    ['file' => 'casa-da-sementes.jpg', 'alt' => 'casa-da-sementes'],
+    ['file' => 'carol-nathan_724ef560.jpg', 'alt' => 'carol-nathan_724ef560'],
+    ['file' => 'capital.jpg', 'alt' => 'capital'],
+    ['file' => 'artpan.jpg', 'alt' => 'artpan'],
+    ['file' => 'arkad.jpeg', 'alt' => 'arkad'],
+    ['file' => 'alumix.jpg', 'alt' => 'alumix'],
+    ['file' => 'alfa.jpg', 'alt' => 'alfa'],
+    ['file' => 'agrotouro.jpg', 'alt' => 'agrotouro'],
+    ['file' => 'agro-buso_fc9ec0bc.jpeg', 'alt' => 'agro-buso_fc9ec0bc'],
+    ['file' => 'agriseiva_057e47b7.png', 'alt' => 'agriseiva_057e47b7'],
+];
+
 $whyChooseUsHeading = 'Por que nos escolher?';
 $whyChooseUsImage = BASE_URL . '/assets/images/content/why-choose-us.jpg';
 $whyChooseUsItems = [
@@ -213,6 +303,7 @@ $contactWhatsapp = $company['whatsapp_principal']['url'];
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/video-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/services-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/testimonials-section.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/clients-carousel-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/why-choose-us-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/blog-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/contact-section.css">
@@ -231,6 +322,7 @@ $contactWhatsapp = $company['whatsapp_principal']['url'];
     <?php require __DIR__ . '/components/video-section.php'; ?>
     <?php require __DIR__ . '/components/services-section.php'; ?>
     <?php require __DIR__ . '/components/testimonials-section.php'; ?>
+    <?php require __DIR__ . '/components/clients-carousel-section.php'; ?>
     <?php require __DIR__ . '/components/why-choose-us-section.php'; ?>
     <?php require __DIR__ . '/components/blog-section.php'; ?>
     <?php require __DIR__ . '/components/contact-section.php'; ?>
@@ -247,6 +339,7 @@ $contactWhatsapp = $company['whatsapp_principal']['url'];
 <script src="<?= BASE_URL ?>/assets/js/cookie-banner.js" defer></script>
 <script src="<?= BASE_URL ?>/assets/js/video-section.js" defer></script>
 <script src="<?= BASE_URL ?>/assets/js/testimonials-init.js" defer></script>
+<script src="<?= BASE_URL ?>/assets/js/clients-carousel-init.js" defer></script>
 <script src="<?= BASE_URL ?>/assets/js/hero-init.js" defer></script>
 <script src="<?= BASE_URL ?>/assets/js/scroll-reveal.js" defer></script>
 </body>

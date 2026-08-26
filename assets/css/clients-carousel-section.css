@@ -1,0 +1,62 @@
+/**
+ * assets/css/clients-carousel-section.css
+ *
+ * Carrossel de logos de clientes/parceiros — 7ª seção de nível superior da Home no original
+ * (entre "O que dizem nossos clientes" e "Por que nos escolher?").
+ *
+ * Fonte de medição: reinspeção direta via Chrome DevTools MCP em 1440x900/900x1024x900 (busca de
+ * breakpoint) e 390x844.
+ *
+ * Seção: altura fixa de 200px, background #F2F2F2 (medido diretamente — a auditoria anterior
+ * não diferenciava esta seção das demais de fundo branco; valor confirmado por
+ * `getComputedStyle` direto, não estimado). Container 1200px (--container-width), conteúdo
+ * centralizado verticalmente dentro dos 200px.
+ *
+ * Breakpoints do NÚMERO DE SLIDES VISÍVEIS (não confundir com os breakpoints de conteúdo do
+ * resto do site, embora coincidam numericamente): confirmados testando 750/760/767/768/1000/
+ * 1023/1024 diretamente — a transição de ~10 para 2 slides ocorre exatamente em 1024px (mesmo
+ * breakpoint do menu/blog já usados no projeto); a transição de 2 para 1 ocorre num ponto
+ * interno do Elementor entre 750 e 767px (não um valor redondo, provavelmente um cálculo interno
+ * do widget, não uma media query) — como isso não coincide com nenhum breakpoint "limpo" e os
+ * três viewports obrigatórios (1440/900/390) já caem confortavelmente dentro de cada faixa
+ * (≥1024 / 768–1023 / <768), o breakpoint 768px (já usado no projeto) foi adotado aqui por
+ * produzir o mesmo resultado medido nos três viewports exigidos, sem replicar o cálculo interno
+ * não documentado do Elementor.
+ *
+ * CORREÇÃO INTENCIONAL DE DEFEITO CONHECIDO: altura do slide fixa (70px) com
+ * `object-fit: contain` em vez do `object-fit: fill` sem altura própria do original — evita a
+ * distorção/tamanho excessivo dos logos no mobile (ver components/clients-carousel-section.php).
+ * `gap`/`spaceBetween` (20px) e velocidade/autoplay do Swiper não foram alterados.
+ */
+
+.clients-carousel-section {
+    height: 200px;
+    padding: 0 10px;
+    background: #F2F2F2;
+    display: flex;
+    align-items: center;
+}
+
+.clients-carousel-section__inner {
+    width: 100%;
+    max-width: var(--container-width);
+    margin: 0 auto;
+}
+
+.clients-carousel {
+    width: 100%;
+}
+
+.client-logo-slide {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.client-logo-slide__img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: 50% 50%;
+}
