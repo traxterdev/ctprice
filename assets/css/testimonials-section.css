@@ -1,0 +1,170 @@
+/**
+ * assets/css/testimonials-section.css
+ *
+ * Seção "O que dizem nossos clientes" — 6ª seção de nível superior da Home no original (entre
+ * services-section e o carrossel de clientes/parceiros, ainda não implementado).
+ *
+ * Fonte de medição: reinspeção direta via Chrome DevTools MCP em 1440x900/900x1200/390x844.
+ *
+ * Container: 1200px (token global --container-width). Sem breakpoint próprio: o carrossel é
+ * fluido (1 depoimento visível em qualquer largura, confirmado idêntico em 1440/900/390px) — o
+ * único reflow vem do texto quebrando mais linhas em containers mais estreitos, aumentando a
+ * altura do slide (a altura de TODOS os slides acompanha o mais alto, via
+ * `align-items:stretch` nativo do `display:flex` do Swiper — sem `autoHeight`, sem JS extra).
+ *
+ * Tipografia "Roboto Slab" usada apenas em `.testimonial-card__company` (cargo/empresa do
+ * depoente) — confirmado que nome, texto e heading usam Roboto normalmente.
+ */
+
+.testimonials-section {
+    margin: 50px 0;
+    padding: 0 10px;
+}
+
+.testimonials-section__inner {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.testimonials-section__heading {
+    margin: 0;
+    font-family: var(--font-primary);
+    font-size: 35px;
+    font-weight: 600;
+    line-height: 35px;
+    color: var(--color-dark-green);
+    text-align: center;
+}
+
+.testimonials-section__divider {
+    width: 10%;
+    align-self: center;
+    margin: 0;
+    border-top: 3px solid var(--color-dark-green);
+}
+
+.testimonials-swiper-wrap {
+    position: relative;
+    margin: 0 30px;
+}
+
+.swiper-slide.testimonial-card {
+    height: auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.testimonial-card__text {
+    margin: 0;
+    font-family: var(--font-primary);
+    font-size: 20.8px;
+    font-weight: 400;
+    font-style: italic;
+    line-height: 31.2px;
+    color: var(--color-text-gray);
+    text-align: center;
+}
+
+.testimonial-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+.testimonial-card__avatar {
+    flex: none;
+    width: 65px;
+    height: 65px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.testimonial-card__cite {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+    text-align: left;
+    font-style: normal;
+}
+
+.testimonial-card__name {
+    font-family: var(--font-primary);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 21px;
+    color: #2A3855;
+}
+
+.testimonial-card__company {
+    font-family: var(--font-tertiary);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 21px;
+    color: #3D4C6F;
+}
+
+.testimonials-swiper__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.testimonials-swiper__nav--prev {
+    left: -10px;
+}
+
+.testimonials-swiper__nav--next {
+    right: -10px;
+}
+
+.testimonials-swiper__nav svg {
+    width: 20px;
+    height: 20px;
+    fill: rgba(237, 237, 237, 0.9);
+}
+
+.testimonials-swiper__nav.swiper-button-disabled {
+    opacity: 0.35;
+    cursor: auto;
+}
+
+.testimonials-swiper__pagination {
+    /* O Swiper aplica a classe "swiper-pagination-bullets" a este elemento (via `pagination.el`
+       na inicialização), que por padrão o posiciona como position:absolute (swiper-bundle.min.css)
+       — sobrescrito aqui porque a paginação desta seção fica em fluxo normal, abaixo do
+       carrossel (não sobreposta), como medido no original. */
+    position: static;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 15px;
+}
+
+.testimonials-swiper__pagination .swiper-pagination-bullet {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #EFCB39;
+    opacity: 1;
+    cursor: pointer;
+}
+
+.testimonials-swiper__pagination .swiper-pagination-bullet-active {
+    background: #2A3855;
+}

@@ -9,15 +9,16 @@
  *
  * O Hero é renderizado por components/hero-slider.php, a seção "Bem-vindo à CT Price" por
  * components/welcome-section.php, "Ética, agilidade..." (vídeo institucional) por
- * components/video-section.php, "Nossos Serviços" por components/services-section.php, "Por
- * que nos escolher?" por components/why-choose-us-section.php, "Últimas notícias" por
+ * components/video-section.php, "Nossos Serviços" por components/services-section.php,
+ * "O que dizem nossos clientes" por components/testimonials-section.php, "Por que nos
+ * escolher?" por components/why-choose-us-section.php, "Últimas notícias" por
  * components/blog-section.php e "Quer receber um contato?" por components/contact-section.php —
  * esta página só define os dados de cada um (conteúdo real e confirmado do site original) e
  * inclui os componentes. O footer (includes/footer.php) é global e reutilizado por todas as
  * páginas do site, não específico da Home.
  *
- * Seções do baseline ainda ausentes (ver docs/reference/home-final-validation.md): Depoimentos
- * (carrossel) e Carrossel de clientes/parceiros (logos) — fora do escopo desta etapa.
+ * Seção do baseline ainda ausente (ver docs/reference/home-final-validation.md): Carrossel de
+ * clientes/parceiros (logos) — fora do escopo desta etapa.
  */
 require __DIR__ . '/config/bootstrap.php';
 
@@ -112,6 +113,33 @@ $servicesCta = [
     'url' => '/fale-conosco/',
 ];
 
+$testimonials = [
+    [
+        'text' => "\"Nossa história com a CT Price começa com a necessidade de mudanças e essa oportunidade de trilhar novos caminhos. Há quase 30 anos no ramo de alimentação, a Roasted Potato – Campo Grande precisava de uma Empresa Contábil capaz de visualizar, planejar, organizar, orientar e conduzir as mudanças necessárias com segurança e profissionalismo.\nA CT Price, sob a coordenação do Marcelo procura entender o negócio da empresa com suas características particulares e estrategicamente projeta caminhos e possibilidades seguras de crescimento.\nEstamos certos e confiantes de que, juntos, continuaremos a avançar com ainda mais segurança e inovação.\nSomos gratos a todos da Equipe CT Price pelo empenho e profissionalismo.\"",
+        'avatar' => BASE_URL . '/assets/images/testimonials/roasted-potato.jpg',
+        'name' => 'Edvaldo Cezar Germiniani',
+        'company' => 'ROASTED POTATO',
+    ],
+    [
+        'text' => '"Quero agradecer à família CT Price pela parceria há mais de 10 anos. Sempre tivemos um atendimento especial de todos os setores, RH, Fiscal, dentre outros. Podemos contar com uma consultoria de alto nível."',
+        'avatar' => BASE_URL . '/assets/images/testimonials/agrotouro.jpg',
+        'name' => 'Mário Jorge',
+        'company' => 'AgroTouro',
+    ],
+    [
+        'text' => "\"A CT PRICE ORGANIZAÇÃO CONTÁBIL é uma empresa que respira e vive na qualidade.\nCom seus princípios fundamentados na defesa da empresa e do empresário frente as adversidades todas, com uma equipe coesa e participativa que atua de maneira firme e ágil, instrumentalizada na participação de cada um como membro de uma equipe que se propõe e alcança os resultados finais.\nCapitaneada pelo contabilista Marcelo Barbosa da Silva, você pode acreditar, compromisso e confiança são seus ideais e se você tem um problema, CT PRICE é a sua solução.\"",
+        'avatar' => BASE_URL . '/assets/images/testimonials/mauro-cesar-senna.png',
+        'name' => 'Mauro César Senna',
+        'company' => 'INTELECTA SOLUÇÕES EMPRESARIAIS',
+    ],
+    [
+        'text' => '"A CT PRICE se destaca pelo seu profissionalismo na prestação de serviços contábeis e de planejamento tributário. Com uma equipe dedicada e competente, a empresa tem proporcionado ganhos significativos para os empresários, comprovados pelo sucesso dos clientes atendidos ao longo dos anos. A precisão, ética e agilidade da CT PRICE garantem resultados positivos e a confiança de todos que trabalham com eles."',
+        'avatar' => BASE_URL . '/assets/images/testimonials/dieter-augusto-dreyer.png',
+        'name' => 'Dieter Augusto Dreyer',
+        'company' => 'PLANER SOLUÇÕES EMPRESARIAIS',
+    ],
+];
+
 $whyChooseUsHeading = 'Por que nos escolher?';
 $whyChooseUsImage = BASE_URL . '/assets/images/content/why-choose-us.jpg';
 $whyChooseUsItems = [
@@ -184,6 +212,7 @@ $contactWhatsapp = $company['whatsapp_principal']['url'];
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/welcome-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/video-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/services-section.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/testimonials-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/why-choose-us-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/blog-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/contact-section.css">
@@ -201,6 +230,7 @@ $contactWhatsapp = $company['whatsapp_principal']['url'];
     <?php require __DIR__ . '/components/welcome-section.php'; ?>
     <?php require __DIR__ . '/components/video-section.php'; ?>
     <?php require __DIR__ . '/components/services-section.php'; ?>
+    <?php require __DIR__ . '/components/testimonials-section.php'; ?>
     <?php require __DIR__ . '/components/why-choose-us-section.php'; ?>
     <?php require __DIR__ . '/components/blog-section.php'; ?>
     <?php require __DIR__ . '/components/contact-section.php'; ?>
@@ -216,6 +246,7 @@ $contactWhatsapp = $company['whatsapp_principal']['url'];
 <script src="<?= BASE_URL ?>/assets/js/header.js" defer></script>
 <script src="<?= BASE_URL ?>/assets/js/cookie-banner.js" defer></script>
 <script src="<?= BASE_URL ?>/assets/js/video-section.js" defer></script>
+<script src="<?= BASE_URL ?>/assets/js/testimonials-init.js" defer></script>
 <script src="<?= BASE_URL ?>/assets/js/hero-init.js" defer></script>
 <script src="<?= BASE_URL ?>/assets/js/scroll-reveal.js" defer></script>
 </body>
