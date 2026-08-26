@@ -2,17 +2,18 @@
 /**
  * index.php — Home
  *
- * Nesta etapa: topbar, header e o Hero foram implementados visualmente (ver
- * docs/reference/home-desktop-audit.md, docs/reference/home-tablet-audit.md e
- * docs/reference/home-mobile-audit.md). Demais seções, footer, cookie banner e botão de
- * WhatsApp permanecem como placeholder — ver docs/architecture-proposal.md.
+ * Nesta etapa: topbar, header, footer e todas as seções de conteúdo da Home foram
+ * implementados visualmente (ver docs/reference/home-desktop-audit.md,
+ * docs/reference/home-tablet-audit.md e docs/reference/home-mobile-audit.md). Cookie banner e
+ * botão flutuante de WhatsApp permanecem como placeholder — ver docs/architecture-proposal.md.
  *
  * O Hero é renderizado por components/hero-slider.php, a seção "Bem-vindo à CT Price" por
  * components/welcome-section.php, "Nossos Serviços" por components/services-section.php, "Por
  * que nos escolher?" por components/why-choose-us-section.php, "Últimas notícias" por
  * components/blog-section.php e "Quer receber um contato?" por components/contact-section.php —
  * esta página só define os dados de cada um (conteúdo real e confirmado do site original) e
- * inclui os componentes.
+ * inclui os componentes. O footer (includes/footer.php) é global e reutilizado por todas as
+ * páginas do site, não específico da Home.
  */
 require __DIR__ . '/config/bootstrap.php';
 
@@ -176,6 +177,7 @@ $contactWhatsapp = $company['whatsapp_principal']['url'];
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/why-choose-us-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/blog-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/contact-section.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/footer.css">
 </head>
 <body>
 

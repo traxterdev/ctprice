@@ -1,10 +1,178 @@
 /**
  * assets/css/footer.css
  *
- * Responsabilidade: estilos do footer principal (logo, endereço, menu secundário, mapa)
- * e do footer bottom bar (copyright).
+ * Footer global (includes/footer.php) — footer principal (logo + 3 colunas) e bottom bar
+ * (copyright + crédito). Usado por todas as páginas do site.
  *
- * Referência de medição: docs/reference/home-desktop-audit.md (seção 18).
+ * Fonte de medição: docs/reference/home-desktop-audit.md (seção 18) e reinspeção direta via
+ * Chrome DevTools MCP em 1440x900/900x1200/390x844.
  *
- * Nenhuma regra implementada ainda nesta etapa.
+ * Container do footer principal: 1200px (token global --container-width). Container do bottom
+ * bar: 1140px (largura própria medida, igual à de blog-section/contact-section).
+ *
+ * Breakpoint: max-width:767px — mesmo breakpoint de conteúdo das demais seções (confirmado
+ * testando 767/768; o footer NÃO usa um breakpoint próprio, ao contrário de blog-section).
  */
+
+.site-footer__main {
+    /* Altura fixa medida no original (não derivada do conteúdo) — o espaço sobrando é
+       distribuído entre as duas linhas do flex-wrap (logo / colunas) via align-content:normal
+       (stretch), efeito nativo do flex, sem necessidade de declarar align-content explicitamente. */
+    height: 400px;
+    background: #EFF0F1;
+    padding: 0 10px;
+}
+
+.site-footer__container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 10px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.site-footer__logo {
+    flex: 0 0 100%;
+    padding: 10px;
+    text-align: center;
+}
+
+.site-footer__logo img {
+    /* Regra única do original (sem media query): 25% da largura do container em qualquer
+       viewport — confirmado idêntico em 1440/1024/900/390px. */
+    width: 25%;
+    height: auto;
+}
+
+.site-footer__address,
+.site-footer__menu,
+.site-footer__map {
+    /* 30% da largura do container (360px em 1200px) — confirmado proporcional, não px fixo:
+       em 900px o container mede 865px e as colunas medem 259,5px = 865*0,3. */
+    flex: 0 0 30%;
+    max-width: 30%;
+}
+
+.site-footer__address {
+    padding: 10px;
+}
+
+.site-footer__address p {
+    margin: 0 0 0.9em;
+    font-family: var(--font-primary);
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+    color: var(--color-dark-green);
+}
+
+.site-footer__address a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.site-footer__address small {
+    font-size: 12.8px;
+    line-height: 19.2px;
+    color: var(--color-brand-green);
+}
+
+.site-footer__menu {
+    border-left: 2px solid var(--color-dark-teal);
+    padding: 0 20px;
+}
+
+.site-footer__menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.site-footer__menu a {
+    display: block;
+    padding: 0;
+    font-family: var(--font-primary);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color: var(--color-dark-green);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.site-footer__menu a:hover,
+.site-footer__menu a:focus-visible {
+    color: #EFCB39;
+}
+
+.site-footer__map {
+    padding: 10px;
+}
+
+.site-footer__map iframe {
+    display: block;
+    width: 100%;
+    height: 200px;
+    border: 0;
+}
+
+.site-footer__bottom-bar {
+    background: var(--color-dark-teal);
+    padding: 0 10px;
+}
+
+.site-footer__bottom-bar-container {
+    max-width: 1140px;
+    margin: 0 auto;
+    /* Duas camadas de padding:10px empilhadas no original (container externo + grid interno) —
+       equivalentes a 20px vertical / 10px horizontal num único elemento. */
+    padding: 20px 10px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.site-footer__copyright,
+.site-footer__credit {
+    margin: 0 0 0.9em;
+    font-family: var(--font-primary);
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+    color: #FAFAFA;
+}
+
+.site-footer__copyright {
+    padding-left: 40px;
+    text-align: center;
+}
+
+.site-footer__credit {
+    text-align: left;
+}
+
+.site-footer__copyright a,
+.site-footer__credit a {
+    font-weight: 700;
+    color: var(--color-accent-green);
+    text-decoration: none;
+}
+
+@media (max-width: 767px) {
+    .site-footer__main {
+        height: auto;
+    }
+
+    .site-footer__address,
+    .site-footer__menu,
+    .site-footer__map {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .site-footer__bottom-bar-container {
+        grid-template-columns: 1fr;
+    }
+}

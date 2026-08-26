@@ -16,8 +16,10 @@ require __DIR__ . '/../config/bootstrap.php';
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Fale Conosco — CT Price</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/reset.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/fonts.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/variables.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/header.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/footer.css">
 </head>
 <body>
 

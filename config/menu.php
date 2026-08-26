@@ -17,11 +17,20 @@
  * URLs usam a nova estrutura sem "/wp/" definida em docs/architecture-proposal.md (seção 10).
  * Onde o destino real ainda é incerto/quebrado no site atual, o valor fica marcado com TODO
  * em vez de ser inventado — ver docs/architecture-proposal.md, seção 14.1.
+ *
+ * 'footer': lista curada de links do rodapé (includes/footer.php). No site original o rodapé
+ * NÃO repete o menu principal — é uma lista própria, mais curta, com rótulos diferentes para os
+ * mesmos destinos (ex.: "Nossos Clientes" em vez de "Clientes"), confirmada por inspeção direta
+ * do DOM. Os destinos são reaproveitados de 'primary' (via $primary abaixo) para não duplicar
+ * URLs; só os rótulos e a seleção de itens são próprios do rodapé. Uma exceção: o rodapé usa a
+ * URL corrigida de "Benefícios" (/trabalhe-conosco/#beneficios) — o mesmo destino já usado no
+ * submenu de 'primary', não a versão quebrada do original (/informacoes/#beneficios) — e um
+ * destino próprio para "Trabalhe Conosco" (a página institucional, não o sistema externo de
+ * recrutamento usado no header) — ambos reproduzem exatamente o que o rodapé original já faz,
+ * não uma decisão nova.
  */
 
-return [
-
-    'primary' => [
+$primary = [
         [
             'label' => 'Início',
             'url' => '/',
@@ -76,21 +85,45 @@ return [
                 ],
             ],
         ],
-        [
-            'label' => 'Ouvidoria',
-            'url' => '/ouvidoria/',
-        ],
-        [
-            'label' => 'Depoimentos',
-            'url' => '/depoimentos/',
-        ],
+    [
+        'label' => 'Ouvidoria',
+        'url' => '/ouvidoria/',
     ],
+    [
+        'label' => 'Depoimentos',
+        'url' => '/depoimentos/',
+    ],
+];
+
+return [
+
+    'primary' => $primary,
 
     // Botão "Área Restrita" — fora do menu principal, exibido separadamente no header
     // (ver docs/reference/site-inventory.md e docs/reference/home-desktop-audit.md, seção 2.2).
     'area_restrita' => [
         'label' => 'Área Restrita',
         'url' => '/arearestrita/',
+    ],
+
+    // Lista curada do rodapé — ver comentário no topo do arquivo. URLs reaproveitadas de
+    // $primary onde o destino é o mesmo; rótulos e seleção de itens são próprios do rodapé
+    // (confirmados por inspeção direta do DOM original).
+    'footer' => [
+        ['label' => 'Início', 'url' => $primary[0]['url']],
+        ['label' => 'A CT Price', 'url' => $primary[1]['url']],
+        ['label' => 'Nossos Clientes', 'url' => $primary[2]['children'][0]['url']],
+        ['label' => 'Nossos Parceiros', 'url' => $primary[2]['children'][1]['url']],
+        ['label' => 'Fale Conosco', 'url' => $primary[3]['url']],
+        ['label' => 'Informações', 'url' => $primary[4]['url']],
+        [
+            'label' => 'Trabalhe Conosco',
+            // Destino próprio do rodapé no original: a página institucional, não o sistema
+            // externo de recrutamento usado no header ($primary[5]['url'] permanece null —
+            // divergência já documentada e pendente de decisão, não resolvida aqui).
+            'url' => '/trabalhe-conosco/',
+        ],
+        ['label' => 'Benefícios', 'url' => $primary[5]['children'][1]['url']],
     ],
 
 ];
