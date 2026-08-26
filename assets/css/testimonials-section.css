@@ -153,7 +153,11 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
-    margin-top: 15px;
+    /* 34px + 6px (altura das bolinhas) = 40px de espaço total reservado abaixo do carrossel —
+       igual ao padding-bottom:40px medido no widget original (validação final da Home:
+       diferença de ~19px na altura total da seção corrigida aqui, não era um "hack" de altura
+       artificial, era espaçamento subdimensionado). */
+    margin-top: 34px;
 }
 
 .testimonials-swiper__pagination .swiper-pagination-bullet {
