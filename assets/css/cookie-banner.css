@@ -1,0 +1,130 @@
+/**
+ * assets/css/cookie-banner.css
+ *
+ * Aviso de cookies global (includes/cookie-banner.php). Usado por todas as páginas.
+ *
+ * Fonte de medição: reinspeção direta via Chrome DevTools MCP em 1440x900/900x1200/390x844
+ * do plugin "Cookie Notice" (WordPress) na referência original — nenhum valor estimado.
+ *
+ * A família tipográfica (`-apple-system, BlinkMacSystemFont, ...`) é o próprio padrão do
+ * plugin original, não os tokens de marca do projeto (--font-primary/--font-secondary) —
+ * mantido assim por fidelidade, pois é um valor medido, não uma escolha de design.
+ *
+ * Breakpoints próprios deste componente, independentes dos demais do site (confirmados
+ * testando 900/901 e 480/481, não presumidos a partir de outras seções): max-width:900px
+ * (texto e botões empilham) e max-width:480px (padding do container).
+ *
+ * O botão de fechar reproduz também um detalhe "acidental" do original: no site de
+ * referência, o reset de botão do tema (border:1px solid #CC3366; border-radius:3px;
+ * padding:8px 16px) vence em cascata sobre o CSS do próprio plugin, resultando numa caixa
+ * rosa visível ao redor do "X" cinza. Como é um valor medido e realmente visível na
+ * referência, é reproduzido aqui explicitamente (o reset.css deste projeto é limpo e não
+ * geraria esse efeito sozinho).
+ */
+
+.cookie-banner {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100000;
+    background: rgba(50, 50, 58, 0.85);
+    font-family: -apple-system, BlinkMacSystemFont, Arial, Roboto, "Helvetica Neue", sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0;
+    text-align: center;
+}
+
+.cookie-banner__container {
+    position: relative;
+    width: 100%;
+    padding: 15px 30px;
+    color: #FFFFFF;
+}
+
+.cookie-banner__text,
+.cookie-banner__buttons {
+    display: inline-block;
+}
+
+.cookie-banner__button {
+    display: inline-block;
+    margin: 0 0 0 10px;
+    padding: 8.5px 10px;
+    border-radius: 32px;
+    background: #00A99D;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.25px;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.cookie-banner__button:focus-visible {
+    outline: #FFFFFF solid 2px;
+    outline-offset: 2px;
+}
+
+.cookie-banner__close {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    margin: -10px 0 0;
+    width: 15px;
+    height: 15px;
+    padding: 8px 16px;
+    opacity: 0.5;
+    border: 1px solid #CC3366;
+    border-radius: 3px;
+    background: transparent;
+    cursor: pointer;
+}
+
+.cookie-banner__close:hover {
+    opacity: 1;
+}
+
+.cookie-banner__close:focus,
+.cookie-banner__close:focus-visible {
+    outline: currentColor solid 2px;
+    outline-offset: 3px;
+}
+
+.cookie-banner__close::before,
+.cookie-banner__close::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    width: 2px;
+    height: 15px;
+    background-color: grey;
+}
+
+.cookie-banner__close::before {
+    transform: rotate(45deg);
+}
+
+.cookie-banner__close::after {
+    transform: rotate(-45deg);
+}
+
+@media (max-width: 900px) {
+    .cookie-banner__text,
+    .cookie-banner__buttons {
+        display: block;
+    }
+
+    .cookie-banner__button {
+        margin: 0 5px 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .cookie-banner__container {
+        padding: 15px 25px;
+    }
+}

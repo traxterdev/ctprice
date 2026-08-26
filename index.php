@@ -179,6 +179,7 @@ $contactWhatsapp = $company['whatsapp_principal']['url'];
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/contact-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/footer.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/whatsapp-button.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/cookie-banner.css">
 </head>
 <body>
 
@@ -202,6 +203,7 @@ $contactWhatsapp = $company['whatsapp_principal']['url'];
 
 <script src="<?= BASE_URL ?>/assets/vendor/swiper/swiper-bundle.min.js" defer></script>
 <script src="<?= BASE_URL ?>/assets/js/header.js" defer></script>
+<script src="<?= BASE_URL ?>/assets/js/cookie-banner.js" defer></script>
 <script src="<?= BASE_URL ?>/assets/js/hero-init.js" defer></script>
 <script src="<?= BASE_URL ?>/assets/js/scroll-reveal.js" defer></script>
 </body>

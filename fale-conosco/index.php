@@ -21,6 +21,7 @@ require __DIR__ . '/../config/bootstrap.php';
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/header.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/footer.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/whatsapp-button.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/cookie-banner.css">
 </head>
 <body>
 
@@ -36,5 +37,6 @@ require __DIR__ . '/../config/bootstrap.php';
 <?php require __DIR__ . '/../includes/whatsapp-button.php'; ?>
 
 <script src="<?= BASE_URL ?>/assets/js/header.js" defer></script>
+<script src="<?= BASE_URL ?>/assets/js/cookie-banner.js" defer></script>
 </body>
 </html>
