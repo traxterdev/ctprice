@@ -31,6 +31,11 @@ $dedicationSection = [
     'cta_url' => '/fale-conosco/',
 ];
 
+// Carrossel de logos de clientes/parceiros — mesmo carrossel da Home (confirmado idêntico por
+// inspeção direta: mesmo data-settings do widget, mesma altura/background/container). Fonte
+// compartilhada em config/clients.php (não duplicar a lista aqui).
+$clientLogos = require __DIR__ . '/../config/clients.php';
+
 $missionVisionValuesSection = [
     'heading' => 'Deixe a contabilidade nas mãos de quem entende!',
     'items' => [
@@ -58,6 +63,7 @@ $missionVisionValuesSection = [
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Sobre nós — CT Price</title>
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/vendor/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/reset.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/fonts.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/variables.css">
@@ -66,6 +72,7 @@ $missionVisionValuesSection = [
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/image-text-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/flat-icon-box-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/image-content-cta-section.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/clients-carousel-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/footer.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/whatsapp-button.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/cookie-banner.css">
@@ -80,15 +87,16 @@ $missionVisionValuesSection = [
     <?php $imageTextSection = $historySection; require __DIR__ . '/../components/image-text-section.php'; ?>
     <?php $flatIconBoxSection = $missionVisionValuesSection; require __DIR__ . '/../components/flat-icon-box-section.php'; ?>
     <?php $imageContentCtaSection = $dedicationSection; require __DIR__ . '/../components/image-content-cta-section.php'; ?>
-
-    <!-- TODO: carrossel de clientes (ver docs/reference/sobre-nos-audit.md) -->
+    <?php require __DIR__ . '/../components/clients-carousel-section.php'; ?>
 </main>
 
 <?php require __DIR__ . '/../includes/footer.php'; ?>
 <?php require __DIR__ . '/../includes/cookie-banner.php'; ?>
 <?php require __DIR__ . '/../includes/whatsapp-button.php'; ?>
 
+<script src="<?= BASE_URL ?>/assets/vendor/swiper/swiper-bundle.min.js" defer></script>
 <script src="<?= BASE_URL ?>/assets/js/header.js" defer></script>
 <script src="<?= BASE_URL ?>/assets/js/cookie-banner.js" defer></script>
+<script src="<?= BASE_URL ?>/assets/js/clients-carousel-init.js" defer></script>
 </body>
 </html>
