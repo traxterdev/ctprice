@@ -1,0 +1,159 @@
+/**
+ * assets/css/why-choose-us-section.css
+ *
+ * Estilos da seção "Por que nos escolher?" — terceira seção de conteúdo da Home (após
+ * services-section).
+ *
+ * Fonte de medição: docs/reference/home-desktop-audit.md e reinspeção direta via Chrome
+ * DevTools MCP em 1440x900/900x1200/390x844.
+ *
+ * Container: 1200px (token global --container-width, confirmado igual ao medido nesta seção).
+ * Duas colunas (imagem + lista) ficam lado a lado por padrão (`display:flex`, sem
+ * `flex-direction` — herda `row`) e permanecem assim até 900px (estado híbrido do site:
+ * confirmado que o conteúdo só empilha em max-width:767px, mesmo breakpoint de conteúdo já usado
+ * nas demais seções — não há estágio intermediário próprio desta seção).
+ *
+ * DEFEITO CONHECIDO (categoria C — docs/architecture-proposal.md, seção 2): no original, a altura
+ * do bloco de imagem vem inteiramente de `align-items:stretch` com a coluna de texto (o bloco não
+ * tem conteúdo nem altura própria). Ao empilhar no mobile essa relação desaparece e o bloco
+ * colapsa para ~390x20px. Correção aplicada (não reproduzida): `aspect-ratio: 4 / 3` no bloco de
+ * imagem dentro do media query max-width:767px — mesma proporção do recorte original
+ * (600x450 = 4:3), dando altura coerente e proporcional sem herdar um valor fixo do desktop.
+ */
+
+.why-choose-us-section {
+    margin: 0;
+}
+
+.why-choose-us-section__container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 35px 0 45px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.why-choose-us-section__heading-block {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding: 10px 0 14px;
+    text-align: center;
+}
+
+.why-choose-us-section__heading {
+    margin: 0 0 10px;
+    font-family: var(--font-primary);
+    font-size: 35px;
+    font-weight: 600;
+    line-height: 35px;
+    color: var(--color-dark-green);
+}
+
+.why-choose-us-section__divider {
+    width: 10%;
+    margin: 0 auto;
+    border-top: 3px solid var(--color-dark-green);
+}
+
+.why-choose-us-section__image {
+    flex: 0 0 50%;
+    max-width: 50%;
+    background-size: auto;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    border-radius: 15px;
+    opacity: 0;
+}
+
+.why-choose-us-section__image.is-visible {
+    animation: why-choose-us-fade-in 1.25s both;
+}
+
+.why-choose-us-section__list {
+    flex: 0 0 50%;
+    max-width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    padding: 10px;
+}
+
+.why-choose-us-item {
+    /* Padding real do widget original (0 20px 10px 20px) — reduz a largura útil do texto em
+       40px (afeta a quebra de linha) e soma 10px de altura extra; a altura do item não é um
+       valor fixo, é inteiramente dependente do conteúdo (confirmado: os itens 2 e 3 crescem
+       para 154px em 900px porque o texto quebra em mais linhas nessa largura). */
+    padding: 0 20px 10px;
+    text-align: left;
+    opacity: 0;
+}
+
+.why-choose-us-item.is-visible {
+    animation: why-choose-us-fade-in-right 1.25s both;
+}
+
+.why-choose-us-item__title {
+    margin: 8px 0 10px;
+    font-family: var(--font-primary);
+    font-size: 25px;
+    font-weight: 600;
+    line-height: 30px;
+    color: var(--color-dark-green);
+}
+
+.why-choose-us-item__text {
+    margin: 0;
+    font-family: var(--font-primary);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    color: var(--color-text-gray);
+}
+
+@keyframes why-choose-us-fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes why-choose-us-fade-in-right {
+    0% {
+        opacity: 0;
+        transform: translate3d(100%, 0, 0);
+    }
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .why-choose-us-section__image,
+    .why-choose-us-item {
+        opacity: 1;
+    }
+
+    .why-choose-us-section__image.is-visible,
+    .why-choose-us-item.is-visible {
+        animation: none;
+    }
+}
+
+/* Breakpoint real de conteúdo do site (colunas -> empilhado) */
+@media (max-width: 767px) {
+    .why-choose-us-section__image,
+    .why-choose-us-section__list {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    /* Correção intencional do defeito conhecido (ver cabeçalho deste arquivo) */
+    .why-choose-us-section__image {
+        aspect-ratio: 4 / 3;
+        background-size: cover;
+    }
+}

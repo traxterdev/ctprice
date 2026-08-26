@@ -1,0 +1,160 @@
+/**
+ * assets/css/services-section.css
+ *
+ * Estilos da seção "Nossos Serviços" — segunda seção de conteúdo da Home (após welcome-section).
+ *
+ * Fonte de medição: docs/reference/home-desktop-audit.md (seção 1, tabela de larguras/gaps;
+ * seção 5, paddings/bordas) e reinspeção direta via Chrome DevTools MCP em 1440x900/900x1200/
+ * 390x844. Breakpoint real do grid: max-width:767px (mesmo breakpoint de conteúdo já usado em
+ * welcome-section — confirmado nos 3 viewports, sem estágio intermediário).
+ *
+ * Container: 1240px (não os 1200px usados nas demais seções boxed — largura própria medida
+ * desta seção especificamente, não uma aproximação do token --container-width global).
+ */
+
+.services-section {
+    margin: 0;
+    padding: 0 10px;
+    border: 2px solid var(--color-accent-green);
+    border-radius: 20px;
+}
+
+.services-section__container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.services-section__anchor {
+    display: block;
+    height: 0;
+    margin-bottom: 20px;
+}
+
+.services-section__eyebrow {
+    /*
+     * margin-bottom medido diretamente (não é o gap padrão de 20px): o H2 do rótulo é mais alto
+     * que a caixa do widget original e "vaza" para dentro do espaçamento nominal, resultando em
+     * um espaço visível real de 14px até o divisor (confirmado por medição, não estimado).
+     */
+    margin: 0 0 14px;
+    font-family: var(--font-secondary);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: -1.2px;
+    text-transform: uppercase;
+    color: var(--color-dark-teal);
+    text-align: center;
+}
+
+.services-section__divider {
+    width: 10%;
+    /* Espaço real até o título principal: 9px (mesma observação de vazamento do heading — ver
+       comentário acima). */
+    margin: 0 auto 9px;
+    border-top: 3px solid var(--color-dark-green);
+}
+
+.services-section__heading {
+    margin: 0 0 45px;
+    font-family: var(--font-secondary);
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 32px;
+    color: var(--color-brand-green);
+    text-align: center;
+}
+
+/*
+ * Duas grades de 3 cards (não uma única de 6): no original são dois containers "e-grid"
+ * separados, com 30px de espaço entre eles — reproduzido aqui como dois blocos porque isso
+ * afeta o comportamento responsivo real: no breakpoint de coluna única (max-width:767px), cada
+ * bloco empilha SEUS PRÓPRIOS 3 cards com o gap nativo da grade (20px), e só a costura entre os
+ * dois blocos usa o espaçamento maior (30px) — uma grade única de 6 itens com row-gap constante
+ * não reproduziria essa diferença.
+ */
+.services-section__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 10px;
+}
+
+.services-section__grid + .services-section__grid {
+    margin-top: 30px;
+}
+
+.service-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    text-align: center;
+    padding: 20px 10px;
+    border: 1px solid var(--color-brand-green);
+    border-radius: 15px;
+    transition: border-color 0.3s;
+}
+
+.service-card:hover {
+    border-color: var(--color-accent-green);
+}
+
+.service-card__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.service-card__icon svg {
+    width: 80px;
+    height: 80px;
+    fill: var(--color-dark-teal);
+}
+
+.service-card__title {
+    margin: 8px 0 16px;
+    font-family: var(--font-secondary);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 33.6px;
+    color: var(--color-accent-green);
+}
+
+.service-card__text {
+    margin: 0;
+    font-family: var(--font-primary);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    color: var(--color-text-gray);
+}
+
+.services-section__cta {
+    display: flex;
+    justify-content: center;
+    margin-top: 45px;
+    margin-bottom: 25px;
+}
+
+.btn--filled {
+    padding: 12px 24px;
+    line-height: 15px;
+    border-radius: 3px;
+    color: var(--color-dark-green);
+    background: #61CE70;
+}
+
+.btn--filled:hover,
+.btn--filled:focus-visible {
+    background: var(--color-accent-green);
+}
+
+@media (max-width: 767px) {
+    .services-section__grid {
+        grid-template-columns: 1fr;
+    }
+}
