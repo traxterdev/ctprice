@@ -1,0 +1,116 @@
+/**
+ * assets/css/video-section.css
+ *
+ * Seção "Ética, agilidade, segurança nos processos e respeito ao cliente" — 4ª seção de nível
+ * superior da Home no original (entre welcome-section e services-section).
+ *
+ * Fonte de medição: reinspeção direta via Chrome DevTools MCP em 1440x900/900x1200/390x844.
+ *
+ * Container: 1140px (mesma largura própria de blog-section/footer bottom bar — não é o token
+ * global --container-width de 1200px). Fluida (sem breakpoint próprio): o vídeo mantém a
+ * proporção 16:9 e o único reflow vem da largura do container ficando menor — confirmado
+ * idêntico em 1440/900/390px, sem nenhuma regra @media específica desta seção no original.
+ *
+ * margin:25px 0 no elemento de nível superior é o valor medido no original (colapsa
+ * normalmente com a margem das seções vizinhas: 50px com welcome-section acima, 0 com
+ * services-section abaixo).
+ */
+
+.video-section {
+    margin: 25px 0;
+    padding: 0 10px;
+}
+
+.video-section__inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 10px 0;
+}
+
+.video-section__body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px;
+    margin-bottom: 30px;
+}
+
+.video-section__heading {
+    margin: 0;
+    font-family: var(--font-primary);
+    font-size: 35px;
+    font-weight: 900;
+    line-height: 35px;
+    color: var(--color-dark-green);
+    text-align: center;
+}
+
+.video-section__text {
+    margin: 0 0 14.4px;
+    font-family: var(--font-primary);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    color: var(--color-text-gray);
+    text-align: center;
+}
+
+.video-section__highlight {
+    color: var(--color-dark-green);
+}
+
+.video-section__player {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+}
+
+.video-section__video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.video-section__cover {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+}
+
+.video-section__cover.is-hidden {
+    display: none;
+}
+
+.video-section__play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.video-section__play-icon {
+    width: 100px;
+    height: 100px;
+    fill: #F50101;
+    filter: drop-shadow(1px 0 6px rgba(0, 0, 0, 0.3));
+    opacity: 0.8;
+    transition: opacity 0.5s;
+}
+
+.video-section__cover:hover .video-section__play-icon,
+.video-section__play:focus-visible .video-section__play-icon {
+    opacity: 1;
+}

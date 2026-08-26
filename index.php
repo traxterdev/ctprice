@@ -8,12 +8,16 @@
  * botão flutuante de WhatsApp permanecem como placeholder — ver docs/architecture-proposal.md.
  *
  * O Hero é renderizado por components/hero-slider.php, a seção "Bem-vindo à CT Price" por
- * components/welcome-section.php, "Nossos Serviços" por components/services-section.php, "Por
+ * components/welcome-section.php, "Ética, agilidade..." (vídeo institucional) por
+ * components/video-section.php, "Nossos Serviços" por components/services-section.php, "Por
  * que nos escolher?" por components/why-choose-us-section.php, "Últimas notícias" por
  * components/blog-section.php e "Quer receber um contato?" por components/contact-section.php —
  * esta página só define os dados de cada um (conteúdo real e confirmado do site original) e
  * inclui os componentes. O footer (includes/footer.php) é global e reutilizado por todas as
  * páginas do site, não específico da Home.
+ *
+ * Seções do baseline ainda ausentes (ver docs/reference/home-final-validation.md): Depoimentos
+ * (carrossel) e Carrossel de clientes/parceiros (logos) — fora do escopo desta etapa.
  */
 require __DIR__ . '/config/bootstrap.php';
 
@@ -35,6 +39,11 @@ $heroSlides = [
         'html' => 'Fornecemos informações <br> <span class="hero-slide__highlight">precisas e seguras</span> para <br>que você possa tomar <br>as <span class="hero-slide__highlight">melhores decisões </span><br>para seu negócio',
     ],
 ];
+
+$videoSectionHeading = 'Ética, agilidade, segurança nos processos e respeito ao cliente';
+$videoSectionHtml = 'A <strong class="video-section__highlight">CT Price</strong> nasceu determinada a conquistar o mercado com eficiência e dedicação, valorizando sempre o cliente e preocupando-se em encontrar soluções adequadas para cada situação.';
+$videoSectionSrc = BASE_URL . '/assets/videos/institucional-ct-price.mp4';
+$videoSectionCover = BASE_URL . '/assets/images/content/institucional-video-cover.jpg';
 
 $welcomeHeading = 'Bem-vindo à CT Price';
 $welcomeLead = 'Obtenha consultoria e suporte especializado da CT price, uma empresa de consultoria contábil que está sempre ao seu lado.';
@@ -173,6 +182,7 @@ $contactWhatsapp = $company['whatsapp_principal']['url'];
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/header.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/hero.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/welcome-section.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/video-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/services-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/why-choose-us-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/blog-section.css">
@@ -189,6 +199,7 @@ $contactWhatsapp = $company['whatsapp_principal']['url'];
 <main>
     <?php require __DIR__ . '/components/hero-slider.php'; ?>
     <?php require __DIR__ . '/components/welcome-section.php'; ?>
+    <?php require __DIR__ . '/components/video-section.php'; ?>
     <?php require __DIR__ . '/components/services-section.php'; ?>
     <?php require __DIR__ . '/components/why-choose-us-section.php'; ?>
     <?php require __DIR__ . '/components/blog-section.php'; ?>
@@ -204,6 +215,7 @@ $contactWhatsapp = $company['whatsapp_principal']['url'];
 <script src="<?= BASE_URL ?>/assets/vendor/swiper/swiper-bundle.min.js" defer></script>
 <script src="<?= BASE_URL ?>/assets/js/header.js" defer></script>
 <script src="<?= BASE_URL ?>/assets/js/cookie-banner.js" defer></script>
+<script src="<?= BASE_URL ?>/assets/js/video-section.js" defer></script>
 <script src="<?= BASE_URL ?>/assets/js/hero-init.js" defer></script>
 <script src="<?= BASE_URL ?>/assets/js/scroll-reveal.js" defer></script>
 </body>
