@@ -20,6 +20,7 @@ require __DIR__ . '/../config/bootstrap.php';
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/variables.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/header.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/footer.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/whatsapp-button.css">
 </head>
 <body>
 

@@ -178,6 +178,7 @@ $contactWhatsapp = $company['whatsapp_principal']['url'];
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/blog-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/contact-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/footer.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/whatsapp-button.css">
 </head>
 <body>
 

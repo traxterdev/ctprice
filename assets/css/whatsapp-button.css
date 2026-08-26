@@ -1,0 +1,38 @@
+/**
+ * assets/css/whatsapp-button.css
+ *
+ * Botão flutuante global de WhatsApp (includes/whatsapp-button.php).
+ *
+ * Fonte de medição: reinspeção direta via Chrome DevTools MCP em 1440x900/900x1200/390x844 —
+ * valores idênticos nos três, sem nenhuma regra responsiva (confirmado, não presumido).
+ */
+
+.whatsapp-float {
+    position: fixed;
+    left: 35px;
+    bottom: 50px;
+    display: inline-flex;
+    width: 60px;
+    height: 60px;
+    /* z-index baixo, igual ao original — o cookie banner (a implementar depois, com z-index bem
+       mais alto) cobre este botão quando ambos estão visíveis. Não é uma decisão de design desta
+       tarefa; é fidelidade ao comportamento medido. */
+    z-index: 1;
+    transition: transform 0.3s;
+}
+
+.whatsapp-float__icon {
+    width: 60px;
+    height: 60px;
+    fill: var(--color-accent-green);
+}
+
+.whatsapp-float:active {
+    transform: scale(0.9);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .whatsapp-float {
+        transition: none;
+    }
+}
