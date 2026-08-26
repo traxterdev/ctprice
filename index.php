@@ -8,9 +8,10 @@
  * WhatsApp permanecem como placeholder — ver docs/architecture-proposal.md.
  *
  * O Hero é renderizado por components/hero-slider.php, a seção "Bem-vindo à CT Price" por
- * components/welcome-section.php, "Nossos Serviços" por components/services-section.php e "Por
- * que nos escolher?" por components/why-choose-us-section.php — esta página só define os dados
- * de cada um (conteúdo real e confirmado do site original) e inclui os componentes.
+ * components/welcome-section.php, "Nossos Serviços" por components/services-section.php, "Por
+ * que nos escolher?" por components/why-choose-us-section.php e "Últimas notícias" por
+ * components/blog-section.php — esta página só define os dados de cada um (conteúdo real e
+ * confirmado do site original) e inclui os componentes.
  */
 require __DIR__ . '/config/bootstrap.php';
 
@@ -116,6 +117,42 @@ $whyChooseUsItems = [
         'text' => 'Nos destacamos pela alta performance de nosso time de profissionais, entregando resultados excepcionais com qualidade, presteza e eficiência, para o impulsionamento da sua empresa',
     ],
 ];
+
+$blogHeading = 'Últimas notícias';
+$blogPosts = [
+    [
+        'image' => BASE_URL . '/assets/images/blog/blog03-300x155.webp',
+        'category' => 'FOLHA DE PAGAMENTO',
+        'title' => 'Reforma trabalhista volta à pauta do STF; julgamento acontece neste mês',
+        'excerpt' => 'Julgamento será retomado sobre a validade de contrato de trabalho intermitente.',
+        // Original: https://ctprice.com.br/wp/reforma-trabalhista-volta-a-pauta-do-stf-julgamento-acontece-neste-mes/
+        // Sem defeito conhecido documentado (ao contrário do CTA de services-section) e a página
+        // de post da nova arquitetura ainda não existe — link reproduzido como no original.
+        'url' => 'https://ctprice.com.br/wp/reforma-trabalhista-volta-a-pauta-do-stf-julgamento-acontece-neste-mes/',
+        'date' => 'agosto 2, 2024',
+        'time' => '17:01',
+    ],
+    [
+        'image' => BASE_URL . '/assets/images/blog/blog02-300x155.webp',
+        'category' => 'INFORMATIVO',
+        'title' => 'Receita Federal e Correios lançam portal de compras internacionais',
+        'excerpt' => 'Ferramenta tem como objetivo auxiliar consumidores em questões de importação, desde o rastreamento até a prevenção de fraudes.',
+        'url' => 'https://ctprice.com.br/wp/receita-federal-e-correios-lancam-portal-de-compras-internacionais/',
+        'date' => 'agosto 2, 2024',
+        'time' => '16:59',
+    ],
+    [
+        'image' => BASE_URL . '/assets/images/blog/blog01-300x155.webp',
+        'category' => 'INFORMATIVO',
+        'title' => 'Novo golpe mira em empreendedores e cria sites falsos que simulam a geração de documentos',
+        'excerpt' => 'Receita Federal alerta empresários sobre os sites falsos e diz que já está tomando as medidas cabíveis para tirá-los do ar.',
+        // Slug "hello-world" é o post de exemplo padrão do WordPress, nunca excluído no
+        // original (site-inventory.md, seção 2) — reproduzido como está, não é um link quebrado.
+        'url' => 'https://ctprice.com.br/wp/hello-world/',
+        'date' => 'julho 29, 2024',
+        'time' => '13:53',
+    ],
+];
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -132,6 +169,7 @@ $whyChooseUsItems = [
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/welcome-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/services-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/why-choose-us-section.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/blog-section.css">
 </head>
 <body>
 
@@ -143,6 +181,7 @@ $whyChooseUsItems = [
     <?php require __DIR__ . '/components/welcome-section.php'; ?>
     <?php require __DIR__ . '/components/services-section.php'; ?>
     <?php require __DIR__ . '/components/why-choose-us-section.php'; ?>
+    <?php require __DIR__ . '/components/blog-section.php'; ?>
 
     <!-- TODO: demais seções da Home (ver docs/reference/home-desktop-audit.md) -->
 </main>

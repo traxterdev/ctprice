@@ -1,0 +1,187 @@
+/**
+ * assets/css/blog-section.css
+ *
+ * Estilos da seção "Últimas notícias" — quarta seção de conteúdo da Home (após
+ * why-choose-us-section).
+ *
+ * Fonte de medição: docs/reference/home-desktop-audit.md e reinspeção direta via Chrome
+ * DevTools MCP em 1440x900/900x1200/390x844.
+ *
+ * Container: 1140px (largura própria medida desta seção — nem 1200px nem os 1240px usados em
+ * services-section).
+ *
+ * Breakpoints do grid: PRÓPRIOS desta seção (widget Elementor "Posts" com colunas responsivas
+ * nativas), confirmados por medição direta — NÃO o breakpoint de conteúdo (767px) usado nas
+ * demais seções:
+ *   - até 1024px (inclusive): 3 → 2 colunas
+ *   - até 767px (inclusive): 2 → 1 coluna
+ * Os dois valores (1024/767) coincidem com breakpoints já usados em outras partes do projeto
+ * (header.css e o breakpoint de conteúdo geral), mas aqui governam um comportamento
+ * independente, próprio deste widget — confirmado testando 1023/1024/1025 e 767/768.
+ */
+
+.blog-section {
+    margin: 50px 0;
+    padding: 0 10px;
+}
+
+.blog-section__container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.blog-section__heading-block {
+    padding: 10px 0 14px;
+    text-align: center;
+}
+
+.blog-section__heading {
+    margin: 0 0 10px;
+    font-family: var(--font-primary);
+    font-size: 35px;
+    font-weight: 600;
+    line-height: 35px;
+    color: var(--color-dark-green);
+}
+
+.blog-section__divider {
+    width: 10%;
+    margin: 0 auto;
+    border-top: 3px solid var(--color-dark-green);
+}
+
+.blog-section__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 30px;
+    row-gap: 35px;
+    padding: 10px;
+}
+
+.blog-card {
+    /*
+     * flex column: o card inteiro é esticado pelo grid (align-items:stretch, padrão) para a
+     * altura do card mais alto da linha; sem isso, o espaço extra viraria vazio no fim do card
+     * em vez de ser absorvido pelo corpo (empurrando a data/hora para o rodapé, como no
+     * original — confirmado: .elementor-post__card é flex column com .elementor-post__text
+     * em flex:1 1 auto).
+     */
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    background: var(--color-white);
+    border-radius: 3px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.3s;
+}
+
+.blog-card:hover {
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+}
+
+.blog-card__thumb-link {
+    display: block;
+    margin-bottom: 20px;
+}
+
+.blog-card__thumb {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1.5152;
+    object-fit: cover;
+    object-position: 50% 50%;
+}
+
+.blog-card__badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 7.2px 14.4px;
+    border-radius: 999px;
+    background: #A66F2E;
+    color: var(--color-white);
+    font-family: var(--font-primary);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 12px;
+    text-transform: uppercase;
+}
+
+.blog-card__body {
+    flex: 1 1 auto;
+    margin-top: 20px;
+    padding: 0 30px;
+}
+
+.blog-card__title {
+    margin: 0 0 25px;
+}
+
+.blog-card__title a {
+    font-family: var(--font-primary);
+    font-size: 21px;
+    font-weight: 600;
+    line-height: 25.2px;
+    color: var(--color-dark-green);
+    text-decoration: none;
+}
+
+.blog-card__excerpt {
+    margin: 0 0 25px;
+}
+
+.blog-card__excerpt p {
+    margin: 0;
+    font-family: var(--font-primary);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 21px;
+    color: #777777;
+}
+
+.blog-card__read-more {
+    display: inline-block;
+    margin: 0 0 20px;
+    font-family: var(--font-primary);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 18px;
+    text-transform: uppercase;
+    color: var(--color-dark-green);
+    text-decoration: none;
+}
+
+.blog-card__meta {
+    padding: 15px 30px;
+    font-family: var(--font-tertiary);
+    font-size: 12px;
+    line-height: 15.6px;
+    color: var(--color-dark-green);
+}
+
+.blog-card__time::before {
+    content: "•";
+    margin: 0 6px;
+}
+
+/* Breakpoints próprios desta seção (widget de posts) — ver cabeçalho deste arquivo */
+@media (max-width: 1024px) {
+    .blog-section__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 767px) {
+    .blog-section__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .blog-card__thumb {
+        aspect-ratio: 2;
+    }
+}
