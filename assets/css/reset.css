@@ -1,8 +1,53 @@
 /**
  * assets/css/reset.css
  *
- * Responsabilidade: reset/normalização base de estilos do navegador (não uma cópia do
- * reset.css do Elementor — ver CLAUDE.md, "Não copiar código gerado pelo Elementor").
+ * Reset/normalização mínima e própria do projeto (não é uma cópia do reset.css do Elementor
+ * nem de qualquer framework — ver CLAUDE.md, "Não copiar código gerado pelo Elementor").
  *
- * Nenhuma regra implementada ainda nesta etapa.
+ * Escopo intencionalmente pequeno: só o necessário para que os componentes não herdem
+ * comportamento inconsistente do user-agent. Resets específicos de um componente (ex.:
+ * remover list-style só da navegação) ficam no CSS daquele componente.
  */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+a {
+    color: inherit;
+}
+
+button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+/* Classe utilitária para conteúdo acessível a leitores de tela, oculto visualmente. */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}

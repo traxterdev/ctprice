@@ -1,12 +1,37 @@
 /**
  * assets/css/variables.css
  *
- * Responsabilidade: tokens de design como custom properties em :root — cores, famílias e
- * tamanhos de tipografia, espaçamentos, border-radius, sombras, durações de transição e
- * breakpoints.
+ * Tokens de design globais, como custom properties em :root. Populado apenas com valores já
+ * confirmados por medição (não estimados) e claramente globais (usados fora do header também).
+ * Fonte: docs/reference/home-desktop-audit.md (seções 6 e 7).
  *
- * Valores devem vir de docs/reference/home-desktop-audit.md (seções 6, 7 e 9) — medidos,
- * nunca estimados.
- *
- * Nenhum valor foi implementado ainda nesta etapa.
+ * Tokens específicos de um único componente (ex.: dimensões do botão hambúrguer) ficam no
+ * próprio CSS do componente, não aqui.
  */
+
+:root {
+    /* Cores institucionais (home-desktop-audit.md, seção 7) */
+    --color-brand-green: #057038;   /* verde-marca: links de menu, bordas, botão outline */
+    --color-dark-green: #084020;    /* verde-escuro: headings principais */
+    --color-dark-teal: #00222C;     /* verde-petróleo escuro: headings secundários, hover */
+    --color-accent-green: #10E36B;  /* verde-vivo: ícones do topbar, hover de menu/botão */
+    --color-text-gray: #7A7A7A;     /* cinza de parágrafo/descrição */
+    --color-white: #FFFFFF;
+    --color-off-white: #FEFEFE;     /* texto do topbar */
+
+    /* Tipografia global confirmada */
+    --font-primary: "Roboto", sans-serif;
+    --font-secondary: "Poppins", sans-serif;
+    --font-topbar: "Roboto Flex", sans-serif;
+
+    /* Container "boxed" usado na maior parte das seções do site */
+    --container-width: 1200px;
+
+    /*
+     * Breakpoints reais do site (não utilizáveis como valor dentro de @media — apenas
+     * documentados aqui para referência; cada @media usa o valor literal):
+     * - 1024px: breakpoint do menu do header (horizontal -> hambúrguer)
+     * - 767px: breakpoint do conteúdo (grids -> coluna única)
+     * Ver docs/reference/home-tablet-audit.md.
+     */
+}

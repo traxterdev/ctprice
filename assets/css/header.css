@@ -1,12 +1,374 @@
 /**
  * assets/css/header.css
  *
- * Responsabilidade: estilos da topbar + header + menu (logo, navegação, botão "Área
- * Restrita"), incluindo o breakpoint de max-width:1024px em que o menu horizontal vira
- * hambúrguer.
+ * Estilos da topbar + header (logo, navegação, botão "Área Restrita", hambúrguer).
  *
- * Referência de medição: docs/reference/home-desktop-audit.md (seção 2) e
- * docs/reference/home-tablet-audit.md (confirmação exata do breakpoint do menu).
+ * Fonte de medição: docs/reference/home-desktop-audit.md (seção 2) e
+ * docs/reference/home-tablet-audit.md (breakpoint exato do menu). Valores em px são os
+ * medidos no site original; onde uma medição exata não estava disponível (marcado nos
+ * comentários), foi usado um valor de aproximação a confirmar na validação visual.
  *
- * Nenhuma regra implementada ainda nesta etapa.
+ * Dois breakpoints reais e independentes, preservados como no original (não unificados):
+ * - 1024px: o menu horizontal vira hambúrguer (docs/reference/home-tablet-audit.md).
+ * - 767px: o header (linha logo/nav/CTA) empilha em coluna — comportamento próprio deste
+ *   componente (flex-wrap do header), não uma substituição do breakpoint de conteúdo.
  */
+
+/* =========================================================================
+   Topbar
+   ========================================================================= */
+
+.topbar {
+    background: linear-gradient(180deg, var(--color-dark-teal) 0%, var(--color-brand-green) 100%);
+    padding: 10px;
+}
+
+.topbar__inner {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    row-gap: 4px;
+    column-gap: 24px;
+}
+
+.topbar__contacts {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    row-gap: 4px;
+    column-gap: 30px; /* confirmado por medição direta no original (validação visual) */
+    flex: 1 1 auto;
+}
+
+.topbar__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    color: var(--color-off-white);
+    font-family: var(--font-topbar);
+    font-size: 15px;
+    font-weight: 500;
+    /* sem white-space:nowrap — corrigido: o texto (ex.: endereço) precisa poder quebrar em
+       mais de uma linha em telas estreitas, como no original (bug comprovado em 390px) */
+}
+
+.topbar__item .topbar__icon {
+    margin-top: 2px; /* alinha o ícone com a primeira linha do texto quando ele quebra */
+}
+
+.topbar__item a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: inherit;
+    text-decoration: none;
+}
+
+.topbar__icon {
+    width: 15px;
+    height: 15px;
+    flex: none;
+    fill: var(--color-accent-green);
+}
+
+.topbar__languages {
+    display: flex;
+    align-items: center;
+    gap: 0; /* confirmado por medição direta no original: bandeiras adjacentes, sem gap */
+    list-style: none;
+    margin: 0;
+    padding: 11px 0; /* reproduz a altura de 46px do widget de idiomas medida no original */
+    flex: 0 0 auto;
+}
+
+.topbar__language img {
+    display: block;
+}
+
+/* =========================================================================
+   Header (logo + navegação + CTA)
+   ========================================================================= */
+
+.site-header {
+    position: relative; /* nunca sticky — comportamento medido no original */
+    background: transparent;
+    padding: 10px;
+}
+
+.site-header__bar {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-wrap: nowrap;
+    gap: 16px;
+}
+
+@media (max-width: 767px) {
+    .site-header__bar {
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+/* --- Logo ---------------------------------------------------------------- */
+
+.site-header__logo {
+    flex: 0 0 auto; /* corrigido: "0 1 auto" permitia que o flexbox encolhesse a logo abaixo do
+                       tamanho definido (bug comprovado na validação visual — logo renderizava
+                       170px em vez de 233px em 1440px de largura) */
+}
+
+.site-header__logo img {
+    width: 233px;
+    height: auto;
+}
+
+@media (max-width: 1024px) {
+    .site-header__logo img {
+        width: 136px;
+    }
+}
+
+@media (max-width: 767px) {
+    .site-header__logo img {
+        width: min(350px, 90%);
+        margin: 0 auto;
+    }
+}
+
+/* --- Botão hambúrguer ------------------------------------------------------ */
+
+.menu-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 33px;
+    height: 33px;
+    color: var(--color-dark-teal);
+    background: rgba(0, 0, 0, 0.05); /* confirmado por medição direta no original */
+    border-radius: 4px;
+}
+
+.menu-toggle[aria-expanded="true"] {
+    color: var(--color-accent-green);
+}
+
+.menu-toggle__icon {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+}
+
+.menu-toggle__icon--close {
+    display: none;
+}
+
+.menu-toggle[aria-expanded="true"] .menu-toggle__icon--bars {
+    display: none;
+}
+
+.menu-toggle[aria-expanded="true"] .menu-toggle__icon--close {
+    display: block;
+}
+
+@media (max-width: 1024px) {
+    .menu-toggle {
+        display: inline-flex;
+    }
+}
+
+/* --- Navegação principal -------------------------------------------------- */
+
+.site-header__nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 auto;
+    padding: 10px 0; /* confirmado por medição direta no original: o wrapper do menu tem
+                        padding vertical próprio, além do padding do header */
+}
+
+.primary-nav__list {
+    display: flex;
+    width: 100%; /* corrigido: estava em .primary-nav (sempre 100%), o que empurrava o
+                    hambúrguer para a borda esquerda em vez de centralizado — bug comprovado
+                    na validação visual em 390px */
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 0; /* confirmado por medição direta no original: sem espaçamento extra entre linhas
+               do menu, o espaçamento visual vem só do padding de cada link */
+    flex-wrap: wrap;
+}
+
+.primary-nav__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 13px 20px; /* confirmado por medição direta no original (validação visual) */
+    font-family: var(--font-primary);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 20px;
+    color: var(--color-brand-green);
+    text-decoration: none;
+    transition: 0.4s;
+}
+
+.primary-nav__link--toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.primary-nav__caret {
+    width: 10px;
+    height: 8px;
+    flex: none;
+}
+
+.has-submenu {
+    position: relative;
+}
+
+.primary-nav__submenu {
+    display: none;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background: var(--color-white);
+}
+
+.primary-nav__submenu a {
+    display: block;
+    padding: 13px 20px; /* confirmado por medição direta no original: submenu usa tipografia
+                           própria, diferente do item de topo */
+    font-family: var(--font-primary);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-dark-teal);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.primary-nav__submenu a:hover,
+.primary-nav__submenu a:focus {
+    background: var(--color-dark-teal);
+    color: var(--color-accent-green);
+}
+
+/* Exibe o submenu por mouse (hover), teclado (foco) ou clique (aria-expanded) */
+.has-submenu:hover .primary-nav__submenu,
+.has-submenu:focus-within .primary-nav__submenu,
+.primary-nav__link--toggle[aria-expanded="true"] + .primary-nav__submenu {
+    display: block;
+}
+
+@media (min-width: 1025px) {
+    .primary-nav__submenu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        min-width: 200px;
+        z-index: 10;
+    }
+}
+
+/* Menu horizontal -> hambúrguer: breakpoint real medido em max-width:1024px */
+@media (max-width: 1024px) {
+    .primary-nav__list {
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 0;
+    }
+
+    .primary-nav__list.is-open {
+        display: flex;
+    }
+
+    .primary-nav__link {
+        width: 100%;
+        justify-content: space-between;
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1.4;
+        padding: 10px 20px;
+    }
+
+    .primary-nav__link--toggle[aria-expanded="true"] {
+        background: var(--color-dark-teal);
+        color: var(--color-accent-green);
+    }
+
+    .primary-nav__submenu a {
+        font-size: 12px; /* original ~11.05px, valor não-redondo (tipografia fluida do Elementor) */
+        padding-left: 20px; /* corrigido: confirmado por medição direta no original (era 40px) */
+        border-left: 8px solid transparent;
+    }
+}
+
+/* --- Botão "Área Restrita" ------------------------------------------------ */
+
+.site-header__cta {
+    flex: 0 0 auto;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-primary);
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: 0.3s;
+}
+
+.btn--pill-outline {
+    border: 3px solid var(--color-brand-green);
+    border-radius: 40px;
+    padding: 12px 24px;
+    color: var(--color-brand-green);
+    background: transparent;
+}
+
+.btn--pill-outline:hover,
+.btn--pill-outline:focus-visible {
+    background: var(--color-dark-teal);
+    color: var(--color-accent-green);
+    border-color: transparent;
+}
+
+/* =========================================================================
+   Empilhamento do header em telas estreitas (max-width:767px)
+   Precisa vir DEPOIS das declarações de "flex" de cada seção acima (mesma
+   especificidade — a ordem no arquivo decide, e essa regra precisa vencer
+   nessa faixa de largura). Bug comprovado na validação visual: quando esta
+   regra vinha antes, as declarações unconditionais de "flex" mais abaixo no
+   arquivo sempre venciam, mesmo em telas estreitas, e o hambúrguer/logo/CTA
+   nunca empilhavam de fato.
+   ========================================================================= */
+@media (max-width: 767px) {
+    .site-header__logo,
+    .site-header__nav,
+    .site-header__cta {
+        flex: 1 1 100%;
+    }
+}
