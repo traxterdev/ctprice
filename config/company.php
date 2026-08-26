@@ -23,11 +23,15 @@ return [
     // e corroborado pela ficha do Google Maps (ver docs/reference/global-data-conflicts.md, seção 3).
     'razao_social' => 'CT Price Organização Contábil',
 
-    'whatsapp_principal' => null,
-    // TODO: DIVERGÊNCIA CONFIRMADA — 3 números diferentes encontrados no site atual, variando por
-    // página e por posição (topbar vs. botão flutuante). Levantamento completo em
-    // docs/reference/global-data-conflicts.md, seção 1. Não escolher um valor sem decisão do cliente.
-    // Ver docs/architecture-proposal.md, seção 14.1, item 1.
+    // Definido pelo cliente como o WhatsApp oficial/canônico da CT Price (2026-08-17).
+    // A auditoria original encontrou 3 números diferentes no site atual (topbar/botão flutuante
+    // variando por página) — esse levantamento permanece registrado apenas como histórico em
+    // docs/reference/global-data-conflicts.md, seção 1. Nenhum dos outros números é mais
+    // candidato a valor deste campo.
+    'whatsapp_principal' => [
+        'numero' => '(67) 99261-6117',
+        'url' => 'https://api.whatsapp.com/send?phone=5567992616117',
+    ],
 
     // Confirmado sem divergência: idêntico no topbar de todas as 10 páginas institucionais e dos
     // 3 posts de blog verificados.
