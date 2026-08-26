@@ -1,0 +1,92 @@
+/**
+ * assets/css/internal-hero.css
+ *
+ * Hero interno reutilizável (components/internal-hero.php) — padrão de páginas de conteúdo
+ * institucional, identificado em docs/reference/sobre-nos-audit.md.
+ *
+ * Fonte de medição: reinspeção direta via Chrome DevTools MCP em 1440x900/900x1200/390x844.
+ *
+ * Desktop/tablet (>767px): fidelidade máxima ao original — altura fixa 640px, imagem full-bleed
+ * (`background-size:cover`, sem overlay), coluna de texto com `margin-left:200px` fixo (valor
+ * medido, não um erro — é assim que o original reserva a faixa da imagem à direita do texto),
+ * texto centralizado verticalmente. Sem breakpoint próprio entre 1440 e 900 (confirmado: mesmos
+ * valores nos dois viewports) — corresponde ao comportamento real medido, não a uma omissão.
+ *
+ * Mobile (<=767px) — CORREÇÃO INTENCIONAL DE DEFEITO CONHECIDO (categoria C, ver
+ * components/internal-hero.php): o original mantém a margem de 200px e a tipografia de 40px
+ * fixas em qualquer largura, causando quebra de linha extrema e overflow horizontal
+ * (`scrollWidth > clientWidth` confirmado em 390px). Aqui a margem fixa é substituída por padding
+ * responsivo e a tipografia é reduzida, preservando a imagem, a altura geral da seção, o eyebrow,
+ * o título e a composição de texto ocupando uma faixa da imagem — sem overflow.
+ */
+
+.internal-hero {
+    position: relative;
+    height: 640px;
+    padding: 10px;
+    display: flex;
+    background-size: cover;
+    background-position: 0% 0%;
+    background-repeat: no-repeat;
+}
+
+.internal-hero__content {
+    /*
+     * O original divide o espaço restante (após os 200px de margem fixa) em duas colunas iguais
+     * — a segunda vazia, só para reservar a faixa de imagem à direita (ver nota no componente).
+     * `calc(50% - 100px)` reproduz exatamente essa largura fluida sem precisar de uma segunda
+     * div vazia no DOM: confirmado batendo com o valor medido tanto em 1440px (602,5px) quanto
+     * em 900px (332,5px) do original.
+     */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    width: calc(50% - 100px);
+    margin-left: 200px;
+    padding: 10px;
+}
+
+.internal-hero__eyebrow {
+    margin: 0;
+    font-family: var(--font-secondary);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: -1.2px;
+    text-transform: uppercase;
+    color: var(--color-dark-teal);
+}
+
+.internal-hero__title {
+    margin: 0 0 14.4px;
+    font-family: var(--font-primary);
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 35px;
+    color: var(--color-brand-green);
+}
+
+.internal-hero__title strong {
+    font-weight: 700;
+}
+
+@media (max-width: 767px) {
+    .internal-hero__content {
+        width: auto;
+        max-width: 78%;
+        margin-left: 0;
+        padding: 0 24px;
+    }
+
+    .internal-hero__eyebrow {
+        font-size: 15px;
+        line-height: 18px;
+        letter-spacing: -0.6px;
+    }
+
+    .internal-hero__title {
+        font-size: 24px;
+        line-height: 28px;
+    }
+}

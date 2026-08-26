@@ -1,0 +1,78 @@
+/**
+ * assets/css/image-text-section.css
+ *
+ * Bloco "imagem + texto" (components/image-text-section.php) — padrão reutilizável de conteúdo
+ * institucional em duas colunas, sem heading/eyebrow próprios.
+ *
+ * Fonte de medição: reinspeção direta via Chrome DevTools MCP em 1440x900/900x1200/390x844.
+ *
+ * Container: 1140px (não o token global de 1200px — valor próprio medido desta seção, igual ao
+ * já usado em blog-section/testimonials-section). Duas colunas de 50% cada, sem gap entre elas
+ * (`gap:0`, confirmado). Imagem centralizada verticalmente na sua coluna; texto alinhado ao topo
+ * na sua — alinhamento assimétrico confirmado por medição, não uma escolha arbitrária.
+ *
+ * Breakpoint de empilhamento: `max-width:767px`, confirmado independentemente para este
+ * componente (testado 767/768) — mesmo valor já usado no resto do site, mas não presumido.
+ */
+
+.image-text-section {
+    margin: 35px 0;
+    padding: 0 10px;
+}
+
+.image-text-section__inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 10px 0;
+    display: flex;
+    gap: 0;
+}
+
+.image-text-section__image-col,
+.image-text-section__text-col {
+    flex: 0 0 50%;
+    max-width: 50%;
+    padding: 10px;
+}
+
+.image-text-section__image-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.image-text-section__image {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.image-text-section__content p {
+    margin: 0 0 14.4px;
+    font-family: var(--font-primary);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    color: var(--color-text-gray);
+    text-align: left;
+}
+
+.image-text-section--image-right .image-text-section__inner {
+    flex-direction: row-reverse;
+}
+
+@media (max-width: 767px) {
+    .image-text-section__inner {
+        flex-direction: column;
+    }
+
+    .image-text-section__image-col,
+    .image-text-section__text-col {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .image-text-section--image-right .image-text-section__inner {
+        flex-direction: column;
+    }
+}
