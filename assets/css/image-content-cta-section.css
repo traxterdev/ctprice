@@ -1,0 +1,114 @@
+/**
+ * assets/css/image-content-cta-section.css
+ *
+ * Bloco "imagem + heading + texto + CTA" em fundo gradiente (components/image-content-cta-section.php)
+ * — seção "Dedicação" de /sobre-nos/.
+ *
+ * Fonte de medição: reinspeção direta via Chrome DevTools MCP em 1440x900/900x1200/390x844.
+ *
+ * Diferença estrutural chave em relação a image-text-section.css: esta seção NÃO tem gutter
+ * lateral (`padding:0` no elemento de seção, medido — não `0 10px` como as demais seções
+ * "boxed" do site). O gradiente é full-bleed (cobre toda a largura da viewport); apenas o
+ * conteúdo interno é limitado a 1140px (mesmo valor próprio já usado em image-text-section.css
+ * e flat-icon-box-section.css).
+ *
+ * Coluna de texto: os três itens (heading, texto, CTA) são distribuídos com
+ * `justify-content:space-around` — não alinhamento simples ao topo (diferente de
+ * image-text-section.css) nem stretch de grid (diferente de flat-icon-box-section.css).
+ * Confirmado por medição direta que esse é o mecanismo real (a folga entre os itens muda com a
+ * altura da coluna), por isso a propriedade é usada tal qual, em vez de margens fixas.
+ *
+ * Breakpoint de empilhamento: `max-width:767px`, confirmado independentemente para esta seção
+ * (testado 767/768) — mesmo valor do resto do site, mas não presumido.
+ */
+
+.image-content-cta-section {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(90deg, #00222C 16%, #057038 100%);
+}
+
+.image-content-cta-section__inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 35px 0;
+    display: flex;
+    flex-direction: row;
+    gap: 0;
+}
+
+.image-content-cta-section__image-col,
+.image-content-cta-section__text-col {
+    flex: 0 0 50%;
+    max-width: 50%;
+    padding: 10px;
+}
+
+.image-content-cta-section__image {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.image-content-cta-section__text-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+.image-content-cta-section__heading {
+    margin: 0;
+    font-family: var(--font-secondary);
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 28px;
+    color: var(--color-off-white);
+    text-align: left;
+}
+
+.image-content-cta-section__content p {
+    margin: 0 0 14.4px;
+    font-family: var(--font-primary);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    color: var(--color-off-white);
+    text-align: left;
+}
+
+.image-content-cta-section__cta-wrap {
+    display: flex;
+    justify-content: center;
+}
+
+.image-content-cta-section__cta {
+    display: inline-block;
+    padding: 12px 24px;
+    font-family: var(--font-primary);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 15px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 3px;
+    color: var(--color-dark-green);
+    background: #61CE70;
+}
+
+.image-content-cta-section__cta:hover,
+.image-content-cta-section__cta:focus-visible {
+    background: var(--color-accent-green);
+}
+
+@media (max-width: 767px) {
+    .image-content-cta-section__inner {
+        flex-direction: column;
+    }
+
+    .image-content-cta-section__image-col,
+    .image-content-cta-section__text-col {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}

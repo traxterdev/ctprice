@@ -22,6 +22,15 @@ $historySection = [
     'image_position' => 'left',
 ];
 
+$dedicationSection = [
+    'image' => BASE_URL . '/assets/images/pages/sobre-nos/01-1024x684.jpg',
+    'image_alt' => '',
+    'heading_html' => '<span style="color:#10E36B;font-weight:bold">Dedicação</span> aos resultados e <span style="color:#10E36B;font-weight:bold">Compromisso</span> com nossos clientes.',
+    'content_html' => '<p>Temos um <strong><span style="color:#10E36B">compromisso</span></strong> com os resultados excepcionais e total dedicação ao sucesso dos <strong><span style="color:#10E36B">nossos clientes</span></strong>.</p><p><strong><span style="color:#10E36B">Trabalhamos incansavelmente</span></strong> para atender suas necessidades e superar expectativas, garantindo que cada detalhe seja tratado com o <strong><span style="color:#10E36B">máximo cuidado e eficiência</span></strong>.</p>',
+    'cta_label' => 'Fale Conosco',
+    'cta_url' => '/fale-conosco/',
+];
+
 $missionVisionValuesSection = [
     'heading' => 'Deixe a contabilidade nas mãos de quem entende!',
     'items' => [
@@ -56,6 +65,7 @@ $missionVisionValuesSection = [
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/internal-hero.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/image-text-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/flat-icon-box-section.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/image-content-cta-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/footer.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/whatsapp-button.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/cookie-banner.css">
@@ -69,8 +79,9 @@ $missionVisionValuesSection = [
     <?php require __DIR__ . '/../components/internal-hero.php'; ?>
     <?php $imageTextSection = $historySection; require __DIR__ . '/../components/image-text-section.php'; ?>
     <?php $flatIconBoxSection = $missionVisionValuesSection; require __DIR__ . '/../components/flat-icon-box-section.php'; ?>
+    <?php $imageContentCtaSection = $dedicationSection; require __DIR__ . '/../components/image-content-cta-section.php'; ?>
 
-    <!-- TODO: demais seções da página "A CT Price" (ver docs/reference/sobre-nos-audit.md) -->
+    <!-- TODO: carrossel de clientes (ver docs/reference/sobre-nos-audit.md) -->
 </main>
 
 <?php require __DIR__ . '/../includes/footer.php'; ?>
