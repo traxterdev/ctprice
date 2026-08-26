@@ -1,0 +1,72 @@
+/**
+ * assets/css/hero.css
+ *
+ * Estilos do Hero (carrossel de destaque) da Home. Depende de assets/vendor/swiper/
+ * (swiper-bundle.min.css) para a mecânica do carrossel — este arquivo só estiliza a
+ * aparência visual do componente, não reimplementa nada do Swiper.
+ *
+ * Fonte de medição: docs/reference/home-desktop-audit.md (seção 12),
+ * docs/reference/home-tablet-audit.md e docs/reference/home-mobile-audit.md (seção Hero).
+ *
+ * Altura (660px), background-size/position (cover / 50% 50%) e o conteúdo (incluindo as
+ * quebras de linha <br> já presentes no texto original) são idênticos nos 3 breakpoints
+ * auditados — não há regra de altura por media query.
+ *
+ * DEFEITO CONHECIDO CORRIGIDO (não reproduzido) — ver docs/architecture-proposal.md, seção 2,
+ * categoria C, e docs/reference/home-mobile-audit.md: no site original, o padding-left de
+ * 150px e o font-size de 30px do texto são fixos em qualquer largura, o que faz o texto
+ * espremer numa coluna de ~130–240px em 390px e quebrar linha excessivamente. Nesta
+ * implementação, o padding e o tamanho de fonte reduzem em max-width:767px (o breakpoint real
+ * de conteúdo do site) para que o texto caiba de forma legível, preservando identidade,
+ * composição, imagem de fundo, altura, hierarquia e tipografia (mesma família, mesmo peso,
+ * mesmos destaques em negrito) — não é um redesenho do Hero.
+ */
+
+.hero-slider {
+    width: 100%;
+    height: 660px;
+}
+
+.hero-slider .swiper-slide {
+    height: 660px;
+    background-size: cover;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+}
+
+.hero-slide__inner {
+    width: 100%;
+    padding: 0 0 0 150px;
+}
+
+.hero-slide__text {
+    margin: 0;
+    max-width: 600px;
+    font-family: var(--font-secondary);
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 30px;
+    color: var(--color-dark-teal);
+    text-align: left;
+}
+
+.hero-slide__highlight {
+    color: #2A3855;
+    font-weight: 700;
+}
+
+/* Correção do defeito conhecido (ver cabeçalho do arquivo): coluna e fonte reduzidas para o
+   texto caber sem quebra excessiva, mantendo altura, imagem e hierarquia do Hero. */
+@media (max-width: 767px) {
+    .hero-slide__inner {
+        padding: 0 24px;
+    }
+
+    .hero-slide__text {
+        max-width: 100%;
+        font-size: 21px;
+        line-height: 26px;
+    }
+}

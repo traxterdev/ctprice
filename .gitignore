@@ -4,7 +4,10 @@
 
 # Dependencies
 node_modules/
-vendor/
+/vendor/
+# Nota: ancorado na raiz — o projeto não usa Composer. Um "vendor/" sem barra inicial
+# ignoraria também assets/vendor/ (ex.: Swiper, armazenado localmente por decisão de
+# arquitetura — ver docs/architecture-proposal.md, seção 6).
 
 # Build
 dist/
