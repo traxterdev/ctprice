@@ -9,9 +9,10 @@
  *
  * O Hero é renderizado por components/hero-slider.php, a seção "Bem-vindo à CT Price" por
  * components/welcome-section.php, "Nossos Serviços" por components/services-section.php, "Por
- * que nos escolher?" por components/why-choose-us-section.php e "Últimas notícias" por
- * components/blog-section.php — esta página só define os dados de cada um (conteúdo real e
- * confirmado do site original) e inclui os componentes.
+ * que nos escolher?" por components/why-choose-us-section.php, "Últimas notícias" por
+ * components/blog-section.php e "Quer receber um contato?" por components/contact-section.php —
+ * esta página só define os dados de cada um (conteúdo real e confirmado do site original) e
+ * inclui os componentes.
  */
 require __DIR__ . '/config/bootstrap.php';
 
@@ -153,6 +154,10 @@ $blogPosts = [
         'time' => '13:53',
     ],
 ];
+
+$contactHeading = 'Quer receber um contato?';
+$contactText = 'Gostaria de falar com um de nossos especialistas? Basta enviar seus dados e entraremos em contato em breve. <br>Você também pode nos enviar um e-mail se preferir. <br> Ou envie uma mensagem em nosso WhatsApp.<br><br>';
+$contactWhatsapp = $company['whatsapp_principal']['url'];
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -170,6 +175,7 @@ $blogPosts = [
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/services-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/why-choose-us-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/blog-section.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/contact-section.css">
 </head>
 <body>
 
@@ -182,6 +188,7 @@ $blogPosts = [
     <?php require __DIR__ . '/components/services-section.php'; ?>
     <?php require __DIR__ . '/components/why-choose-us-section.php'; ?>
     <?php require __DIR__ . '/components/blog-section.php'; ?>
+    <?php require __DIR__ . '/components/contact-section.php'; ?>
 
     <!-- TODO: demais seções da Home (ver docs/reference/home-desktop-audit.md) -->
 </main>

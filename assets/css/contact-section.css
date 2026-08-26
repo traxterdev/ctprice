@@ -1,0 +1,175 @@
+/**
+ * assets/css/contact-section.css
+ *
+ * Estilos da seção "Quer receber um contato?" — quinta seção de conteúdo da Home (após
+ * blog-section). Full-width, fundo verde-escuro sólido.
+ *
+ * Fonte de medição: docs/reference/home-desktop-audit.md e reinspeção direta via Chrome
+ * DevTools MCP em 1440x900/900x1200/390x844.
+ *
+ * Colunas: 30% (caixa WhatsApp) / 50% (formulário), ~20% de gap implícito — confirmado
+ * percentual (mesma proporção em 1440px e 900px, não px fixo). Empilha em max-width:767px —
+ * mesmo breakpoint de conteúdo das demais seções (confirmado testando 767/768; diferente do
+ * breakpoint próprio de blog-section, 1024/767).
+ */
+
+.contact-section {
+    background: var(--color-dark-green);
+}
+
+.contact-section__container {
+    /* 1140px medido diretamente nesta seção — não é o token global --container-width (1200px). */
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 35px 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.contact-section__whatsapp-box {
+    flex: 0 0 30%;
+    max-width: 30%;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    border: 2px solid var(--color-accent-green);
+    border-radius: 15px;
+}
+
+.contact-section__heading {
+    margin: 8px 0 16px;
+    font-family: var(--font-primary);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 33.6px;
+    color: var(--color-off-white);
+    text-align: center;
+}
+
+.contact-section__text {
+    margin: 0;
+    font-family: var(--font-primary);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #FAFAFA;
+    text-align: center;
+}
+
+.contact-section__whatsapp-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    margin-top: 6px;
+    transition: transform 0.3s;
+}
+
+.contact-section__whatsapp-icon svg {
+    width: 50px;
+    height: 50px;
+    fill: var(--color-off-white);
+}
+
+.contact-section__whatsapp-icon:hover {
+    animation: contact-whatsapp-bounce 0.4s;
+}
+
+@keyframes contact-whatsapp-bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .contact-section__whatsapp-icon:hover {
+        animation: none;
+    }
+}
+
+.contact-section__form-box {
+    flex: 0 0 50%;
+    max-width: 50%;
+    margin-left: auto;
+    padding: 10px;
+}
+
+.contact-form {
+    /* Margem direita fixa de 50px medida no original (não responsiva — confirmada igual em
+       1440px e 900px), deixando um respiro assimétrico à direita do formulário. */
+    margin-right: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.contact-form__field {
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-form__field label {
+    padding-bottom: 5px;
+    font-family: var(--font-primary);
+    font-size: 16px;
+    line-height: 16px;
+    font-weight: 400;
+    color: var(--color-accent-green);
+}
+
+.contact-form__required {
+    color: var(--color-accent-green);
+}
+
+.contact-form__field input,
+.contact-form__field textarea {
+    padding: 8px 16px;
+    border: 1px solid #69727D;
+    border-radius: 3px;
+    background: var(--color-white);
+    font-family: var(--font-primary);
+    font-size: 15px;
+    line-height: 21px;
+    color: inherit;
+}
+
+.contact-form__field input {
+    height: 40px;
+}
+
+.contact-form__field textarea {
+    padding: 5px 14px;
+    resize: vertical;
+}
+
+.contact-form__submit {
+    text-align: center;
+}
+
+.contact-form__submit .btn--filled {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 0 24px;
+    line-height: 15px;
+    color: var(--color-white);
+}
+
+.contact-form__submit .btn--filled:hover,
+.contact-form__submit .btn--filled:focus-visible {
+    /* Cor de hover própria deste botão (medida no original) — diferente do hover verde-vivo
+       usado pelo CTA "Fale Conosco" de services-section. */
+    background: #3FC216;
+}
+
+@media (max-width: 767px) {
+    .contact-section__whatsapp-box,
+    .contact-section__form-box {
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-left: 0;
+    }
+}
