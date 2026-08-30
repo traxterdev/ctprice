@@ -1,8 +1,11 @@
 /**
  * assets/css/flat-icon-box-section.css
  *
- * Bloco "heading + grid de icon-boxes planos" (components/flat-icon-box-section.php) — terceiro
- * padrão de icon-box do site (ver comentário no componente).
+ * Bloco "heading + grid de icon-boxes com contorno" (components/flat-icon-box-section.php) —
+ * terceiro padrão de icon-box do site (ver comentário no componente). CORREÇÃO (validação
+ * full-page de /sobre-nos/): os cards têm um contorno `1px solid #057038` com
+ * `border-radius:15px`, não documentado na primeira auditoria — confirmado por reinspeção direta
+ * e corrigido aqui.
  *
  * Fonte de medição: reinspeção direta via Chrome DevTools MCP em 1440x900/900x1200/390x844.
  *
@@ -61,16 +64,22 @@
 
 .flat-icon-box {
     /*
-     * padding:20px 10px medido diretamente no original (`.elementor-widget-container`). Como o
-     * grid é `display:grid` (stretch por padrão), todos os cards ficam com a mesma altura do
-     * mais alto dos três — o espaço sobrando nos cards mais curtos fica em branco após o
-     * conteúdo (mesmo comportamento medido no original, não uma decisão de design nova).
+     * padding:20px 10px + border:1px solid + border-radius:15px medidos diretamente no original
+     * (`.elementor-widget-container`) — cada card TEM um contorno verde fino visível (defeito de
+     * documentação anterior: a auditoria original registrou os cards como "planos, sem
+     * borda/cartão", mas a reinspeção da validação full-page da página confirmou o contorno
+     * `1px solid #057038` com cantos arredondados; corrigido aqui). Como o grid é `display:grid`
+     * (stretch por padrão), todos os cards ficam com a mesma altura do mais alto dos três — o
+     * espaço sobrando nos cards mais curtos fica em branco após o conteúdo (mesmo comportamento
+     * medido no original, não uma decisão de design nova).
      */
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 15px;
     padding: 20px 10px;
+    border: 1px solid var(--color-brand-green);
+    border-radius: 15px;
     text-align: center;
 }
 

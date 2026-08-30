@@ -2,10 +2,12 @@
 /**
  * components/flat-icon-box-section.php
  *
- * Bloco "heading + grid de icon-boxes planos" — terceiro padrão de icon-box identificado em
+ * Bloco "heading + grid de icon-boxes com contorno" — terceiro padrão de icon-box identificado em
  * docs/reference/sobre-nos-audit.md (seção "Missão / Visão / Valores", `/sobre-nos/`), distinto
  * dos dois já usados na Home (círculo com borda em "Bem-vindo"; cartão com borda em "Nossos
- * Serviços"): ícone SVG colorido "solto" (sem borda/círculo/cartão), título e texto centralizados.
+ * Serviços"): ícone SVG colorido, card com contorno fino (`1px solid #057038`,
+ * `border-radius:15px` — corrigido na validação full-page da página; a auditoria original havia
+ * registrado erroneamente "sem borda/cartão"), título e texto centralizados.
  *
  * Reutilizável por qualquer página interna que precise do mesmo padrão simples — não específico
  * de "A CT Price". Sem heading/eyebrow adicional além do único H2 da seção (confirmado: esta
