@@ -1,0 +1,130 @@
+/**
+ * assets/css/clients-grid-section.css
+ *
+ * Grade de logos de clientes/parceiros (components/clients-grid-section.php) — seção exclusiva
+ * de /clientes/.
+ *
+ * A aparência do CARD (fundo, borda, radius, sombra, object-fit, hover) foi extraída para
+ * assets/css/client-logo-card.css (classe `.client-logo-card`), compartilhada com o carrossel da
+ * Home (assets/css/clients-carousel-section.css) — ver relatório da tarefa de unificação de UI.
+ * Este arquivo contém apenas o que é exclusivo desta seção: container, grid (colunas/gap por
+ * breakpoint), tamanho do card nesta página específica, e o lightbox.
+ *
+ * Grid fixo por breakpoint (não `auto-fill`, para garantir exatamente as colunas pedidas):
+ * 5 colunas em desktop (>=1024px), 3 em tablet (768–1023px), 2 em mobile (<768px) — mesmos
+ * breakpoints (1024/767) já usados em todo o projeto.
+ */
+
+.clients-grid-section {
+    margin: 50px 0;
+    padding: 0 10px;
+}
+
+.clients-grid-section__inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 10px 0;
+}
+
+.clients-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 24px;
+}
+
+.clients-grid .client-logo-card {
+    cursor: pointer;
+}
+
+@media (max-width: 1023px) {
+    .clients-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+    }
+
+    .clients-grid .client-logo-card {
+        height: 130px;
+        padding: 18px;
+    }
+}
+
+@media (max-width: 767px) {
+    .clients-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+    }
+
+    .clients-grid .client-logo-card {
+        height: 110px;
+        padding: 14px;
+    }
+}
+
+/* Lightbox — JS puro, sem biblioteca externa (assets/js/clients-grid-lightbox.js) */
+
+.clients-grid-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.85);
+}
+
+.clients-grid-lightbox[hidden] {
+    display: none;
+}
+
+.clients-grid-lightbox__img {
+    max-width: 90vw;
+    max-height: 85vh;
+    object-fit: contain;
+}
+
+.clients-grid-lightbox__close,
+.clients-grid-lightbox__prev,
+.clients-grid-lightbox__next {
+    position: absolute;
+    background: none;
+    border: 0;
+    color: var(--color-off-white);
+    cursor: pointer;
+    line-height: 1;
+}
+
+.clients-grid-lightbox__close {
+    top: 20px;
+    right: 30px;
+    font-size: 40px;
+}
+
+.clients-grid-lightbox__prev,
+.clients-grid-lightbox__next {
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 60px;
+    padding: 10px 20px;
+}
+
+.clients-grid-lightbox__prev {
+    left: 10px;
+}
+
+.clients-grid-lightbox__next {
+    right: 10px;
+}
+
+@media (max-width: 767px) {
+    .clients-grid-lightbox__prev,
+    .clients-grid-lightbox__next {
+        font-size: 36px;
+        padding: 10px;
+    }
+
+    .clients-grid-lightbox__close {
+        top: 10px;
+        right: 15px;
+        font-size: 32px;
+    }
+}

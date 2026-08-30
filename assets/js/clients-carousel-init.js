@@ -17,7 +17,14 @@
  * porquê de usar 768/1024 em vez do ponto de corte não-redondo do widget original):
  *   <768px:      1 slide
  *   768–1023px:  2 slides
- *   >=1024px:    10 slides
+ *   >=1024px:    10 slides no original
+ *
+ * AJUSTE DE UI (etapa de refinamento visual — não fidelidade ao original): com a UI de cards
+ * premium (fundo, borda, sombra), 10 logos simultâneos em desktop comprimiam demais cada marca
+ * dentro do card. Ajustado visualmente via Chrome DevTools para 6 (melhor equilíbrio entre
+ * presença visual de cada logo e densidade do conjunto — testado contra 5 e 7, ver relatório da
+ * tarefa). `spaceBetween`, autoplay, loop, swipe e a ordem de `config/clients.php` permanecem
+ * inalterados; apenas o NÚMERO de slides visíveis em desktop muda.
  *
  * Biblioteca em assets/vendor/swiper/ (Swiper 8.4.5, MIT) — mesma já usada pelo Hero e por
  * Depoimentos, nenhuma nova dependência.
@@ -52,7 +59,7 @@
                 slidesPerView: 2,
             },
             1024: {
-                slidesPerView: 10,
+                slidesPerView: 6,
             },
         },
     });

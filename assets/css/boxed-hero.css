@@ -1,0 +1,48 @@
+/**
+ * assets/css/boxed-hero.css
+ *
+ * Hero interno "simples" (components/boxed-hero.php) — imagem de fundo full-bleed + eyebrow/título
+ * dentro de um container boxed 1140px. Ver docs/reference/clientes-audit.md, seção 2.
+ *
+ * Fonte de medição: reinspeção direta via Chrome DevTools MCP em 1440x900/900x1200/390x844
+ * (auditoria de /clientes/). Sem breakpoint próprio no original — altura e tipografia idênticas
+ * nos três viewports; nenhuma regra @media de redução foi adicionada aqui pelo mesmo motivo.
+ */
+
+.boxed-hero {
+    height: 400px;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    background-size: cover;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+}
+
+.boxed-hero__inner {
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+}
+
+.boxed-hero__eyebrow {
+    margin: 0;
+    font-family: var(--font-primary);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: -0.9px;
+    text-transform: uppercase;
+    color: var(--color-dark-teal);
+    text-align: left;
+}
+
+.boxed-hero__title {
+    margin: 0;
+    font-family: var(--font-primary);
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 30px;
+    color: var(--color-brand-green);
+    text-align: left;
+}

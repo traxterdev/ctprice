@@ -31,6 +31,19 @@
  * `modelo.jpg`, `logo_0020_Camada16.jpg`) — não baixadas nem reproduzidas; os 82 logos restantes
  * mantêm a ordem relativa exata do original.
  *
+ * UI DO SLIDE (unificação de identidade visual com /clientes/): cada slide usa a mesma classe de
+ * card `.client-logo-card` (aparência em assets/css/client-logo-card.css — fundo branco, borda
+ * sutil, sombra leve, `border-radius`, hover) já aprovada na grade de clientes, para que os logos
+ * tenham a mesma identidade visual em qualquer lugar do site. A DIMENSÃO do card aqui é mais
+ * compacta que em /clientes/ (ver assets/css/clients-carousel-section.css) para caber na seção de
+ * ~200px de altura sem crescer a seção nem reduzir os 10 logos visíveis em desktop — apenas
+ * tamanho/padding mudam por contexto, não a identidade.
+ *
+ * ORDEM: `$clientLogos` chega deste componente EXATAMENTE como o chamador passou (nenhum sort/
+ * usort/shuffle é aplicado aqui) — ao contrário de components/clients-grid-section.php, que
+ * embaralha uma CÓPIA local (`$displayLogos`) apenas para a página `/clientes/`. A Home continua
+ * exibindo a ordem original de `config/clients.php`.
+ *
  * Espera, definida pelo chamador antes do include:
  *
  *   $clientLogos = [
@@ -51,9 +64,9 @@ if (!isset($clientLogos) || !is_array($clientLogos)) {
         <div class="clients-carousel swiper">
             <div class="swiper-wrapper">
                 <?php foreach ($clientLogos as $logo): ?>
-                <div class="swiper-slide client-logo-slide">
+                <div class="swiper-slide client-logo-slide client-logo-card">
                     <img
-                        class="client-logo-slide__img"
+                        class="client-logo-card__img"
                         src="<?= BASE_URL ?>/assets/images/clients/home-carousel/<?= htmlspecialchars($logo['file'], ENT_QUOTES, 'UTF-8') ?>"
                         alt="<?= htmlspecialchars($logo['alt'], ENT_QUOTES, 'UTF-8') ?>"
                         loading="lazy"

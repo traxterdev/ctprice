@@ -69,7 +69,10 @@ nenhum dos 12 pares de seções adjacentes, em nenhum dos três viewports.
   Depoimentos, Por que escolher) crescem de altura por quebra de linha adicional — tipografia
   fixa, sem redução de `font-size`, replicando o comportamento real do site original (já
   documentado nas auditorias de tablet/mobile). O carrossel de logos passa de 10 (desktop) → 2
-  (tablet) → 1 (mobile) logo(s) visível(is), confirmado nos três viewports.
+  (tablet) → 1 (mobile) logo(s) visível(is), confirmado nos três viewports. **Atualização
+  posterior a esta validação**: o desktop foi revisado para 6 logos simultâneos (em vez de 10) —
+  evolução visual aprovada após a introdução dos cards premium (ver
+  `docs/reference/clientes-final-validation.md`), não uma regressão desta validação.
 - Nenhuma seção teve elemento oculto, removido ou reordenado em nenhum breakpoint.
 
 ---
@@ -110,7 +113,7 @@ layout.
 | Serviços: destino do CTA | ✅ `/fale-conosco/` |
 | Depoimentos: autoplay/loop/touch | ✅ `swiper.autoplay.running===true`, `loop===true`, `allowTouchMove===true` |
 | Depoimentos: convivência com Hero e Clientes (3 Swipers simultâneos) | ✅ todos rodando independentemente, sem conflito |
-| Clientes: 10 logos desktop / 2 tablet / 1 mobile | ✅ confirmado via `swiper.params.slidesPerView` nos 3 viewports |
+| Clientes: 10 logos desktop / 2 tablet / 1 mobile | ✅ confirmado via `swiper.params.slidesPerView` nos 3 viewports (desktop revisado depois para 6 — ver `docs/reference/clientes-final-validation.md`) |
 | Clientes: continuidade do loop após múltiplos ciclos | ✅ (já testado em validação anterior: `slideToLoop(81)` → `slideNext()` → volta a index 0 sem quebra) |
 | Blog: hover (box-shadow) | ✅ `box-shadow` base presente, regra `:hover` confirmada em validação anterior |
 | Blog: links | ✅ |

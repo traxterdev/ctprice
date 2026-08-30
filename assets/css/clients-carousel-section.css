@@ -23,10 +23,22 @@
  * produzir o mesmo resultado medido nos três viewports exigidos, sem replicar o cálculo interno
  * não documentado do Elementor.
  *
- * CORREÇÃO INTENCIONAL DE DEFEITO CONHECIDO: altura do slide fixa (70px) com
- * `object-fit: contain` em vez do `object-fit: fill` sem altura própria do original — evita a
- * distorção/tamanho excessivo dos logos no mobile (ver components/clients-carousel-section.php).
- * `gap`/`spaceBetween` (20px) e velocidade/autoplay do Swiper não foram alterados.
+ * UI DO CARD (unificação de identidade visual com /clientes/): a aparência do card (fundo, borda,
+ * radius, sombra, hover) vem de assets/css/client-logo-card.css, classe `.client-logo-card` — a
+ * mesma usada em assets/css/clients-grid-section.css. Aqui só é definida a DIMENSÃO do card
+ * (altura/padding) para este contexto.
+ *
+ * AJUSTE DE TAMANHO (etapa de refinamento visual, com 6 logos visíveis em vez de 10 — ver
+ * assets/js/clients-carousel-init.js): a primeira versão (altura 76px/padding 10px, herdada do
+ * layout de 10 slides) deixava cada logo pequeno demais dentro do card. Ajustado visualmente via
+ * Chrome DevTools para altura 136px/padding 18px — a seção mantém ~200px de altura (o card ainda
+ * cabe com folga vertical, sem precisar crescer a seção). `.client-logo-card__img` do carrossel
+ * usa `width:100%; height:100%` (em vez do `max-width/max-height:100%; width/height:auto` da
+ * base compartilhada, que não amplia logos com dimensão original pequena) para que cada logo
+ * ocupe a área útil do card por completo — `object-fit:contain` (herdado da base) continua
+ * garantindo que nenhum logo seja cortado/esticado/achatado, só amplia/reduz proporcionalmente.
+ * Essa sobrescrita é exclusiva do carrossel (seletor `.client-logo-slide .client-logo-card__img`)
+ * — a página /clientes/ continua com o comportamento original da base compartilhada.
  */
 
 .clients-carousel-section {
@@ -47,16 +59,12 @@
     width: 100%;
 }
 
-.client-logo-slide {
-    height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.client-logo-slide.client-logo-card {
+    height: 136px;
+    padding: 18px;
 }
 
-.client-logo-slide__img {
+.client-logo-slide.client-logo-card .client-logo-card__img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    object-position: 50% 50%;
 }

@@ -72,6 +72,7 @@ $missionVisionValuesSection = [
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/image-text-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/flat-icon-box-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/image-content-cta-section.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/client-logo-card.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/clients-carousel-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/footer.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/whatsapp-button.css">
