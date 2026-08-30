@@ -12,6 +12,11 @@
  * exigiria condicionais artificiais para um comportamento que só existe aqui. Componente próprio,
  * mesmo espírito de dados-como-array dos demais.
  *
+ * `Isotipolinear.png` mora em `assets/images/logo/` (não em `assets/images/pages/fale-conosco/`,
+ * onde estava originalmente) desde a implementação de `/ouvidoria/`, que passou a reaproveitar a
+ * mesma marca d'água — é um asset de logomarca da CT Price, não conteúdo exclusivo desta página;
+ * o caminho é passado pelo chamador (`fale-conosco/index.php`), este componente não o hardcoda.
+ *
  * DIFERENÇAS CONSCIENTES em relação à referência (WordPress), registradas como melhoria, não como
  * infidelidade — ver docs/reference/fale-conosco-final-validation.md quando existir:
  *   - a foto de fundo usa `background-size:cover` (preenche toda a coluna), não `contain` com

@@ -43,7 +43,7 @@ $boxedHero = [
 
 $contactFormSection = [
     'photo' => BASE_URL . '/assets/images/pages/fale-conosco/maosdadas.jpg',
-    'decorative_image' => BASE_URL . '/assets/images/pages/fale-conosco/Isotipolinear.png',
+    'decorative_image' => BASE_URL . '/assets/images/logo/Isotipolinear.png',
     'intro_html' => 'Quer tirar dúvidas ou conversar sobre como a <strong>CT Price</strong> pode ajudar sua empresa a crescer? Entre em contato com a gente!',
     'form_action' => BASE_URL . '/fale-conosco/fale-conosco-action.php',
     'csrf_token' => $csrfToken,

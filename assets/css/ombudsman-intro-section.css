@@ -1,0 +1,69 @@
+/**
+ * assets/css/ombudsman-intro-section.css
+ *
+ * Primeiro bloco institucional de `/ouvidoria/` (components/ombudsman-intro-section.php) —
+ * texto + foto sobre fundo escuro. Medições: docs/reference/ouvidoria-audit.md, seção 11.
+ *
+ * Container 1240px — valor medido, diferente dos 1140px/1200px usados nas demais seções do site
+ * (não um erro de digitação, uma medição real desta página).
+ */
+
+.ombudsman-intro-section {
+    background: var(--color-dark-teal);
+    padding: 0 10px;
+}
+
+.ombudsman-intro-section__inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 60px 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 40px;
+}
+
+.ombudsman-intro-section__text-col {
+    flex: 1 1 480px;
+}
+
+.ombudsman-intro-section__image-col {
+    flex: 1 1 320px;
+    display: flex;
+    justify-content: center;
+}
+
+.ombudsman-intro-section__image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.ombudsman-intro-section__content p {
+    margin: 0 0 16px;
+    font-family: var(--font-primary);
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--color-off-white);
+}
+
+.ombudsman-intro-section__content p:last-child {
+    margin-bottom: 0;
+}
+
+@media (max-width: 767px) {
+    .ombudsman-intro-section__inner {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 40px 0;
+        gap: 24px;
+    }
+
+    .ombudsman-intro-section__image-col {
+        order: 2;
+    }
+
+    .ombudsman-intro-section__text-col {
+        order: 1;
+    }
+}

@@ -1,0 +1,68 @@
+/**
+ * assets/css/ombudsman-guidance-section.css
+ *
+ * Segundo bloco institucional de `/ouvidoria/` (components/ombudsman-guidance-section.php) —
+ * texto de confidencialidade + lista "Quando utilizar a Ouvidoria?", fundo branco. Medições:
+ * docs/reference/ouvidoria-audit.md, seção 11. Mesmo container 1240px do bloco anterior.
+ */
+
+.ombudsman-guidance-section {
+    padding: 0 10px;
+}
+
+.ombudsman-guidance-section__inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 60px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.ombudsman-guidance-section__text-col,
+.ombudsman-guidance-section__list-col {
+    flex: 1 1 480px;
+}
+
+.ombudsman-guidance-section__content p {
+    margin: 0 0 16px;
+    font-family: var(--font-primary);
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--color-text-gray);
+}
+
+.ombudsman-guidance-section__content p:last-child {
+    margin-bottom: 0;
+}
+
+.ombudsman-guidance-section__heading {
+    margin: 0 0 16px;
+    font-family: var(--font-primary);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color-brand-green);
+}
+
+.ombudsman-guidance-section__list {
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ombudsman-guidance-section__list li {
+    font-family: var(--font-primary);
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--color-text-gray);
+}
+
+@media (max-width: 767px) {
+    .ombudsman-guidance-section__inner {
+        flex-direction: column;
+        padding: 40px 0;
+        gap: 24px;
+    }
+}

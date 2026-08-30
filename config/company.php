@@ -99,6 +99,17 @@ return [
         ],
     ],
 
+    // Canal exclusivo da Ouvidoria (docs/reference/ouvidoria-audit.md, seção 9/10) — número
+    // PRÓPRIO desta página, diferente do `whatsapp_principal` acima e do WhatsApp da topbar
+    // (`(67) 99232-4097`, já documentado como divergência em global-data-conflicts.md). NÃO deve
+    // ser substituído por nenhum dos outros dois números do site.
+    'ouvidoria' => [
+        'whatsapp' => [
+            'numero' => '(67) 99110-3140',
+            'url' => 'https://wa.me/5567991103140',
+        ],
+    ],
+
     // Investigado nesta revisão: nenhuma rede social oficial da CT Price foi encontrada em
     // nenhuma página do site atual. Os únicos links de redes sociais existentes no site (na
     // página Depoimentos) pertencem a clientes individuais citados nos depoimentos, não à CT
