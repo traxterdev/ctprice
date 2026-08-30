@@ -1,0 +1,260 @@
+/**
+ * assets/css/contact-form-section.css
+ *
+ * Estilos de components/contact-form-section.php — bloco principal de `/fale-conosco/` (foto +
+ * logomarca decorativa + texto introdutório + formulário).
+ *
+ * Fonte de medição: docs/reference/fale-conosco-audit.md, seção 2/3/9. Container 1200px (mesmo
+ * valor já usado no carrossel de clientes e nas faixas de `/parcerias/`). Breakpoint 767px —
+ * mesmo padrão já usado em todo o projeto.
+ */
+
+.contact-form-section {
+    background: var(--color-dark-teal);
+}
+
+.contact-form-section__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: stretch;
+}
+
+.contact-form-section__photo-col {
+    flex: 0 0 50%;
+    max-width: 50%;
+    min-height: 560px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.contact-form-section__decorative-img {
+    width: 60%;
+    max-width: 360px;
+    height: auto;
+    opacity: 0.9;
+}
+
+.contact-form-section__text-col {
+    flex: 0 0 50%;
+    max-width: 50%;
+    padding: 40px;
+}
+
+.contact-form-section__intro {
+    margin: 0 0 24px;
+    font-family: var(--font-primary);
+    font-size: 16px;
+    line-height: 21px;
+    color: var(--color-off-white);
+    text-align: center;
+}
+
+.contact-form__static-banner {
+    margin: 0 0 20px;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-family: var(--font-primary);
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+}
+
+.contact-form__static-banner--success {
+    background: rgba(16, 227, 107, 0.15);
+    border: 1px solid var(--color-accent-green);
+    color: var(--color-accent-green);
+}
+
+.contact-form__static-banner--error {
+    background: rgba(255, 158, 158, 0.12);
+    border: 1px solid #FF9E9E;
+    color: #FF9E9E;
+}
+
+/* Formulário */
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Honeypot: fora da área visível, mas ainda presente no fluxo do documento para não ser
+   descartado por leitores de bots simplistas que ignoram `display:none`. `aria-hidden` no
+   wrapper e `tabindex="-1"` no input impedem qualquer efeito para teclado/leitor de tela. */
+.contact-form__hp {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    left: -9999px;
+}
+
+.contact-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.contact-form__field label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--font-primary);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-accent-green);
+}
+
+.contact-form__required {
+    color: var(--color-accent-green);
+}
+
+.contact-form__field input,
+.contact-form__field textarea {
+    height: 44px;
+    padding: 10px 14px;
+    border: 1px solid #69727D;
+    border-radius: 6px;
+    background: var(--color-white);
+    font-family: var(--font-primary);
+    font-size: 15px;
+    line-height: 21px;
+    color: #1A1A1A;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.contact-form__field textarea {
+    height: auto;
+    min-height: 110px;
+    padding: 10px 14px;
+    resize: vertical;
+}
+
+.contact-form__field input::placeholder,
+.contact-form__field textarea::placeholder {
+    color: #7A7A7A;
+}
+
+/* Foco mais evidente que o padrão cru do navegador e mais evidente que o encontrado na
+   referência (box-shadow sutil de 1px) — melhoria de acessibilidade registrada na auditoria,
+   seção 13. */
+.contact-form__field input:focus-visible,
+.contact-form__field textarea:focus-visible {
+    outline: 3px solid var(--color-accent-green);
+    outline-offset: 1px;
+    border-color: var(--color-accent-green);
+}
+
+.contact-form__field--invalid input,
+.contact-form__field--invalid textarea {
+    border-color: #FF9E9E;
+}
+
+.contact-form__error {
+    display: block;
+    min-height: 16px;
+    font-family: var(--font-primary);
+    font-size: 13px;
+    line-height: 16px;
+    color: #FF9E9E;
+}
+
+.contact-form__feedback {
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-family: var(--font-primary);
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.contact-form__feedback--success {
+    background: rgba(16, 227, 107, 0.15);
+    border: 1px solid var(--color-accent-green);
+    color: var(--color-accent-green);
+}
+
+.contact-form__feedback--error {
+    background: rgba(255, 158, 158, 0.12);
+    border: 1px solid #FF9E9E;
+    color: #FF9E9E;
+}
+
+.contact-form__submit-wrap {
+    text-align: center;
+}
+
+.contact-form__submit-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    padding: 0 32px;
+    border: none;
+    border-radius: 6px;
+    background: var(--color-brand-green);
+    color: var(--color-white);
+    font-family: var(--font-primary);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.15s;
+}
+
+.contact-form__submit-btn:hover {
+    background: #3FC216;
+}
+
+.contact-form__submit-btn:focus-visible {
+    outline: 3px solid var(--color-accent-green);
+    outline-offset: 2px;
+}
+
+.contact-form__submit-btn:disabled {
+    opacity: 0.7;
+    cursor: default;
+}
+
+.contact-form--submitting .contact-form__submit-btn {
+    transform: scale(0.98);
+}
+
+@media (max-width: 1023px) {
+    .contact-form-section__photo-col {
+        min-height: 460px;
+    }
+
+    .contact-form-section__text-col {
+        padding: 32px 24px;
+    }
+}
+
+/* <= 767px: foto e formulário deixam de se sobrepor — bloco de foto com altura fixa reduzida
+   ACIMA do formulário, evitando o problema de contraste identificado na referência (labels sobre
+   a foto). Logomarca decorativa omitida (é só decoração, sem função de conteúdo). */
+@media (max-width: 767px) {
+    .contact-form-section__inner {
+        flex-direction: column;
+    }
+
+    .contact-form-section__photo-col {
+        flex: 0 0 auto;
+        max-width: 100%;
+        min-height: 220px;
+    }
+
+    .contact-form-section__decorative-img {
+        display: none;
+    }
+
+    .contact-form-section__text-col {
+        flex: 0 0 auto;
+        max-width: 100%;
+        padding: 24px 16px;
+    }
+}

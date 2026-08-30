@@ -27,3 +27,45 @@ if (!defined('BASE_URL')) {
 
 $company = require __DIR__ . '/company.php';
 $menu = require __DIR__ . '/menu.php';
+
+/**
+ * Configura os parâmetros do cookie de sessão ANTES de session_start() ser chamado. Centralizado
+ * aqui porque é o único arquivo já incluído por toda página — hoje só `/fale-conosco/` usa sessão
+ * (token CSRF + rate limit do formulário, ver fale-conosco/fale-conosco-action.php), mas qualquer
+ * página futura que precise de sessão deve reutilizar esta função em vez de duplicar a
+ * configuração. Chamar esta função não inicia uma sessão nem define um cookie por si só — ela só
+ * tem efeito quando a página que a chama também chama `session_start()` em seguida.
+ *
+ * - `httponly`: sempre ativo — o cookie de sessão não precisa (e não deve) ser lido por
+ *   JavaScript no navegador.
+ * - `samesite=Lax`: permite navegação normal (ex.: alguém chegando a `/fale-conosco/` a partir de
+ *   um link em outro site) sem expor o cookie a requisições cross-site de terceiros — adequado
+ *   para um formulário que não precisa funcionar embutido em iframe de outro domínio.
+ * - `secure`: ativado automaticamente SOMENTE quando a requisição já chegou via HTTPS
+ *   (`$_SERVER['HTTPS']` ou a porta 443) — em HTTP puro (ambiente local de desenvolvimento) fica
+ *   desativado de propósito, porque um cookie `Secure` é descartado pelo navegador em conexões
+ *   não criptografadas, o que quebraria a sessão localmente. PENDÊNCIA DE PRODUÇÃO: se o servidor
+ *   real ficar atrás de um proxy reverso/load balancer que termina o HTTPS antes do PHP, é preciso
+ *   confirmar que esse proxy popula `$_SERVER['HTTPS']` (ou ajustar esta função para também checar
+ *   um cabeçalho como `X-Forwarded-Proto`) — isso depende da infraestrutura de produção, não pode
+ *   ser confirmado a partir deste código.
+ */
+if (!function_exists('ctprice_configure_session_cookie')) {
+    function ctprice_configure_session_cookie(): void
+    {
+        if (session_status() !== PHP_SESSION_NONE) {
+            return;
+        }
+
+        $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+            || (($_SERVER['SERVER_PORT'] ?? null) === '443');
+
+        session_set_cookie_params([
+            'lifetime' => 0,
+            'path' => '/',
+            'httponly' => true,
+            'samesite' => 'Lax',
+            'secure' => $isHttps,
+        ]);
+    }
+}

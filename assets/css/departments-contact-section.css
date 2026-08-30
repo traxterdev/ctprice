@@ -1,0 +1,94 @@
+/**
+ * assets/css/departments-contact-section.css
+ *
+ * Estilos de components/departments-contact-section.php — faixa de 5 contatos por departamento.
+ *
+ * Fonte de medição: docs/reference/fale-conosco-audit.md, seção 1/9. Fundo `--color-dark-teal`
+ * (#00222C), destaque `--color-accent-green` (#10E36B) — ambos tokens já existentes em
+ * assets/css/variables.css, nenhuma cor nova introduzida.
+ *
+ * Grade responsiva com estágio intermediário (5 → 3 → 1 colunas, breakpoints 1024/767px já
+ * usados em todo o projeto) em vez do salto direto da referência ("5 colunas → 1 coluna") —
+ * decisão de qualidade visual pré-aprovada, ver comentário no componente PHP.
+ */
+
+.departments-contact-section {
+    background: var(--color-dark-teal);
+    padding: 32px 10px;
+}
+
+.departments-contact-section__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.departments-contact-section__grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 24px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.departments-contact-section__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+    padding: 8px 4px;
+}
+
+.departments-contact-section__label {
+    font-family: var(--font-primary);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-accent-green);
+}
+
+.departments-contact-section__phone {
+    display: inline-block;
+    padding: 4px 2px;
+    font-family: var(--font-primary);
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--color-white);
+    text-decoration: none;
+}
+
+a.departments-contact-section__phone:hover,
+a.departments-contact-section__phone:focus-visible {
+    color: var(--color-accent-green);
+    text-decoration: underline;
+}
+
+a.departments-contact-section__phone:focus-visible {
+    outline: 3px solid var(--color-accent-green);
+    outline-offset: 2px;
+    border-radius: 3px;
+}
+
+@media (max-width: 1023px) {
+    .departments-contact-section__grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px 16px;
+    }
+}
+
+@media (max-width: 767px) {
+    .departments-contact-section__grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .departments-contact-section__item {
+        padding: 10px 4px;
+    }
+
+    /* Toque confortável em mobile (~44px de altura mínima da área clicável). */
+    .departments-contact-section__phone {
+        padding: 8px 4px;
+        font-size: 15px;
+    }
+}
