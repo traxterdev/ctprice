@@ -1,0 +1,120 @@
+/**
+ * assets/css/jobs-section.css
+ *
+ * Grade de vagas em aberto (components/jobs-section.php) — /trabalhe-conosco/.
+ *
+ * Container 1140px, igual ao Hero (boxed-hero) e à maioria das seções internas já implementadas.
+ * Grid 3/2/1 (docs/reference/trabalhe-conosco-audit.md, seção 9 — a página original pulava
+ * direto de 3 para 1 coluna; aqui usa-se o breakpoint de 1024px já padrão no projeto para um
+ * estágio intermediário de 2 colunas, evitando o salto brusco).
+ *
+ * `align-items: start` no grid deliberadamente NÃO estica os cards para a mesma altura — o card
+ * com menos conteúdo (Analista Fiscal) fica mais baixo em vez de ganhar espaço vazio artificial.
+ *
+ * `.job-card__cta` reproduz visualmente o botão preenchido já usado em outras seções
+ * (`.btn--filled` de assets/css/services-section.css) com uma classe própria — mesma convenção
+ * já usada em image-content-cta-section.css, para não depender de carregar o CSS de outra seção
+ * só por causa de um botão.
+ */
+
+.jobs-section {
+    padding: 50px 10px;
+}
+
+.jobs-section__container {
+    max-width: 1140px;
+    margin: 0 auto;
+}
+
+.jobs-section__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    align-items: start;
+}
+
+.job-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 28px;
+    background: var(--color-white);
+    border: 1px solid rgba(0, 34, 44, 0.12);
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 34, 44, 0.06);
+}
+
+.job-card__title {
+    margin: 0;
+    font-family: var(--font-primary);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--color-dark-teal);
+    line-height: 1.25;
+}
+
+.job-card__block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.job-card__label {
+    margin: 0;
+    font-family: var(--font-primary);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-brand-green);
+}
+
+.job-card__list {
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.job-card__list li {
+    font-family: var(--font-primary);
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--color-text-gray);
+}
+
+.job-card__cta {
+    align-self: flex-start;
+    margin-top: 4px;
+    padding: 12px 24px;
+    line-height: 15px;
+    border-radius: 3px;
+    font-family: var(--font-primary);
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--color-dark-green);
+    background: #61CE70;
+    transition: background 0.2s ease;
+}
+
+.job-card__cta:hover,
+.job-card__cta:focus-visible {
+    background: var(--color-accent-green);
+}
+
+.job-card__cta:focus-visible {
+    outline: 2px solid var(--color-dark-teal);
+    outline-offset: 2px;
+}
+
+@media (max-width: 1023px) {
+    .jobs-section__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 767px) {
+    .jobs-section__grid {
+        grid-template-columns: 1fr;
+    }
+}

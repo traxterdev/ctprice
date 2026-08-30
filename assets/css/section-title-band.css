@@ -8,6 +8,12 @@
  * (assets/css/header.css), texto branco (`--color-off-white`), centralizado, Roboto 800.
  * `font-size`/`line-height` são definidos inline pelo componente (valor medido difere por
  * instância — 40px vs 50px na página de origem).
+ *
+ * Os valores abaixo (`height`, `background`, `max-width`, `font-weight`) são a base/padrão do
+ * componente — reproduzem exatamente `/parcerias/`. `components/section-title-band.php` os
+ * sobrescreve via `style` inline quando o chamador passa `height`/`gradient_stops`/
+ * `container_max_width`/`font_weight` (ver `/trabalhe-conosco/`, que usa valores diferentes) —
+ * ver o comentário do componente para o motivo de cada um.
  */
 
 .section-title-band {

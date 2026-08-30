@@ -1,0 +1,54 @@
+/**
+ * assets/css/benefits-grid-section.css
+ *
+ * Layout da grade "Nossos Benefícios" (components/benefits-grid-section.php) — a identidade
+ * visual do card em si (fundo, borda, radius, sombra, hover, object-fit) vem inteira de
+ * assets/css/logo-card.css (`.logo-card`/`.logo-card__img`); este arquivo só resolve
+ * container/grid/breakpoints e a altura maior do card (imagens de benefício têm proporções mais
+ * extremas que logos de cliente — até 372×497, contra o valor-base de 150px de altura de
+ * `.logo-card`).
+ *
+ * Flexbox com `flex-wrap`+`justify-content:center` (não CSS Grid) — centraliza automaticamente a
+ * última linha parcial (2 de 14 itens numa grade de 3 colunas) sem nenhum cálculo baseado na
+ * quantidade total de itens. Grid 3/2/1 (docs/reference/trabalhe-conosco-audit.md, seção 9 —
+ * mesmo raciocínio de estágio intermediário em 2 colunas já usado em jobs-section.css, em vez do
+ * salto direto 3→1 do original).
+ */
+
+.benefits-grid-section {
+    padding: 50px 10px 70px;
+}
+
+.benefits-grid-section__container {
+    max-width: 1140px;
+    margin: 0 auto;
+}
+
+.benefits-grid-section__grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}
+
+.benefit-card {
+    flex: 0 1 calc((100% - 2 * 30px) / 3);
+    max-width: calc((100% - 2 * 30px) / 3);
+    height: 220px;
+    padding: 20px;
+}
+
+@media (max-width: 1023px) {
+    .benefit-card {
+        flex-basis: calc((100% - 30px) / 2);
+        max-width: calc((100% - 30px) / 2);
+    }
+}
+
+@media (max-width: 767px) {
+    .benefit-card {
+        flex-basis: 100%;
+        max-width: 100%;
+        height: 200px;
+    }
+}
