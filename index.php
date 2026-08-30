@@ -218,7 +218,7 @@ $contactWhatsapp = $company['whatsapp_principal']['url'];
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/video-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/services-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/testimonials-section.css">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/client-logo-card.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/logo-card.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/clients-carousel-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/why-choose-us-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/blog-section.css">

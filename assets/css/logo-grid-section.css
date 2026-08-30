@@ -1,0 +1,70 @@
+/**
+ * assets/css/logo-grid-section.css
+ *
+ * Grade de logos com link externo (components/logo-grid-section.php) — usado nas duas grades de
+ * `/parcerias/` (Ferramentas Web e Parceiros). Aparência do card vem de
+ * assets/css/logo-card.css (`.logo-card`) — aqui só container, grid (colunas configuráveis por
+ * instância via custom properties) e o modificador do item sem link.
+ *
+ * Container 1140px (mesmo valor já usado em Clientes/História/MVV/Dedicação). Breakpoints
+ * 1024px/767px — mesmos já usados em todo o projeto (não os do Elementor original, que colapsava
+ * direto para 1 coluna em 767px sem estágio intermediário; aqui um estágio intermediário melhora
+ * a experiência em tablet, decisão consciente registrada em
+ * docs/reference/parcerias-audit.md/relatório da implementação).
+ */
+
+.logo-grid-section {
+    margin: 50px 0;
+    padding: 0 10px;
+}
+
+.logo-grid-section__inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 10px 0;
+}
+
+.logo-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--logo-grid-cols-desktop, 5), 1fr);
+    gap: 24px;
+}
+
+.logo-grid .logo-card {
+    cursor: pointer;
+}
+
+.logo-grid .logo-card.logo-card--static {
+    cursor: default;
+}
+
+.logo-grid .logo-card.logo-card--static:hover,
+.logo-grid .logo-card.logo-card--static:focus-visible {
+    transform: none;
+    box-shadow: 0 2px 6px rgba(0, 34, 44, 0.06);
+    border-color: rgba(0, 34, 44, 0.1);
+}
+
+@media (max-width: 1023px) {
+    .logo-grid {
+        grid-template-columns: repeat(var(--logo-grid-cols-tablet, 3), 1fr);
+        gap: 16px;
+    }
+
+    .logo-grid .logo-card {
+        height: 130px;
+        padding: 18px;
+    }
+}
+
+@media (max-width: 767px) {
+    .logo-grid {
+        grid-template-columns: repeat(var(--logo-grid-cols-mobile, 2), 1fr);
+        gap: 14px;
+    }
+
+    .logo-grid .logo-card {
+        height: 110px;
+        padding: 14px;
+    }
+}

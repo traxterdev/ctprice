@@ -7,6 +7,11 @@
  * Fonte de medição: reinspeção direta via Chrome DevTools MCP em 1440x900/900x1200/390x844
  * (auditoria de /clientes/). Sem breakpoint próprio no original — altura e tipografia idênticas
  * nos três viewports; nenhuma regra @media de redução foi adicionada aqui pelo mesmo motivo.
+ *
+ * `background-position:50% 50%` aqui é só o valor-padrão (fallback) — o componente
+ * (components/boxed-hero.php) sempre define a posição real inline via `background_position`
+ * (configurável por página; /parcerias/ usa `0% 0%`, medido separadamente — ver
+ * docs/reference/parcerias-audit.md).
  */
 
 .boxed-hero {

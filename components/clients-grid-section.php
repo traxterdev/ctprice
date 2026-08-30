@@ -18,8 +18,8 @@
  * reproduzia esse efeito com uma grade `auto-fill` "solta" (sem card). Nesta revisão, a
  * prioridade deixou de ser copiar literalmente a galeria do WordPress — decisão explícita do
  * cliente para uma apresentação mais premium: cada logo agora vive num CARD (classe
- * `.client-logo-card`, aparência em assets/css/client-logo-card.css — fundo branco, borda sutil,
- * sombra leve, `border-radius`, `object-fit:contain`, hover), em grade fixa de 5/3/2 colunas por
+ * `.logo-card`, aparência em assets/css/logo-card.css — fundo branco, borda sutil, sombra leve,
+ * `border-radius`, `object-fit:contain`, hover), em grade fixa de 5/3/2 colunas por
  * breakpoint (ver assets/css/clients-grid-section.css). A mesma classe/aparência de card é
  * reaproveitada pelo carrossel da Home (components/clients-carousel-section.php) — apenas a
  * altura/padding do card mudam por contexto, não a identidade visual.
@@ -86,9 +86,9 @@ usort($displayLogos, function ($a, $b) use ($today) {
     <div class="clients-grid-section__inner">
         <div class="clients-grid">
             <?php foreach ($displayLogos as $logo): ?>
-            <button type="button" class="client-logo-card" data-full="<?= BASE_URL ?>/assets/images/clients/home-carousel/<?= htmlspecialchars($logo['file'], ENT_QUOTES, 'UTF-8') ?>" data-alt="<?= htmlspecialchars($logo['alt'], ENT_QUOTES, 'UTF-8') ?>">
+            <button type="button" class="logo-card" data-full="<?= BASE_URL ?>/assets/images/clients/home-carousel/<?= htmlspecialchars($logo['file'], ENT_QUOTES, 'UTF-8') ?>" data-alt="<?= htmlspecialchars($logo['alt'], ENT_QUOTES, 'UTF-8') ?>">
                 <img
-                    class="client-logo-card__img"
+                    class="logo-card__img"
                     src="<?= BASE_URL ?>/assets/images/clients/home-carousel/<?= htmlspecialchars($logo['file'], ENT_QUOTES, 'UTF-8') ?>"
                     alt="<?= htmlspecialchars($logo['alt'], ENT_QUOTES, 'UTF-8') ?>"
                     loading="lazy"

@@ -5,8 +5,9 @@
  * de /clientes/.
  *
  * A aparência do CARD (fundo, borda, radius, sombra, object-fit, hover) foi extraída para
- * assets/css/client-logo-card.css (classe `.client-logo-card`), compartilhada com o carrossel da
- * Home (assets/css/clients-carousel-section.css) — ver relatório da tarefa de unificação de UI.
+ * assets/css/logo-card.css (classe `.logo-card`), compartilhada com o carrossel da Home/Sobre
+ * Nós (assets/css/clients-carousel-section.css) e com as grades de Parceiros/Ferramentas — ver
+ * docs/reference/clientes-final-validation.md e docs/reference/parcerias-audit.md.
  * Este arquivo contém apenas o que é exclusivo desta seção: container, grid (colunas/gap por
  * breakpoint), tamanho do card nesta página específica, e o lightbox.
  *
@@ -32,7 +33,7 @@
     gap: 24px;
 }
 
-.clients-grid .client-logo-card {
+.clients-grid .logo-card {
     cursor: pointer;
 }
 
@@ -42,7 +43,7 @@
         gap: 16px;
     }
 
-    .clients-grid .client-logo-card {
+    .clients-grid .logo-card {
         height: 130px;
         padding: 18px;
     }
@@ -54,7 +55,7 @@
         gap: 14px;
     }
 
-    .clients-grid .client-logo-card {
+    .clients-grid .logo-card {
         height: 110px;
         padding: 14px;
     }

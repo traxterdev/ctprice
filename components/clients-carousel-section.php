@@ -32,8 +32,8 @@
  * mantêm a ordem relativa exata do original.
  *
  * UI DO SLIDE (unificação de identidade visual com /clientes/): cada slide usa a mesma classe de
- * card `.client-logo-card` (aparência em assets/css/client-logo-card.css — fundo branco, borda
- * sutil, sombra leve, `border-radius`, hover) já aprovada na grade de clientes, para que os logos
+ * card `.logo-card` (aparência em assets/css/logo-card.css — fundo branco, borda sutil, sombra
+ * leve, `border-radius`, hover) já aprovada na grade de clientes, para que os logos
  * tenham a mesma identidade visual em qualquer lugar do site. A DIMENSÃO do card aqui é mais
  * compacta que em /clientes/ (ver assets/css/clients-carousel-section.css) para caber na seção de
  * ~200px de altura sem crescer a seção nem reduzir os 10 logos visíveis em desktop — apenas
@@ -64,9 +64,9 @@ if (!isset($clientLogos) || !is_array($clientLogos)) {
         <div class="clients-carousel swiper">
             <div class="swiper-wrapper">
                 <?php foreach ($clientLogos as $logo): ?>
-                <div class="swiper-slide client-logo-slide client-logo-card">
+                <div class="swiper-slide client-logo-slide logo-card">
                     <img
-                        class="client-logo-card__img"
+                        class="logo-card__img"
                         src="<?= BASE_URL ?>/assets/images/clients/home-carousel/<?= htmlspecialchars($logo['file'], ENT_QUOTES, 'UTF-8') ?>"
                         alt="<?= htmlspecialchars($logo['alt'], ENT_QUOTES, 'UTF-8') ?>"
                         loading="lazy"

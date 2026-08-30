@@ -7,14 +7,15 @@
  *
  * Ver docs/reference/clientes-audit.md, seção 9 (interações confirmadas).
  *
- * Seletor escopado a `.clients-grid .client-logo-card` (não `.client-logo-card` sozinho) porque
- * essa mesma classe de card também é usada no carrossel da Home
- * (components/clients-carousel-section.php) — o carrossel não deve ganhar lightbox.
+ * Seletor escopado a `.clients-grid .logo-card` (não `.logo-card` sozinho) porque essa mesma
+ * classe de card também é usada no carrossel da Home/Sobre Nós
+ * (components/clients-carousel-section.php) e nas grades de Parceiros/Ferramentas — o carrossel
+ * e as grades de link externo não devem ganhar lightbox.
  */
 (function () {
     'use strict';
 
-    var items = Array.prototype.slice.call(document.querySelectorAll('.clients-grid .client-logo-card'));
+    var items = Array.prototype.slice.call(document.querySelectorAll('.clients-grid .logo-card'));
     var lightbox = document.querySelector('.clients-grid-lightbox');
     if (!items.length || !lightbox) {
         return;

@@ -1,0 +1,33 @@
+/**
+ * assets/css/section-title-band.css
+ *
+ * Faixa de título em fundo gradiente (components/section-title-band.php) — ver
+ * docs/reference/parcerias-audit.md, seção 1.
+ *
+ * Medições: altura 180px, container 1200px, gradiente idêntico ao já usado na topbar
+ * (assets/css/header.css), texto branco (`--color-off-white`), centralizado, Roboto 800.
+ * `font-size`/`line-height` são definidos inline pelo componente (valor medido difere por
+ * instância — 40px vs 50px na página de origem).
+ */
+
+.section-title-band {
+    height: 180px;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(180deg, var(--color-dark-teal) 0%, var(--color-brand-green) 100%);
+}
+
+.section-title-band__inner {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-title-band__title {
+    margin: 0;
+    font-family: var(--font-primary);
+    font-weight: 800;
+    color: var(--color-off-white);
+    text-align: center;
+}

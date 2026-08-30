@@ -34,7 +34,7 @@ $clientLogos = require __DIR__ . '/../config/clients.php';
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/variables.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/header.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/boxed-hero.css">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/client-logo-card.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/logo-card.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/clients-grid-section.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/footer.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/whatsapp-button.css">
