@@ -1,0 +1,342 @@
+/**
+ * assets/css/video-testimonials-section.css
+ *
+ * Grade de depoimentos em vídeo (components/video-testimonials-section.php) — /depoimentos/.
+ *
+ * Container 1140px (mesmo valor do Hero desta página, não os 1240px medidos na grade do
+ * WordPress original — decisão consciente de simplificação, um único container em toda a
+ * página). Grid 3/2/1 via flexbox (`flex-wrap`+`justify-content:center`, mesma técnica já usada
+ * em assets/css/benefits-grid-section.css) — centraliza automaticamente a última linha parcial
+ * (1 de 7 cards) sem nenhum seletor `nth-child`.
+ *
+ * Identidade do card: mesma linguagem visual (sombra leve, radius, hover com elevação/borda
+ * verde) já usada em `.logo-card`/`.job-card`/`.benefit-card`, mas com classe própria — a
+ * estrutura interna (thumbnail 16:9 + foto + nome/empresa + citação + links) é bastante
+ * diferente para justificar reaproveitar uma dessas classes diretamente.
+ */
+
+.video-testimonials-section {
+    padding: 50px 10px 70px;
+}
+
+.video-testimonials-section__inner {
+    max-width: 1140px;
+    margin: 0 auto;
+}
+
+.video-testimonials-section__heading {
+    margin: 0;
+    font-family: var(--font-primary);
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--color-brand-green);
+}
+
+.video-testimonials-section__intro {
+    margin-top: 16px;
+    max-width: 720px;
+}
+
+.video-testimonials-section__intro p {
+    margin: 0 0 12px;
+    font-family: var(--font-primary);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--color-text-gray);
+}
+
+.video-testimonials-section__intro p:last-child {
+    margin-bottom: 0;
+}
+
+.video-testimonials-grid {
+    list-style: none;
+    margin: 40px 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}
+
+.video-testimonial-card {
+    flex: 0 1 calc((100% - 2 * 30px) / 3);
+    max-width: calc((100% - 2 * 30px) / 3);
+    display: flex;
+    flex-direction: column;
+    background: var(--color-white);
+    border: 1px solid rgba(0, 34, 44, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 34, 44, 0.06);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+@media (hover: hover) {
+    .video-testimonial-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0, 34, 44, 0.12);
+        border-color: rgba(5, 112, 56, 0.35);
+    }
+}
+
+/* Thumbnail 16:9 + botão de play */
+.video-testimonial-card__thumb-btn {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    padding: 0;
+    border: 0;
+    background: var(--color-dark-teal);
+    cursor: pointer;
+}
+
+.video-testimonial-card__thumb-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.video-testimonial-card__play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(254, 254, 254, 0.92);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.video-testimonial-card__play svg {
+    width: 22px;
+    height: 22px;
+    margin-left: 3px; /* otimização visual: centraliza o triângulo do ícone de play */
+    fill: var(--color-brand-green);
+}
+
+@media (hover: hover) {
+    .video-testimonial-card__thumb-btn:hover .video-testimonial-card__play {
+        transform: translate(-50%, -50%) scale(1.08);
+        background: var(--color-off-white);
+    }
+}
+
+.video-testimonial-card__thumb-btn:focus-visible {
+    outline: 3px solid var(--color-accent-green);
+    outline-offset: -3px;
+}
+
+/* Corpo do card */
+.video-testimonial-card__body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding: 20px;
+    gap: 14px;
+}
+
+.video-testimonial-card__person {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.video-testimonial-card__photo {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.video-testimonial-card__identity {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.video-testimonial-card__name {
+    font-family: var(--font-primary);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-dark-teal);
+}
+
+.video-testimonial-card__company {
+    font-family: var(--font-primary);
+    font-size: 14px;
+    color: var(--color-brand-green);
+}
+
+.video-testimonial-card__quote {
+    margin: 0;
+    position: relative;
+    padding-left: 18px;
+    border-left: 3px solid rgba(5, 112, 56, 0.25);
+}
+
+.video-testimonial-card__quote p {
+    margin: 0;
+    font-family: var(--font-primary);
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--color-text-gray);
+}
+
+.video-testimonial-card__links {
+    margin-top: auto;
+    padding-top: 4px;
+    display: flex;
+    gap: 10px;
+}
+
+.video-testimonial-card__link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--color-dark-teal);
+    color: var(--color-off-white);
+    transition: background 0.2s ease;
+}
+
+.video-testimonial-card__link svg {
+    width: 16px;
+    height: 16px;
+}
+
+.video-testimonial-card__link:hover,
+.video-testimonial-card__link:focus-visible {
+    background: var(--color-brand-green);
+}
+
+.video-testimonial-card__link:focus-visible {
+    outline: 2px solid var(--color-accent-green);
+    outline-offset: 2px;
+}
+
+@media (max-width: 1023px) {
+    .video-testimonial-card {
+        flex-basis: calc((100% - 30px) / 2);
+        max-width: calc((100% - 30px) / 2);
+    }
+}
+
+@media (max-width: 767px) {
+    .video-testimonial-card {
+        flex-basis: 100%;
+        max-width: 100%;
+    }
+}
+
+/* ---------------------------------------------------------------------------------------------
+ * Modal / lightbox de vídeo — components/video-testimonials-section.php +
+ * assets/js/video-testimonials-lightbox.js.
+ *
+ * O <iframe> do YouTube só é inserido em #video-testimonial-modal-frame quando o JS abre o
+ * modal, e é removido ao fechar (ver o JS) — nada aqui carrega vídeo por conta própria.
+ *
+ * `html.video-testimonial-modal-open` bloqueia o scroll do conteúdo atrás do modal (a classe é
+ * adicionada/removida pelo próprio assets/js/video-testimonials-lightbox.js ao abrir/fechar) —
+ * achado da validação final: sem isso, a página por trás rolava livremente com o modal aberto,
+ * um comportamento ruim de UX (e confuso para navegação por teclado). Vai no `<html>`, não no
+ * `<body>`, porque nesta página `document.scrollingElement` é o `<html>` — `overflow:hidden` só
+ * no body não bloqueia o scroll real. Bloqueio simples, sem nenhuma infraestrutura de modal
+ * genérica.
+ * ------------------------------------------------------------------------------------------- */
+
+html.video-testimonial-modal-open {
+    overflow: hidden;
+}
+
+.video-testimonial-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100001; /* acima do cookie banner (100000), mesmo padrão de camadas já usado no site */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.video-testimonial-modal[hidden] {
+    display: none;
+}
+
+.video-testimonial-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 34, 44, 0.85);
+}
+
+.video-testimonial-modal__dialog {
+    position: relative;
+    width: 100%;
+    max-width: 960px;
+}
+
+.video-testimonial-modal__frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.video-testimonial-modal__frame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.video-testimonial-modal__close {
+    position: absolute;
+    top: -44px;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(254, 254, 254, 0.15);
+    color: var(--color-off-white);
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.video-testimonial-modal__close svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+.video-testimonial-modal__close:hover,
+.video-testimonial-modal__close:focus-visible {
+    background: rgba(254, 254, 254, 0.3);
+}
+
+.video-testimonial-modal__close:focus-visible {
+    outline: 2px solid var(--color-accent-green);
+    outline-offset: 2px;
+}
+
+@media (max-width: 767px) {
+    .video-testimonial-modal__close {
+        top: -40px;
+    }
+}
