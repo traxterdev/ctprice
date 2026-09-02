@@ -1,0 +1,185 @@
+/**
+ * assets/css/restricted-access-section.css
+ *
+ * `/arearestrita/` — faixa de título simples (inline em arearestrita/index.php, ver comentário
+ * lá sobre por que não virou um componente separado: são só 2 tags, sem reuso em nenhuma outra
+ * página) + grade dos 2 acessos (components/restricted-access-section.php).
+ *
+ * Container 1140px (mesmo valor já usado em todo o projeto). Grid 2/1 via flexbox
+ * (`flex-wrap`+`justify-content:center`, mesma técnica de assets/css/benefits-grid-section.css e
+ * assets/css/video-testimonials-section.css) — a página só tem 2 itens, não a grade 3/2/1 usada
+ * em páginas com mais conteúdo (ver docs/reference/arearestrita-audit.md, seção 9).
+ *
+ * Identidade do card: mesma linguagem visual (sombra leve, radius, hover com elevação/borda
+ * verde) já usada em `.logo-card`/`.job-card`/`.video-testimonial-card` — ver
+ * docs/reference/arearestrita-audit.md, seção 16 (nenhum componente existente serve para o
+ * padrão "imagem + overlay + estado disponível/indisponível" desta página, por isso uma classe
+ * própria, mas seguindo a mesma receita visual).
+ */
+
+/* --- Faixa de título ------------------------------------------------------- */
+
+.restricted-area-intro {
+    padding: 50px 10px 30px;
+    background: var(--color-white);
+    text-align: center;
+}
+
+.restricted-area-intro__container {
+    max-width: 1140px;
+    margin: 0 auto;
+}
+
+.restricted-area-intro__title {
+    margin: 0;
+    font-family: var(--font-secondary);
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--color-dark-teal);
+}
+
+.restricted-area-intro__subtitle {
+    margin: 12px 0 0;
+    font-family: var(--font-primary);
+    font-size: 16px;
+    color: var(--color-text-gray);
+}
+
+/* --- Grade de acessos -------------------------------------------------------- */
+
+.restricted-access-section {
+    padding: 20px 10px 70px;
+}
+
+.restricted-access-section__container {
+    max-width: 1140px;
+    margin: 0 auto;
+}
+
+.restricted-access-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}
+
+.restricted-access-card {
+    flex: 0 1 calc((100% - 30px) / 2);
+    max-width: calc((100% - 30px) / 2);
+    display: flex;
+    flex-direction: column;
+    background: var(--color-white);
+    border: 1px solid rgba(0, 34, 44, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 34, 44, 0.06);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+/* Hover/foco institucional só quando o acesso está disponível — o card indisponível não deve
+   parecer clicável (sem elevação, sem borda verde, sem cursor de ponteiro). */
+@media (hover: hover) {
+    .restricted-access-card--available:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0, 34, 44, 0.12);
+        border-color: rgba(5, 112, 56, 0.35);
+    }
+}
+
+.restricted-access-card--available:focus-within {
+    border-color: rgba(5, 112, 56, 0.35);
+}
+
+.restricted-access-card--unavailable {
+    cursor: default;
+}
+
+/* Imagem + overlay institucional na base, na cor auditada de cada acesso (Clientes = verde-petróleo
+   escuro, Colaboradores = verde-marca — mesmas 2 cores já usadas no verso dos cards do Elementor
+   original, ver arearestrita-audit.md §7) — mistura visualmente a foto com o corpo branco do card. */
+.restricted-access-card__image-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: var(--color-off-white);
+}
+
+.restricted-access-card__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.restricted-access-card__image-wrap::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 34, 44, 0.55) 0%, rgba(0, 34, 44, 0) 45%);
+}
+
+.restricted-access-card--colaboradores .restricted-access-card__image-wrap::after {
+    background: linear-gradient(to top, rgba(5, 112, 56, 0.55) 0%, rgba(5, 112, 56, 0) 45%);
+}
+
+/* Corpo do card */
+.restricted-access-card__body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-grow: 1;
+    padding: 24px 28px 28px;
+    gap: 10px;
+}
+
+.restricted-access-card__title {
+    margin: 0;
+    font-family: var(--font-secondary);
+    /* Responsivo (não fixo em 45px como no original) + rede de segurança de quebra de palavra —
+       "Colaboradores" nunca é cortado em nenhum viewport (ver arearestrita-audit.md §9/§11). */
+    font-size: clamp(22px, 2.4vw, 26px);
+    font-weight: 700;
+    line-height: 1.25;
+    overflow-wrap: break-word;
+    color: var(--color-dark-teal);
+}
+
+.restricted-access-card--colaboradores .restricted-access-card__title {
+    color: var(--color-brand-green);
+}
+
+.restricted-access-card__description {
+    margin: 0;
+    font-family: var(--font-primary);
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--color-text-gray);
+}
+
+.restricted-access-card__cta {
+    margin-top: 8px;
+}
+
+.restricted-access-card__unavailable {
+    margin-top: 8px;
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-primary);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-gray);
+    background: var(--color-off-white);
+    border: 1px solid rgba(0, 34, 44, 0.12);
+    border-radius: 40px;
+    padding: 10px 20px;
+}
+
+@media (max-width: 767px) {
+    .restricted-access-card {
+        flex-basis: 100%;
+        max-width: 100%;
+    }
+}
