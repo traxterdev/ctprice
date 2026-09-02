@@ -50,6 +50,55 @@ $menu = require __DIR__ . '/menu.php';
  *   um cabeçalho como `X-Forwarded-Proto`) — isso depende da infraestrutura de produção, não pode
  *   ser confirmado a partir deste código.
  */
+/**
+ * Domínio canônico de produção — ÚNICA definição deste valor no projeto (usado só pela validação
+ * de Host em `ctprice_absolute_url()` abaixo, nunca repetido em nenhum outro arquivo).
+ */
+if (!defined('CTPRICE_CANONICAL_HOST')) {
+    define('CTPRICE_CANONICAL_HOST', 'ctprice.com.br');
+}
+
+/**
+ * Monta uma URL ABSOLUTA (com esquema + host) a partir de um caminho relativo à raiz do site —
+ * necessário só quando um valor precisa funcionar fora do contexto do próprio navegador (ex.:
+ * `rel="canonical"`, links de compartilhamento em redes sociais que abrem em outro domínio). A
+ * maioria das páginas nunca precisa disso — para links internos, `BASE_URL . '/caminho'` (relativo
+ * à raiz) já basta e é o padrão usado em todo o resto do projeto.
+ *
+ * SEGURANÇA — Host Header: `$_SERVER['HTTP_HOST']` vem da requisição, controlado pelo cliente, e
+ * NUNCA é usado diretamente aqui (um `Host` forjado seria refletido no `canonical` e nas URLs de
+ * compartilhamento, ex.: envenenar o `canonical` para apontar a outro domínio, ou compartilhar um
+ * link com título/conteúdo da CT Price mas domínio de terceiro). `htmlspecialchars` na saída
+ * impede XSS, mas não impede esse tipo de "canonical/share poisoning" — por isso o host da
+ * requisição só é aceito se bater (ignorando porta) com `CTPRICE_CANONICAL_HOST` ou com o próprio
+ * ambiente local de desenvolvimento; qualquer outro valor cai no fallback canônico conhecido.
+ */
+if (!function_exists('ctprice_absolute_url')) {
+    function ctprice_absolute_url(string $path): string
+    {
+        $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+            || (($_SERVER['SERVER_PORT'] ?? null) === '443');
+        $scheme = $isHttps ? 'https' : 'http';
+
+        $requestHost = (string) ($_SERVER['HTTP_HOST'] ?? '');
+        $requestHostname = strtolower((string) strtok($requestHost, ':'));
+
+        $allowedHostnames = [
+            CTPRICE_CANONICAL_HOST,
+            'www.' . CTPRICE_CANONICAL_HOST,
+            'localhost',
+            '127.0.0.1',
+        ];
+
+        $host = in_array($requestHostname, $allowedHostnames, true) ? $requestHost : CTPRICE_CANONICAL_HOST;
+
+        // Aceita $path com ou sem "/" inicial de forma previsível (nunca gera host+caminho colados).
+        $normalizedPath = '/' . ltrim($path, '/');
+
+        return $scheme . '://' . $host . BASE_URL . $normalizedPath;
+    }
+}
+
 if (!function_exists('ctprice_configure_session_cookie')) {
     function ctprice_configure_session_cookie(): void
     {
