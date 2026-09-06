@@ -3,13 +3,29 @@
  *
  * Estilos da topbar + header (logo, navegação, botão "Área Restrita", hambúrguer).
  *
- * Fonte de medição: docs/reference/home-desktop-audit.md (seção 2) e
- * docs/reference/home-tablet-audit.md (breakpoint exato do menu). Valores em px são os
- * medidos no site original; onde uma medição exata não estava disponível (marcado nos
- * comentários), foi usado um valor de aproximação a confirmar na validação visual.
+ * Fonte de medição original: docs/reference/home-desktop-audit.md (seção 2) e
+ * docs/reference/home-tablet-audit.md (breakpoint exato do menu). Valores em px eram os
+ * medidos no site original; onde uma medição exata não estava disponível, foi usado um valor
+ * de aproximação.
+ *
+ * REFINAMENTO DELIBERADO (sprint "fechamento visual — header e menu global"): a versão medida
+ * do original (logo 233px + itens do menu com padding/font-size largos) não cabe em uma única
+ * linha em notebooks de 14" (1440/1366/1280px) — o menu quebra em 2 linhas de forma
+ * desorganizada nessa faixa (bug comprovado por medição real via Chrome DevTools MCP nesta
+ * sprint: em 1440px, com os valores antigos, a soma dos itens do menu já excedia o espaço
+ * disponível). Por decisão explícita do cliente nesta sprint (não é fidelidade visual ao
+ * original — é melhoria consciente do conceito), os valores abaixo (logo, padding/font-size dos
+ * itens, botão "Área Restrita", largura do container do header) foram recalibrados para caber
+ * em uma linha nessas 3 larguras, mantendo os mesmos 8 itens e os mesmos 2 submenus. Não afeta
+ * nenhuma outra seção do site (--container-width global, usado pelo conteúdo/topbar, não foi
+ * alterado).
  *
  * Dois breakpoints reais e independentes, preservados como no original (não unificados):
- * - 1024px: o menu horizontal vira hambúrguer (docs/reference/home-tablet-audit.md).
+ * - 1024px: o menu horizontal vira hambúrguer (docs/reference/home-tablet-audit.md) — mesmo
+ *   breakpoint de antes, reconfirmado nesta sprint como o ponto correto: nas 3 larguras-alvo de
+ *   notebook (1440/1366/1280) o menu cabe integralmente em uma linha com os novos valores; only
+ *   abaixo de ~1025px o espaço realmente não é mais suficiente para 8 itens + 2 submenus
+ *   legíveis inline, e o hambúrguer já existente continua sendo a solução correta.
  * - 767px: o header (linha logo/nav/CTA) empilha em coluna — comportamento próprio deste
  *   componente (flex-wrap do header), não uma substituição do breakpoint de conteúdo.
  */
@@ -100,17 +116,22 @@
     position: relative; /* nunca sticky — comportamento medido no original */
     background: transparent;
     padding: 10px;
+    /* Largura própria do header, maior que --container-width (1200px, usado pelo conteúdo e
+       pela topbar) — decisão desta sprint: dar à navegação mais espaço horizontal do que o
+       container "boxed" do conteúdo ofereceria, para caber em uma linha em notebooks de 14"
+       sem esticar demais em telas grandes. Não altera --container-width global nem a topbar. */
+    --header-bar-width: 1280px;
 }
 
 .site-header__bar {
-    max-width: var(--container-width);
+    max-width: var(--header-bar-width);
     margin: 0 auto;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
     flex-wrap: nowrap;
-    gap: 16px;
+    gap: 12px;
 }
 
 @media (max-width: 767px) {
@@ -130,13 +151,16 @@
 }
 
 .site-header__logo img {
-    width: 233px;
+    /* Reduzida de 233px (medição do original) para 160px nesta sprint — decisão explícita do
+       cliente: logo grande demais tomava espaço que a navegação precisa para caber em uma
+       linha em notebooks de 14". Continua legível (mesmo arquivo de imagem, não alterado). */
+    width: 160px;
     height: auto;
 }
 
 @media (max-width: 1024px) {
     .site-header__logo img {
-        width: 136px;
+        width: 130px;
     }
 }
 
@@ -196,6 +220,9 @@
     align-items: center;
     justify-content: center;
     flex: 1 1 auto;
+    min-width: 0; /* permite que o item flex encolha para caber os 8 itens antes de quebrar —
+                     sem isso, o conteúdo interno (a lista) pode forçar o próprio contêiner a
+                     ultrapassar o espaço disponível entre logo e CTA */
     padding: 10px 0; /* confirmado por medição direta no original: o wrapper do menu tem
                         padding vertical próprio, além do padding do header */
 }
@@ -218,14 +245,20 @@
 .primary-nav__link {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 13px 20px; /* confirmado por medição direta no original (validação visual) */
+    gap: 5px;
+    /* Padding/font-size reduzidos nesta sprint (eram 13px 20px / 16px — medição do original) —
+       decisão explícita do cliente: liberar espaço horizontal para os 8 itens + 2 submenus
+       caberem em uma única linha em notebooks de 14" (1440/1366/1280px), sem remover nenhum
+       item. `white-space:nowrap` evita que um rótulo de 2 palavras quebre dentro do próprio
+       item antes que o menu inteiro precise ir para o hambúrguer. */
+    padding: 12px 13px;
     font-family: var(--font-primary);
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     line-height: 20px;
     color: var(--color-brand-green);
     text-decoration: none;
+    white-space: nowrap;
     transition: 0.4s;
 }
 
@@ -236,8 +269,8 @@
 }
 
 .primary-nav__caret {
-    width: 10px;
-    height: 8px;
+    width: 9px;
+    height: 7px;
     flex: none;
 }
 
@@ -334,7 +367,7 @@
     align-items: center;
     justify-content: center;
     font-family: var(--font-primary);
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 500;
     text-decoration: none;
     white-space: nowrap;
@@ -342,9 +375,11 @@
 }
 
 .btn--pill-outline {
-    border: 3px solid var(--color-brand-green);
+    /* Border/padding reduzidos nesta sprint (eram 3px / 12px 24px) — o botão deve parecer parte
+       natural do conjunto logo+menu, não um bloco maior que os próprios itens do menu. */
+    border: 2px solid var(--color-brand-green);
     border-radius: 40px;
-    padding: 12px 24px;
+    padding: 9px 18px;
     color: var(--color-brand-green);
     background: transparent;
 }
