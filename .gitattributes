@@ -1,0 +1,15 @@
+# .gitattributes — CT Price
+#
+# `export-ignore`: exclui o caminho de qualquer pacote gerado por `git archive` (ex.:
+# `git archive --format=zip -o deploy.zip HEAD`) — a forma recomendada de gerar um pacote de
+# produção limpo, sem depender só das regras de bloqueio do .htaccess (ver
+# docs/deploy-production.md). Só se aplica a caminhos rastreados pelo Git; `.claude/` não está
+# listado aqui porque não é versionado (nunca entraria num `git archive` de qualquer forma) — a
+# proteção dele em produção vem só do `.htaccess`.
+
+docs export-ignore
+CLAUDE.md export-ignore
+README.md export-ignore
+.serena export-ignore
+.gitattributes export-ignore
+.gitignore export-ignore

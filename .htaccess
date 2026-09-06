@@ -1,0 +1,41 @@
+# .htaccess — CT Price (raiz pública)
+#
+# Bloqueia acesso HTTP DIRETO a arquivos/diretórios internos que não são páginas públicas.
+# NÃO afeta `require`/`include` do PHP (que lê o filesystem diretamente, nunca via HTTP) nem
+# nenhuma página, endpoint de formulário ou asset público legítimo.
+#
+# Por quê: a arquitetura atual usa a raiz do projeto como DocumentRoot (sem pasta /public/
+# separada — ver docs/deploy-production.md, seção "Por que não há /public/ ainda"). Sem estas
+# regras, qualquer arquivo físico sob a raiz é servido normalmente se nada o proibir — foi assim
+# que a auditoria global encontrou `.git/`, `CLAUDE.md`, `docs/` etc. acessíveis por HTTP
+# (docs/reference/global-final-audit.md, achado P0; correção documentada em
+# docs/reference/deploy-security-validation.md).
+#
+# `[NC]` (No Case) em toda regra: o filesystem do Windows/produção pode não diferenciar
+# maiúsculas/minúsculas — sem isso, `/CLAUDE.MD` ou `/.GIT/config` poderiam contornar a regra.
+
+# Nunca listar o conteúdo de nenhum diretório sob esta raiz.
+Options -Indexes
+
+RewriteEngine On
+
+# --- Controle de versão (histórico completo do repositório) -------------------------------
+RewriteRule ^\.git(/|$) - [F,L,NC]
+
+# --- Documentação interna e arquivos de desenvolvimento -----------------------------------
+RewriteRule ^docs(/|$) - [F,L,NC]
+RewriteRule ^(CLAUDE|README)\.md$ - [F,L,NC]
+RewriteRule (^|/)\.env(\..*)?$ - [F,L,NC]
+RewriteRule \.log$ - [F,L,NC]
+RewriteRule ^\.gitignore$ - [F,L,NC]
+RewriteRule ^\.gitattributes$ - [F,L,NC]
+RewriteRule ^\.serena(/|$) - [F,L,NC]
+RewriteRule ^\.claude(/|$) - [F,L,NC]
+
+# --- Diretórios internos da aplicação (usados só via require/include do PHP, nunca por URL) -
+# `blog/` inclui o template compartilhado dos posts (blog/_post-template.php) — os posts em si
+# vivem em URLs próprias na raiz (ex.: /hello-world/), não em /blog/.
+RewriteRule ^(config|components|includes|content|blog)(/|$) - [F,L,NC]
+
+# Observação: `.htaccess`/`.htpasswd` já são negados globalmente pela configuração padrão do
+# Apache (`<Files ".ht*"> Require all denied </Files>` em httpd.conf) — não duplicado aqui.
