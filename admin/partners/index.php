@@ -73,8 +73,12 @@ require __DIR__ . '/../includes/layout-header.php';
                             <img class="admin-table__logo" src="<?= BASE_URL ?>/<?= htmlspecialchars($item['logo_path'], ENT_QUOTES, 'UTF-8') ?>" alt="">
                         </td>
                         <td class="admin-table__name"><?= htmlspecialchars($item['nome'], ENT_QUOTES, 'UTF-8') ?></td>
-                        <td class="admin-table__name">
-                            <?= $item['url'] ? htmlspecialchars($item['url'], ENT_QUOTES, 'UTF-8') : '<span style="color:#9AA6A2">— sem link —</span>' ?>
+                        <td>
+                            <?php if ($item['url']): ?>
+                            <span class="admin-table__truncate" style="--truncate-width:340px" title="<?= htmlspecialchars($item['url'], ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($item['url'], ENT_QUOTES, 'UTF-8') ?></span>
+                            <?php else: ?>
+                            <span style="color:#9AA6A2">— sem link —</span>
+                            <?php endif; ?>
                         </td>
                         <td>
                             <div class="admin-table__actions">

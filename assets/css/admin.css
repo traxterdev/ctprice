@@ -1,159 +1,367 @@
 /**
  * assets/css/admin.css
  *
- * Visual próprio do painel administrativo (`/admin/`) — não reproduz o visual do site público
- * (ver tarefa da sprint, §9): profissional, limpo, corporativo, claramente administrativo.
- * Reaproveita só as cores institucionais já definidas em assets/css/variables.css (nunca inventa
- * uma paleta nova) e assets/css/reset.css/fonts.css (carregados normalmente pelas páginas do
- * admin) — nenhum framework CSS.
+ * Visual próprio do painel administrativo (`/admin/`) — não reproduz o visual do site público.
+ * Reorganização visual (sidebar): mesma filosofia do dashboard do sistema de RH da CT Price/
+ * Traxter (sidebar vertical fixa, escura, institucional; conteúdo amplo e claro à direita;
+ * hierarquia forte; cards discretos) — adaptada a este CMS, não copiada literalmente. Reaproveita
+ * só as cores já definidas em assets/css/variables.css (nunca uma paleta nova) e assets/css/
+ * reset.css/fonts.css (carregados normalmente pelas páginas do admin) — nenhum framework CSS,
+ * nenhuma fonte externa nova.
+ *
+ * Estrutura (ver admin/includes/layout-header.php/layout-footer.php, únicos arquivos que montam
+ * este HTML — nenhuma página duplica a sidebar):
+ *
+ *   .admin-mobile-bar          barra superior, só visível abaixo do breakpoint (§ Responsivo)
+ *   .admin-shell               contêiner flex: sidebar + conteúdo
+ *     .admin-sidebar             coluna fixa escura (nav + rodapé)
+ *     .admin-main                conteúdo claro, largura flexível
  */
+
+/* =========================================================================
+   Base
+   ========================================================================= */
 
 .admin-body {
     background: #F4F6F5;
     color: #1B2B27;
     font-family: var(--font-primary);
     min-height: 100vh;
+}
+
+/* =========================================================================
+   Shell (sidebar + conteúdo)
+   ========================================================================= */
+
+.admin-shell {
+    display: flex;
+    align-items: stretch;
+    min-height: 100vh;
+}
+
+/* --- Sidebar --------------------------------------------------------------------------- */
+
+.admin-sidebar {
+    flex: 0 0 240px;
+    width: 240px;
+    background: var(--color-dark-teal);
+    color: rgba(254, 254, 254, 0.92);
     display: flex;
     flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
 }
 
-/* --- Barra superior --------------------------------------------------------------------- */
-
-.admin-topbar {
-    background: linear-gradient(180deg, var(--color-dark-teal) 0%, var(--color-brand-green) 100%);
-    color: var(--color-off-white);
-    padding: 0 24px;
-}
-
-.admin-topbar__inner {
-    max-width: 1200px;
-    margin: 0 auto;
+.admin-sidebar__brand {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 12px;
-    padding: 14px 0;
+    gap: 10px;
+    padding: 22px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    flex: 0 0 auto;
 }
 
-.admin-topbar__brand {
+.admin-sidebar__brand img {
+    display: block;
+    flex: none;
+}
+
+.admin-sidebar__brand-text {
     display: flex;
-    align-items: baseline;
-    gap: 8px;
+    flex-direction: column;
+    line-height: 1.25;
+}
+
+.admin-sidebar__brand-text strong {
+    font-size: 14px;
     font-weight: 700;
-    font-size: 18px;
+    letter-spacing: 0.03em;
     color: var(--color-off-white);
-    text-decoration: none;
 }
 
-.admin-topbar__brand span {
+.admin-sidebar__brand-text span {
+    font-size: 11px;
     font-weight: 400;
-    font-size: 13px;
-    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgba(254, 254, 254, 0.55);
 }
 
-.admin-nav {
+.admin-sidebar__nav {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 14px 10px;
+}
+
+.admin-sidebar__link {
     display: flex;
     align-items: center;
-    gap: 4px;
-    flex-wrap: wrap;
-}
-
-.admin-nav a {
-    color: var(--color-off-white);
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: rgba(254, 254, 254, 0.75);
     text-decoration: none;
     font-size: 14px;
     font-weight: 500;
-    padding: 8px 14px;
-    border-radius: 6px;
-    transition: background 0.2s;
-}
-
-.admin-nav a:hover,
-.admin-nav a:focus-visible {
-    background: rgba(255, 255, 255, 0.12);
-}
-
-.admin-nav a.is-active {
-    background: rgba(255, 255, 255, 0.18);
-}
-
-.admin-nav__user {
-    font-size: 13px;
-    opacity: 0.85;
-    margin-right: 4px;
     white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
 }
 
-/* --- Conteúdo ---------------------------------------------------------------------------- */
+.admin-sidebar__icon {
+    width: 18px;
+    height: 18px;
+    flex: none;
+    opacity: 0.85;
+}
+
+.admin-sidebar__link:hover,
+.admin-sidebar__link:focus-visible {
+    background: rgba(255, 255, 255, 0.07);
+    color: var(--color-off-white);
+}
+
+.admin-sidebar__link.is-active {
+    background: rgba(16, 227, 107, 0.14);
+    color: var(--color-off-white);
+    box-shadow: inset 3px 0 0 var(--color-accent-green);
+}
+
+.admin-sidebar__link.is-active .admin-sidebar__icon {
+    opacity: 1;
+}
+
+.admin-sidebar__footer {
+    flex: 0 0 auto;
+    padding: 14px 20px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-sidebar__user {
+    font-size: 12px;
+    color: rgba(254, 254, 254, 0.55);
+    margin: 0 0 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.admin-sidebar__footer .admin-sidebar__link {
+    padding-left: 12px;
+    margin: 0 -12px;
+}
+
+.admin-sidebar__tag {
+    font-size: 11px;
+    color: rgba(254, 254, 254, 0.38);
+    margin: 14px 0 0;
+}
+
+/* --- Barra superior mobile (só aparece no breakpoint, ver § Responsivo) --------------------- */
+
+.admin-mobile-bar {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    background: var(--color-dark-teal);
+    color: var(--color-off-white);
+    padding: 12px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 30;
+}
+
+.admin-mobile-bar__toggle {
+    width: 36px;
+    height: 36px;
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 6px;
+    color: inherit;
+    cursor: pointer;
+}
+
+.admin-mobile-bar__toggle svg {
+    width: 20px;
+    height: 20px;
+}
+
+.admin-mobile-bar__title {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.admin-sidebar-overlay {
+    display: none;
+}
+
+/* --- Conteúdo principal ------------------------------------------------------------------ */
 
 .admin-main {
     flex: 1 1 auto;
-    max-width: 1200px;
-    width: 100%;
-    margin: 0 auto;
-    padding: 28px 24px 60px;
+    min-width: 0;
+    max-width: 1440px;
+    padding: 32px 40px 60px;
 }
 
 .admin-header {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 12px;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
 .admin-header h1 {
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 700;
     color: var(--color-dark-teal);
     margin: 0;
+    letter-spacing: -0.01em;
 }
 
 .admin-header p {
     color: #5B6D68;
     font-size: 14px;
-    margin: 4px 0 0;
+    margin: 5px 0 0;
 }
 
-/* --- Cards / Dashboard --------------------------------------------------------------------- */
+/* =========================================================================
+   Dashboard — cards de totais
+   ========================================================================= */
 
 .admin-stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 16px;
     margin-bottom: 28px;
 }
 
 .admin-stat-card {
     background: var(--color-white);
-    border: 1px solid #E1E7E4;
+    border: 1px solid #E7ECEA;
     border-radius: 10px;
-    padding: 20px 22px;
+    box-shadow: 0 1px 2px rgba(0, 34, 44, 0.04);
+    padding: 18px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.admin-stat-card__icon {
+    flex: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
+    background: #E4F7EC;
+    color: var(--color-brand-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-stat-card__icon svg {
+    width: 19px;
+    height: 19px;
 }
 
 .admin-stat-card__label {
-    font-size: 13px;
+    font-size: 12.5px;
     color: #5B6D68;
     text-transform: uppercase;
     letter-spacing: 0.03em;
-    margin: 0 0 6px;
+    margin: 2px 0 4px;
 }
 
 .admin-stat-card__value {
-    font-size: 32px;
+    font-size: 28px;
     font-weight: 700;
     color: var(--color-dark-teal);
     margin: 0;
+    line-height: 1.1;
 }
 
-/* --- Cartão genérico de conteúdo ------------------------------------------------------------ */
+/* --- Dashboard — "Conteúdo do site" (segunda área, atalhos por módulo) --------------------- */
+
+.admin-section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-dark-teal);
+    margin: 0 0 14px;
+}
+
+.admin-module-list {
+    background: var(--color-white);
+    border: 1px solid #E7ECEA;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.admin-module-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    border-bottom: 1px solid #EEF1F0;
+}
+
+.admin-module-row:last-child {
+    border-bottom: none;
+}
+
+.admin-module-row__icon {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: #F4F6F5;
+    color: var(--color-dark-teal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-module-row__icon svg {
+    width: 17px;
+    height: 17px;
+}
+
+.admin-module-row__name {
+    flex: 1 1 auto;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1B2B27;
+}
+
+.admin-module-row__count {
+    flex: none;
+    font-size: 13px;
+    color: #5B6D68;
+    min-width: 90px;
+}
+
+.admin-module-row__count strong {
+    color: var(--color-dark-teal);
+    font-weight: 700;
+}
+
+/* =========================================================================
+   Cartão genérico de conteúdo
+   ========================================================================= */
 
 .admin-panel {
     background: var(--color-white);
-    border: 1px solid #E1E7E4;
+    border: 1px solid #E7ECEA;
     border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(0, 34, 44, 0.04);
     overflow: hidden;
 }
 
@@ -163,17 +371,21 @@
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 10px;
-    padding: 16px 20px;
-    border-bottom: 1px solid #E1E7E4;
+    padding: 14px 20px;
+    border-bottom: 1px solid #EEF1F0;
+    background: #FAFBFA;
 }
 
 .admin-panel__toolbar h2 {
-    font-size: 16px;
+    font-size: 14px;
+    font-weight: 700;
     margin: 0;
     color: var(--color-dark-teal);
 }
 
-/* --- Tabela ---------------------------------------------------------------------------- */
+/* =========================================================================
+   Tabela
+   ========================================================================= */
 
 .admin-table-wrap {
     overflow-x: auto;
@@ -182,24 +394,28 @@
 .admin-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 14px;
+    font-size: 13.5px;
 }
 
 .admin-table th,
 .admin-table td {
-    padding: 12px 16px;
+    padding: 13px 18px;
     text-align: left;
     border-bottom: 1px solid #EEF1F0;
     white-space: nowrap;
 }
 
 .admin-table th {
-    color: #5B6D68;
+    color: #7A8A85;
     font-weight: 600;
-    font-size: 12px;
+    font-size: 11px;
     text-transform: uppercase;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.04em;
     background: #FAFBFA;
+}
+
+.admin-table tbody tr:last-child td {
+    border-bottom: none;
 }
 
 .admin-table tbody tr:hover {
@@ -207,10 +423,10 @@
 }
 
 .admin-table__logo {
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
     object-fit: contain;
-    border: 1px solid #E1E7E4;
+    border: 1px solid #E7ECEA;
     border-radius: 6px;
     background: var(--color-white);
     padding: 4px;
@@ -228,14 +444,38 @@
     flex-wrap: wrap;
 }
 
-/* --- Badges --------------------------------------------------------------------------------- */
+/*
+ * Truncamento de conteúdo longo/sem espaços (URLs, slugs) numa célula de tabela — Parceiros
+ * (coluna URL) e Notícias (colunas Título/Slug): `.admin-table__name` (`white-space: normal`) só
+ * resolve texto com espaços (quebra a linha); uma URL/slug longo é uma única palavra sem espaço,
+ * então "quebrar" não tem onde acontecer e o texto vazava para as colunas seguintes. `max-width`
+ * sozinho (em px, não %, que seria circular numa tabela de layout automático) não corta o texto
+ * por si só — precisa vir junto com `overflow: hidden` + `text-overflow: ellipsis` +
+ * `white-space: nowrap` no mesmo elemento; por isso é um <span> à parte dentro da célula, não a
+ * própria célula. `--truncate-width` (custom property, padrão 260px) permite ajustar a largura
+ * máxima por coluna sem precisar de uma classe nova para cada caso — ver admin/partners/index.php
+ * e admin/posts/index.php. Usar sempre com o atributo `title` no mesmo elemento, para o valor
+ * completo continuar consultável por hover (o valor salvo no banco nunca é alterado por este
+ * truncamento, que é puramente visual).
+ */
+.admin-table__truncate {
+    display: block;
+    max-width: var(--truncate-width, 260px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* =========================================================================
+   Badges
+   ========================================================================= */
 
 .admin-badge {
     display: inline-flex;
     align-items: center;
     padding: 3px 10px;
     border-radius: 999px;
-    font-size: 12px;
+    font-size: 11.5px;
     font-weight: 600;
 }
 
@@ -249,13 +489,15 @@
     color: #6B6B6B;
 }
 
-/* --- Botões ---------------------------------------------------------------------------------- */
+/* =========================================================================
+   Botões
+   ========================================================================= */
 
 .admin-btn {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 9px 16px;
+    padding: 8px 14px;
     border-radius: 6px;
     font-size: 13px;
     font-weight: 600;
@@ -296,7 +538,7 @@
 }
 
 .admin-btn--sm {
-    padding: 6px 10px;
+    padding: 5px 10px;
     font-size: 12px;
 }
 
@@ -306,10 +548,12 @@
     pointer-events: none;
 }
 
-/* --- Formulários ---------------------------------------------------------------------------- */
+/* =========================================================================
+   Formulários
+   ========================================================================= */
 
 .admin-form {
-    padding: 20px;
+    padding: 22px 24px;
     max-width: 560px;
 }
 
@@ -335,6 +579,8 @@
 .admin-form input[type="url"],
 .admin-form input[type="email"],
 .admin-form input[type="password"],
+.admin-form input[type="datetime-local"],
+.admin-form textarea,
 .admin-form select {
     width: 100%;
     padding: 10px 12px;
@@ -347,6 +593,7 @@
 }
 
 .admin-form input:focus,
+.admin-form textarea:focus,
 .admin-form select:focus {
     outline: 2px solid var(--color-brand-green);
     outline-offset: 1px;
@@ -363,7 +610,7 @@
     width: 56px;
     height: 56px;
     object-fit: contain;
-    border: 1px solid #E1E7E4;
+    border: 1px solid #E7ECEA;
     border-radius: 6px;
     padding: 4px;
     background: var(--color-white);
@@ -372,22 +619,27 @@
 .admin-form__actions {
     display: flex;
     gap: 10px;
-    margin-top: 24px;
+    margin-top: 26px;
+    padding-top: 20px;
+    border-top: 1px solid #EEF1F0;
 }
 
-/* --- Login ------------------------------------------------------------------------------- */
+/* =========================================================================
+   Login
+   ========================================================================= */
 
 .admin-login {
-    flex: 1 1 auto;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 24px;
+    background: #F4F6F5;
 }
 
 .admin-login__card {
     background: var(--color-white);
-    border: 1px solid #E1E7E4;
+    border: 1px solid #E7ECEA;
     border-radius: 12px;
     padding: 36px 32px;
     width: 100%;
@@ -415,7 +667,9 @@
     margin-top: 8px;
 }
 
-/* --- Alertas / flash --------------------------------------------------------------------- */
+/* =========================================================================
+   Alertas / flash
+   ========================================================================= */
 
 .admin-alert {
     padding: 12px 16px;
@@ -449,12 +703,44 @@
     font-size: 14px;
 }
 
-@media (max-width: 640px) {
+/* =========================================================================
+   Responsivo — a sidebar é permanente em desktop/notebook (prioridade, incluindo 1024px); só
+   vira off-canvas abaixo de 900px, faixa claramente de tablet/mobile, nunca atingida pelas 4
+   larguras de notebook exigidas (1440/1366/1280/1024).
+   ========================================================================= */
+
+@media (max-width: 900px) {
+    .admin-mobile-bar {
+        display: flex;
+    }
+
+    .admin-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 50;
+        width: 260px;
+        transform: translateX(-100%);
+        transition: transform 0.22s ease;
+    }
+
+    .admin-sidebar.is-open {
+        transform: translateX(0);
+    }
+
+    .admin-sidebar-overlay.is-open {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 34, 44, 0.45);
+        z-index: 40;
+    }
+
     .admin-main {
-        padding: 20px 14px 40px;
+        padding: 20px 16px 40px;
     }
 
     .admin-form {
-        padding: 16px;
+        padding: 18px;
     }
 }

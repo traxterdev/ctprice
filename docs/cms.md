@@ -59,18 +59,14 @@ independentes, ver "Migrations e seeds em produção" abaixo).
 
 ## Módulos disponíveis
 
-- **Dashboard** (`/admin/`): totais ativos de Clientes, Parceiros, Vagas, Benefícios, Depoimentos,
-  posts publicados e Administradores. Nenhum analytics.
+- **Dashboard** (`/admin/`): totais ativos de Clientes, Parceiros, Depoimentos, posts publicados e
+  Administradores. Nenhum analytics. (Vagas/Benefícios saíram do dashboard — ver "Vagas e
+  Benefícios — retirados do CMS" abaixo.)
 - **Clientes** (`/admin/clients/`): CRUD + ativar/desativar + reordenar (setas). Campos: nome,
   logo, site (opcional).
 - **Parceiros** (`/admin/partners/`): idem, com categoria (`tools`/`companies`, mesma semântica de
   "Ferramentas"/"Parceiros" de `/parcerias/`) e URL opcional (preserva o caso real "Auditto", sem
   link).
-- **Vagas** (`/admin/jobs/`): CRUD + ativar/desativar + reordenar. Pré-requisitos/diferenciais são
-  textareas "um item por linha" (convertidos para `<ul><li>` na leitura pública — mesma
-  apresentação de sempre). O link de candidatura continua vindo de
-  `config/company.php['sistemas_externos']['recrutamento']`, nunca duplicado aqui.
-- **Benefícios** (`/admin/benefits/`): CRUD + upload + ativar/desativar + reordenar.
 - **Depoimentos** (`/admin/testimonials/`): CRUD + ativar/desativar + reordenar. Um único upload
   ("foto") alimenta `foto_path` e `thumbnail_path` — ver "Decisão: upload único" abaixo.
   `video_id`/`video_list`/URLs validados server-side.
@@ -86,6 +82,33 @@ independentes, ver "Migrations e seeds em produção" abaixo).
 Não implementado (ver tarefa da sprint 03, §14): RBAC, MFA, recuperação automática de senha,
 editor WYSIWYG, biblioteca de mídia genérica, analytics, API, páginas institucionais editáveis,
 configurações gerais da empresa.
+
+## Vagas e Benefícios — retirados do CMS (decisão de arquitetura)
+
+**Vagas e Benefícios não são mais módulos administráveis por este CMS.** Decisão de arquitetura:
+esse conteúdo passará a vir de outro sistema já existente, que se tornará a fonte canônica dessas
+duas entidades no futuro.
+
+O que mudou nesta correção:
+- Os CRUDs administrativos foram removidos: os diretórios `admin/jobs/` e `admin/benefits/` (cada
+  um com `index/form/save/toggle/delete/move.php`) foram excluídos — eram totalmente isolados, sem
+  nenhuma outra parte do projeto dependendo deles.
+- Os itens "Vagas" e "Benefícios" saíram do menu administrativo (`admin/includes/
+  layout-header.php`) e do dashboard (`admin/index.php` — cards e consultas removidos).
+
+O que **não** mudou (de propósito, enquanto a integração com o outro sistema não existe):
+- As tabelas `jobs` e `benefits` continuam no banco, com os mesmos dados.
+- `repositories/JobRepository.php` e `repositories/BenefitRepository.php` continuam existindo e
+  sendo usados.
+- A página pública `/trabalhe-conosco/` continua lendo Vagas e Benefícios **do banco** através
+  desses repositórios, exatamente como antes — não foi alterada e não ficou vazia.
+- `database/seed_editorial_content.php` continua importando Vagas/Benefícios (entre outras
+  entidades) — ver "Fonte canônica dos dados" abaixo para o que isso significa hoje.
+
+**A integração com o outro sistema (fonte canônica futura) ainda NÃO foi implementada.** Enquanto
+ela não existir, o banco `jobs`/`benefits` desta aplicação continua sendo a única fonte que a
+página pública lê — só deixou de ser **editável por este CMS**. Quando os dados técnicos dessa
+integração estiverem disponíveis, essa seção deste documento precisará ser revisada.
 
 ## Gestão de administradores (sprint 03)
 
@@ -202,6 +225,12 @@ Esses arquivos **não foram apagados** — existem só como fonte histórica dos
 (`database/seed_clients_and_partners.php`, `database/seed_editorial_content.php`). Não há duas
 fontes públicas simultâneas.
 
+**Exceção temporária — Vagas e Benefícios**: o banco continua sendo a fonte que a página pública
+lê hoje, mas deixou de ser **editável** por este CMS (ver "Vagas e Benefícios — retirados do CMS"
+acima). Esses dois, especificamente, têm uma fonte canônica **futura** já decidida (o outro
+sistema já existente) que ainda não foi integrada — quando for, o banco `jobs`/`benefits` desta
+aplicação deixa de ser usado pela página pública, e esta seção precisará ser atualizada.
+
 ## Disponibilidade e erros em produção
 
 - **Banco indisponível**: toda página pública que lê do banco envolve a chamada em `try/catch` —
@@ -306,6 +335,9 @@ inválido rejeitado com mensagem genérica.
 
 ## Pendências reais restantes
 
+- Integração de Vagas/Benefícios com o outro sistema (fonte canônica futura) — ainda não
+  implementada; sem dados técnicos dessa integração até o momento (ver "Vagas e Benefícios —
+  retirados do CMS" acima).
 - Rate limit persistente não trata `X-Forwarded-For`/proxy reverso (ver seção própria acima) —
   ajustar `admin_client_ip()` quando a topologia real de produção (proxy/load balancer, se
   houver) for conhecida.

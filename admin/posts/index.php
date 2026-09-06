@@ -47,8 +47,8 @@ require __DIR__ . '/../includes/layout-header.php';
                 <?php foreach ($posts as $post): ?>
                 <?php $isPublished = (int) $post['ativo'] === 1; ?>
                 <tr>
-                    <td class="admin-table__name"><?= htmlspecialchars($post['titulo'], ENT_QUOTES, 'UTF-8') ?></td>
-                    <td>/<?= htmlspecialchars($post['slug'], ENT_QUOTES, 'UTF-8') ?>/</td>
+                    <td><span class="admin-table__truncate" style="--truncate-width:320px" title="<?= htmlspecialchars($post['titulo'], ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($post['titulo'], ENT_QUOTES, 'UTF-8') ?></span></td>
+                    <td><span class="admin-table__truncate" style="--truncate-width:220px" title="/<?= htmlspecialchars($post['slug'], ENT_QUOTES, 'UTF-8') ?>/">/<?= htmlspecialchars($post['slug'], ENT_QUOTES, 'UTF-8') ?>/</span></td>
                     <td><?= htmlspecialchars((new DateTimeImmutable($post['published_at']))->format('d/m/Y H:i'), ENT_QUOTES, 'UTF-8') ?></td>
                     <td>
                         <span class="admin-badge <?= $isPublished ? 'admin-badge--active' : 'admin-badge--inactive' ?>">
