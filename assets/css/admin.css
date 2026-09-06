@@ -56,37 +56,45 @@
 
 .admin-sidebar__brand {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 10px;
-    padding: 22px 20px;
+    padding: 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     flex: 0 0 auto;
 }
 
-.admin-sidebar__brand img {
+/*
+ * Logo oficial da CT Price (assets/images/logo/LogoPreferencialColorida-768x223.png — mesmo
+ * arquivo usado no header/footer do site público, ver includes/header.php) é colorida (verde +
+ * azul-marinho quase preto) pensada para fundo claro; não existe no projeto uma variação própria
+ * para fundo escuro, e não criamos uma. Por isso a logo fica dentro de um "chip" claro — só um
+ * contêiner de layout (arredondado, fundo off-white), a imagem em si não é alterada/recortada,
+ * `object-fit: contain` preserva a proporção original (1024×297 / 768×223 ≈ 3.45:1).
+ */
+.admin-sidebar__logo-chip {
+    display: inline-flex;
+    align-items: center;
+    background: var(--color-off-white);
+    border-radius: 8px;
+    padding: 8px 12px;
+    line-height: 0;
+}
+
+.admin-sidebar__logo-chip img {
     display: block;
-    flex: none;
+    height: 22px;
+    width: auto;
+    object-fit: contain;
 }
 
-.admin-sidebar__brand-text {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.25;
-}
-
-.admin-sidebar__brand-text strong {
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-    color: var(--color-off-white);
-}
-
-.admin-sidebar__brand-text span {
+.admin-sidebar__brand-label {
     font-size: 11px;
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: rgba(254, 254, 254, 0.55);
+    padding-left: 2px;
 }
 
 .admin-sidebar__nav {

@@ -94,11 +94,10 @@ $adminNavItems = [
 
     <aside class="admin-sidebar" id="admin-sidebar">
         <div class="admin-sidebar__brand">
-            <img src="<?= BASE_URL ?>/assets/images/logo/Isotipolinear.png" alt="" width="26" height="26">
-            <span class="admin-sidebar__brand-text">
-                <strong>CT PRICE</strong>
-                <span>Admin</span>
+            <span class="admin-sidebar__logo-chip">
+                <img src="<?= BASE_URL ?>/assets/images/logo/LogoPreferencialColorida-768x223.png" alt="CT Price" width="768" height="223">
             </span>
+            <span class="admin-sidebar__brand-label">Administração</span>
         </div>
 
         <nav class="admin-sidebar__nav" aria-label="Navegação administrativa">
