@@ -26,13 +26,19 @@ $videoTestimonialsSection = [
     'intro_html' => '<p>Há anos a <strong>CT Price</strong> constrói relações de confiança com nossos clientes oferecendo soluções transparentes, atendimento dedicado e resultados que realmente fazem a diferença.</p><p>Acreditamos que o respeito, a ética e a responsabilidade em cada projeto são os pilares do nosso trabalho — e é isso que faz nossos clientes continuarem escolhendo a CT Price e recomendando nossos serviços.</p>',
     'items' => require __DIR__ . '/../config/video-testimonials.php',
 ];
+
+$pageMeta = [
+    'title' => 'Depoimentos — CT Price',
+    'description' => 'Veja depoimentos em vídeo de clientes que confiam na CT Price e conhecem de perto a qualidade do nosso atendimento e trabalho.',
+    'canonical_path' => '/depoimentos/',
+];
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Depoimentos — CT Price</title>
+    <?php require __DIR__ . '/../includes/seo-head.php'; ?>
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/reset.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/fonts.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/variables.css">

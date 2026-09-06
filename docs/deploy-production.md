@@ -86,6 +86,27 @@ testes realizados.
 
 ---
 
+## Servidor: Apache/LiteSpeed, `mod_rewrite`, `.htaccess`
+
+O `.htaccess` da raiz (Camada 2 desta correção, ver acima) depende de:
+
+- `mod_rewrite` habilitado (`RewriteEngine On`) — usado tanto pelo bloqueio de arquivos internos
+  (P0) quanto pelos redirects 301 de URLs antigas WordPress (P1, ver
+  `docs/reference/redirect-plan.md`).
+- `AllowOverride All` (ou ao menos `AllowOverride FileInfo Indexes` — as diretivas usadas são
+  `RewriteEngine`/`RewriteRule`/`RewriteCond`/`Options -Indexes`/`ErrorDocument`) no bloco
+  `<Directory>` do vhost/config do servidor que aponta para este `DocumentRoot`. Sem isso, o
+  Apache ignora o `.htaccess` inteiro silenciosamente — o site continuaria funcionando (as
+  páginas em si não dependem do `.htaccess`), mas nenhuma proteção P0 nem redirect P1 entraria em
+  vigor.
+- `ErrorDocument 404 /404.php` — manda o servidor exibir a página 404 própria do projeto
+  (`404.php`) para qualquer URL/arquivo inexistente, em vez da página padrão do Apache/LiteSpeed.
+  Sintaxe compatível com LiteSpeed (lê `.htaccess` no formato Apache nativamente).
+
+Validado nesta sprint contra um Apache real (não `php -S`, que ignora `.htaccess` por completo —
+ver `docs/reference/deploy-security-validation.md`, seção 2/13, e
+`docs/reference/404-redirects-server-validation.md` para o detalhe desta rodada específica).
+
 ## Checklist rápido antes de publicar
 
 1. `.htaccess` e `.gitattributes` estão commitados?
@@ -94,3 +115,10 @@ testes realizados.
 4. Nenhum arquivo `docs/`, `CLAUDE.md`, `README.md`, `.serena/` no pacote?
 5. Depois de publicar: `/​.git/config`, `/CLAUDE.md`, `/docs/` retornam algo diferente de 200 no
    servidor real (403/404, nunca o conteúdo)?
+6. `AllowOverride All` (ou equivalente mínimo) está configurado no vhost/config real de produção
+   para este `DocumentRoot`? Sem isso o `.htaccess` é ignorado silenciosamente.
+7. Uma URL claramente inexistente (ex.: `/rota-que-nao-existe/`) retorna HTTP 404 com a página
+   própria do projeto (não a página padrão do servidor, não 200, não redirect para a Home)?
+8. Uma URL antiga WordPress comprovadamente mapeada (ex.: `/wp/hello-world/`) retorna HTTP 301
+   direto para a URL nova, sem encadeamento? Ver tabela completa em
+   `docs/reference/redirect-plan.md`.

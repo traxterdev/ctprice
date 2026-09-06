@@ -44,13 +44,19 @@ $companiesGridSection = [
     'columns_tablet' => 3,
     'columns_mobile' => 2,
 ];
+
+$pageMeta = [
+    'title' => 'Parcerias — CT Price',
+    'description' => 'Conheça as ferramentas web e os parceiros que a CT Price disponibiliza aos seus clientes para facilitar a gestão contábil.',
+    'canonical_path' => '/parcerias/',
+];
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Parcerias — CT Price</title>
+    <?php require __DIR__ . '/../includes/seo-head.php'; ?>
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/reset.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/fonts.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/variables.css">

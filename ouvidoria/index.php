@@ -80,13 +80,19 @@ $ombudsmanFormSection = [
     'decorative_image' => BASE_URL . '/assets/images/logo/Isotipolinear.png',
     'status' => $formStatus,
 ];
+
+$pageMeta = [
+    'title' => 'Ouvidoria — CT Price',
+    'description' => 'Canal de Ouvidoria da CT Price para reclamações, sugestões e elogios, com informações tratadas de forma sigilosa pela diretoria.',
+    'canonical_path' => '/ouvidoria/',
+];
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Ouvidoria — CT Price</title>
+    <?php require __DIR__ . '/../includes/seo-head.php'; ?>
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/reset.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/fonts.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/variables.css">

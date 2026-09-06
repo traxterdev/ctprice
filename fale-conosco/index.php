@@ -53,13 +53,19 @@ $contactFormSection = [
 $departmentsContactSection = [
     'departments' => $company['departamentos'] ?? [],
 ];
+
+$pageMeta = [
+    'title' => 'Fale Conosco — CT Price',
+    'description' => 'Entre em contato com a CT Price: tire dúvidas, envie sugestões pelo formulário de contato ou fale diretamente com nossos departamentos.',
+    'canonical_path' => '/fale-conosco/',
+];
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Fale Conosco — CT Price</title>
+    <?php require __DIR__ . '/../includes/seo-head.php'; ?>
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/reset.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/fonts.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/variables.css">

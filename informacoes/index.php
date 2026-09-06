@@ -44,13 +44,19 @@ $dedicationSection['image_alt'] = '';
 // Carrossel de logos de clientes/parceiros — mesmo carrossel da Home/Sobre Nós. Fonte
 // compartilhada em config/clients.php (não duplicar a lista aqui).
 $clientLogos = require __DIR__ . '/../config/clients.php';
+
+$pageMeta = [
+    'title' => 'Informações — CT Price',
+    'description' => 'Acompanhe as últimas notícias e novidades sobre contabilidade, tributação e gestão empresarial publicadas pela CT Price.',
+    'canonical_path' => '/informacoes/',
+];
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Informações — CT Price</title>
+    <?php require __DIR__ . '/../includes/seo-head.php'; ?>
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/vendor/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/reset.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/fonts.css">

@@ -53,13 +53,19 @@ $missionVisionValuesSection = [
         ],
     ],
 ];
+
+$pageMeta = [
+    'title' => 'Sobre nós — CT Price',
+    'description' => 'Conheça a história da CT Price, nossa missão, visão e valores, e a dedicação em oferecer segurança, ética e agilidade contábil.',
+    'canonical_path' => '/sobre-nos/',
+];
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sobre nós — CT Price</title>
+    <?php require __DIR__ . '/../includes/seo-head.php'; ?>
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/vendor/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/reset.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/fonts.css">

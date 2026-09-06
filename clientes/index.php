@@ -22,13 +22,19 @@ $boxedHero = [
 // config/clients.php (mesma fonte do carrossel da Home/Sobre Nós) — os 72 logos exclusivos da
 // página original não foram baixados nem reproduzidos.
 $clientLogos = require __DIR__ . '/../config/clients.php';
+
+$pageMeta = [
+    'title' => 'Clientes — CT Price',
+    'description' => 'Conheça algumas das empresas que confiam na CT Price, referência em contabilidade, planejamento tributário e consultoria empresarial.',
+    'canonical_path' => '/clientes/',
+];
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Clientes — CT Price</title>
+    <?php require __DIR__ . '/../includes/seo-head.php'; ?>
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/reset.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/fonts.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/variables.css">

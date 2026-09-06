@@ -44,13 +44,19 @@ $benefitsTitleBand = [
 $benefitsGridSection = [
     'items' => require __DIR__ . '/../config/benefits.php',
 ];
+
+$pageMeta = [
+    'title' => 'Trabalhe Conosco — CT Price',
+    'description' => 'Veja as vagas disponíveis na CT Price, candidate-se pelo nosso sistema de recrutamento e conheça os benefícios oferecidos à equipe.',
+    'canonical_path' => '/trabalhe-conosco/',
+];
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Trabalhe Conosco — CT Price</title>
+    <?php require __DIR__ . '/../includes/seo-head.php'; ?>
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/reset.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/fonts.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/variables.css">

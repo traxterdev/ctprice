@@ -19,6 +19,37 @@ Options -Indexes
 
 RewriteEngine On
 
+# --- Redirects 301 de URLs antigas WordPress (P1 — mapeamentos comprovados) ----------------
+# Cada redirect vai DIRETO ao destino final (nenhum encadeamento tipo /wp/home/ -> /wp/ -> /).
+# Mapeamentos e classificação completa: docs/reference/redirect-plan.md. Lista fechada,
+# explícita — de propósito NÃO existe uma regra genérica ^wp/(.*)$ (esconderia URLs antigas sem
+# equivalente real atrás de um destino novo também inexistente).
+#
+# Host do redirect: usa o Host da própria requisição SE ele estiver na mesma allowlist já
+# aprovada em ctprice_absolute_url() (config/bootstrap.php) — evita refletir um Host forjado
+# (ex.: "evil.com") no cabeçalho Location; qualquer Host fora da allowlist cai no domínio
+# canônico de produção. O domínio literal aparece UMA única vez (regra de fallback abaixo), não
+# repetido nas 14 regras de redirect.
+RewriteCond %{HTTP_HOST} !^(ctprice\.com\.br|www\.ctprice\.com\.br|ctprice\.traxter|localhost|127\.0\.0\.1)(:[0-9]+)?$ [NC]
+RewriteRule ^ - [E=CTPRICE_REDIRECT_HOST:ctprice.com.br]
+RewriteCond %{ENV:CTPRICE_REDIRECT_HOST} ^$
+RewriteRule ^ - [E=CTPRICE_REDIRECT_HOST:%{HTTP_HOST}]
+
+RewriteRule ^wp/?$ %{REQUEST_SCHEME}://%{ENV:CTPRICE_REDIRECT_HOST}/ [R=301,L,NC]
+RewriteRule ^wp/home/?$ %{REQUEST_SCHEME}://%{ENV:CTPRICE_REDIRECT_HOST}/ [R=301,L,NC]
+RewriteRule ^wp/sobre-nos/?$ %{REQUEST_SCHEME}://%{ENV:CTPRICE_REDIRECT_HOST}/sobre-nos/ [R=301,L,NC]
+RewriteRule ^wp/clientes/?$ %{REQUEST_SCHEME}://%{ENV:CTPRICE_REDIRECT_HOST}/clientes/ [R=301,L,NC]
+RewriteRule ^wp/parcerias/?$ %{REQUEST_SCHEME}://%{ENV:CTPRICE_REDIRECT_HOST}/parcerias/ [R=301,L,NC]
+RewriteRule ^wp/fale-conosco/?$ %{REQUEST_SCHEME}://%{ENV:CTPRICE_REDIRECT_HOST}/fale-conosco/ [R=301,L,NC]
+RewriteRule ^wp/informacoes/?$ %{REQUEST_SCHEME}://%{ENV:CTPRICE_REDIRECT_HOST}/informacoes/ [R=301,L,NC]
+RewriteRule ^wp/trabalhe-conosco/?$ %{REQUEST_SCHEME}://%{ENV:CTPRICE_REDIRECT_HOST}/trabalhe-conosco/ [R=301,L,NC]
+RewriteRule ^wp/ouvidoria/?$ %{REQUEST_SCHEME}://%{ENV:CTPRICE_REDIRECT_HOST}/ouvidoria/ [R=301,L,NC]
+RewriteRule ^wp/depoimentos/?$ %{REQUEST_SCHEME}://%{ENV:CTPRICE_REDIRECT_HOST}/depoimentos/ [R=301,L,NC]
+RewriteRule ^wp/arearestrita/?$ %{REQUEST_SCHEME}://%{ENV:CTPRICE_REDIRECT_HOST}/arearestrita/ [R=301,L,NC]
+RewriteRule ^wp/reforma-trabalhista-volta-a-pauta-do-stf-julgamento-acontece-neste-mes/?$ %{REQUEST_SCHEME}://%{ENV:CTPRICE_REDIRECT_HOST}/reforma-trabalhista-volta-a-pauta-do-stf-julgamento-acontece-neste-mes/ [R=301,L,NC]
+RewriteRule ^wp/receita-federal-e-correios-lancam-portal-de-compras-internacionais/?$ %{REQUEST_SCHEME}://%{ENV:CTPRICE_REDIRECT_HOST}/receita-federal-e-correios-lancam-portal-de-compras-internacionais/ [R=301,L,NC]
+RewriteRule ^wp/hello-world/?$ %{REQUEST_SCHEME}://%{ENV:CTPRICE_REDIRECT_HOST}/hello-world/ [R=301,L,NC]
+
 # --- Controle de versão (histórico completo do repositório) -------------------------------
 RewriteRule ^\.git(/|$) - [F,L,NC]
 
@@ -39,3 +70,10 @@ RewriteRule ^(config|components|includes|content|blog)(/|$) - [F,L,NC]
 
 # Observação: `.htaccess`/`.htpasswd` já são negados globalmente pela configuração padrão do
 # Apache (`<Files ".ht*"> Require all denied </Files>` em httpd.conf) — não duplicado aqui.
+
+# --- Página 404 própria (P1) ----------------------------------------------------------------
+# 404.php já responde HTTP 404 por si só (http_response_code(404), inclusive em acesso direto);
+# esta diretiva só manda o Apache exibi-la para qualquer URL/arquivo físico inexistente, em vez
+# da página padrão do servidor. NÃO é um router: uma URL física real continua indo para seu
+# próprio diretório/index.php normalmente — só o que não existe cai aqui.
+ErrorDocument 404 /404.php
