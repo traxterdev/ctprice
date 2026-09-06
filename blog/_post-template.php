@@ -45,9 +45,12 @@ if ($ctpricePost === null) {
     exit;
 }
 
+// Máximo de 2 relacionados (mesmo comportamento visual original) — o filtro pelo post atual e o
+// LIMIT já acontecem dentro de relatedTo() (SQL), não mais só no componente (ver
+// repositories/BlogPostRepository.php, correção da pendência registrada em docs/cms.md).
 $ctpriceRelatedItems = [];
 try {
-    $ctpriceRelatedItems = (new BlogPostRepository())->allPublished();
+    $ctpriceRelatedItems = (new BlogPostRepository())->relatedTo($postSlug, 2);
 } catch (Throwable $e) {
     error_log('CT Price [blog/_post-template]: falha ao consultar relacionados — ' . $e->getMessage());
 }

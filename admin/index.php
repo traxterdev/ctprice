@@ -19,6 +19,7 @@ $activeJobs = null;
 $activeBenefits = null;
 $activeTestimonials = null;
 $publishedPosts = null;
+$activeAdmins = null;
 $dbError = false;
 
 try {
@@ -29,6 +30,7 @@ try {
     $activeBenefits = (int) $pdo->query('SELECT COUNT(*) FROM benefits WHERE ativo = 1')->fetchColumn();
     $activeTestimonials = (int) $pdo->query('SELECT COUNT(*) FROM video_testimonials WHERE ativo = 1')->fetchColumn();
     $publishedPosts = (int) $pdo->query('SELECT COUNT(*) FROM blog_posts WHERE ativo = 1 AND published_at <= NOW()')->fetchColumn();
+    $activeAdmins = (int) $pdo->query('SELECT COUNT(*) FROM admin_users WHERE ativo = 1')->fetchColumn();
 } catch (Throwable $e) {
     error_log('CT Price CMS [admin/index]: falha ao consultar totais — ' . $e->getMessage());
     $dbError = true;
@@ -72,6 +74,10 @@ require __DIR__ . '/includes/layout-header.php';
     <div class="admin-stat-card">
         <p class="admin-stat-card__label">Posts publicados</p>
         <p class="admin-stat-card__value"><?= $publishedPosts ?></p>
+    </div>
+    <div class="admin-stat-card">
+        <p class="admin-stat-card__label">Administradores ativos</p>
+        <p class="admin-stat-card__value"><?= $activeAdmins ?></p>
     </div>
 </div>
 <?php endif; ?>

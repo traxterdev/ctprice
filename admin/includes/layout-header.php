@@ -37,6 +37,7 @@
             <a href="<?= BASE_URL ?>/admin/benefits/" class="<?= ($adminActiveMenu ?? '') === 'benefits' ? 'is-active' : '' ?>">Benefícios</a>
             <a href="<?= BASE_URL ?>/admin/testimonials/" class="<?= ($adminActiveMenu ?? '') === 'testimonials' ? 'is-active' : '' ?>">Depoimentos</a>
             <a href="<?= BASE_URL ?>/admin/posts/" class="<?= ($adminActiveMenu ?? '') === 'posts' ? 'is-active' : '' ?>">Notícias</a>
+            <a href="<?= BASE_URL ?>/admin/users/" class="<?= ($adminActiveMenu ?? '') === 'users' ? 'is-active' : '' ?>">Administradores</a>
             <a href="<?= BASE_URL ?>/admin/logout.php">Sair</a>
         </nav>
     </div>

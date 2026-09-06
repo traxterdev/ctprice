@@ -19,14 +19,32 @@
  * - Usuário buscado no banco A CADA requisição (não só no login) — se for desativado
  *   (`ativo = 0`) enquanto a sessão ainda existe, a próxima requisição já bloqueia (ver §8 da
  *   tarefa: "usuário inativo não entra").
- * - Rate limit por sessão: backoff crescente (2s, 4s, 8s, ... até 60s) após cada falha
- *   consecutiva — suficiente para desestimular força bruta manual sem exigir tabela/IP tracking
- *   nesta primeira versão (ver docs/cms.md, pendências).
+ * - Rate limit em DUAS camadas (sprint 03 — a primeira sozinha não resiste a uma aba anônima):
+ *   1) por SESSÃO: backoff exponencial (2s, 4s, 8s... até 60s) após cada falha consecutiva —
+ *      desestimula clique repetido na mesma aba, resposta imediata, sem tocar no banco.
+ *   2) PERSISTENTE (`admin_login_attempts`, banco): conta tentativas malsucedidas por e-mail
+ *      normalizado E por IP numa janela de tempo — sobrevive a uma sessão/aba nova. Ver
+ *      `admin_login_is_blocked_persistent()`.
+ *   Qualquer uma das duas camadas bloqueando já é suficiente para recusar a tentativa — a
+ *   mensagem ao usuário é sempre a mesma genérica, nunca revela qual camada bloqueou nem se o
+ *   e-mail existe (evita enumeração de contas).
  */
 
 declare(strict_types=1);
 
 const ADMIN_LOGIN_MAX_BACKOFF_SECONDS = 60;
+
+// Camada persistente (banco) — limiares deliberadamente mais folgados que o backoff de sessão
+// (que já pega o caso comum): existe para resistir a uma sessão nova, não para ser o primeiro
+// filtro. 8 tentativas malsucedidas em 15 minutos (por e-mail OU por IP) bloqueiam novas
+// tentativas por essa mesma janela — sem bloqueio "até" fixo separado: a janela desliza sozinha
+// conforme tentativas antigas saem dela.
+const ADMIN_LOGIN_DB_MAX_ATTEMPTS = 8;
+const ADMIN_LOGIN_DB_WINDOW_MINUTES = 15;
+// Idade máxima de uma linha antes de ser elegível para limpeza (bem maior que a janela de
+// bloqueio — mantém histórico curto o suficiente para não crescer indefinidamente, sem exigir
+// cron: a limpeza roda inline a cada tentativa nova, ver admin_login_prune_attempts()).
+const ADMIN_LOGIN_DB_RETENTION_HOURS = 24;
 
 function admin_start_session(): void
 {
@@ -147,19 +165,97 @@ function admin_record_login_attempt(bool $success): void
     $_SESSION['admin_login_blocked_until'] = time() + $backoff;
 }
 
+function admin_normalize_email(string $email): string
+{
+    return strtolower(trim($email));
+}
+
+function admin_client_ip(): string
+{
+    // Sem suporte a X-Forwarded-For nesta sprint (ver comentário da migration) — REMOTE_ADDR é o
+    // único valor que o próprio Apache/PHP determina, nunca vindo direto de um cabeçalho que o
+    // cliente controla.
+    return (string) ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0');
+}
+
 /**
- * Login efetivo: valida credenciais, aplica rate limit, regenera o ID de sessão em caso de
- * sucesso e atualiza `ultimo_login_em`. Mensagem de erro SEMPRE genérica (nunca revela se foi o
- * e-mail ou a senha que estava errada, nem se a conta existe).
+ * true = a camada PERSISTENTE (banco) está bloqueando novas tentativas para este e-mail OU este
+ * IP — sobrevive a uma sessão/aba nova (ver comentário de topo do arquivo).
+ */
+function admin_login_is_blocked_persistent(string $emailNormalized, string $ip): bool
+{
+    try {
+        $stmt = Database::connection()->prepare(
+            'SELECT COUNT(*) FROM admin_login_attempts
+             WHERE sucesso = 0
+               AND created_at >= (NOW() - INTERVAL :window MINUTE)
+               AND (email_normalizado = :email OR ip = :ip)'
+        );
+        $stmt->execute([
+            'window' => ADMIN_LOGIN_DB_WINDOW_MINUTES,
+            'email' => $emailNormalized,
+            'ip' => $ip,
+        ]);
+        return ((int) $stmt->fetchColumn()) >= ADMIN_LOGIN_DB_MAX_ATTEMPTS;
+    } catch (Throwable $e) {
+        error_log('CT Price CMS [AdminAuth]: falha ao consultar admin_login_attempts — ' . $e->getMessage());
+        // Banco indisponível: não bloqueia por causa disto (admin_attempt_login já trata a falha
+        // de conexão separadamente, antes mesmo de chegar aqui, ao consultar admin_users) — aqui
+        // só evita que uma falha nesta tabela auxiliar impeça login legítimo.
+        return false;
+    }
+}
+
+/** Registra a tentativa na tabela persistente e aproveita para limpar linhas antigas. */
+function admin_login_record_db_attempt(string $emailNormalized, string $ip, bool $success): void
+{
+    try {
+        $pdo = Database::connection();
+        $stmt = $pdo->prepare(
+            'INSERT INTO admin_login_attempts (email_normalizado, ip, sucesso) VALUES (:email, :ip, :sucesso)'
+        );
+        $stmt->execute(['email' => $emailNormalized, 'ip' => $ip, 'sucesso' => $success ? 1 : 0]);
+        admin_login_prune_attempts();
+    } catch (Throwable $e) {
+        error_log('CT Price CMS [AdminAuth]: falha ao registrar tentativa de login — ' . $e->getMessage());
+    }
+}
+
+/** Remove linhas mais velhas que ADMIN_LOGIN_DB_RETENTION_HOURS — sem exigir cron. */
+function admin_login_prune_attempts(): void
+{
+    try {
+        $stmt = Database::connection()->prepare(
+            'DELETE FROM admin_login_attempts WHERE created_at < (NOW() - INTERVAL :hours HOUR)'
+        );
+        $stmt->execute(['hours' => ADMIN_LOGIN_DB_RETENTION_HOURS]);
+    } catch (Throwable $e) {
+        error_log('CT Price CMS [AdminAuth]: falha ao limpar admin_login_attempts — ' . $e->getMessage());
+    }
+}
+
+/**
+ * Login efetivo: valida credenciais, aplica rate limit (sessão + persistente), regenera o ID de
+ * sessão em caso de sucesso e atualiza `ultimo_login_em`. Mensagem de erro SEMPRE genérica (nunca
+ * revela se foi o e-mail ou a senha que estava errada, nem se a conta existe).
  *
  * @return array{success:bool, message:string}
  */
 function admin_attempt_login(string $email, string $password): array
 {
     $genericError = 'E-mail ou senha inválidos.';
+    $genericRateLimit = 'Muitas tentativas. Aguarde alguns minutos e tente novamente.';
+    $emailNormalized = admin_normalize_email($email);
+    $ip = admin_client_ip();
 
     if (admin_login_is_blocked()) {
-        return ['success' => false, 'message' => 'Muitas tentativas. Aguarde alguns segundos e tente novamente.'];
+        return ['success' => false, 'message' => $genericRateLimit];
+    }
+
+    if (admin_login_is_blocked_persistent($emailNormalized, $ip)) {
+        // Não incrementa o backoff de sessão aqui — a camada persistente já está segurando
+        // sozinha; registrar mais uma tentativa "falha" na sessão não mudaria o resultado.
+        return ['success' => false, 'message' => $genericRateLimit];
     }
 
     try {
@@ -177,10 +273,12 @@ function admin_attempt_login(string $email, string $password): array
     // para "usuário inativo" — nunca revela qual dos três é o caso real.
     if (!$user || (int) $user['ativo'] !== 1 || !password_verify($password, $user['password_hash'])) {
         admin_record_login_attempt(false);
+        admin_login_record_db_attempt($emailNormalized, $ip, false);
         return ['success' => false, 'message' => $genericError];
     }
 
     admin_record_login_attempt(true);
+    admin_login_record_db_attempt($emailNormalized, $ip, true);
     admin_start_session();
 
     // Mitiga session fixation — um novo ID de sessão é emitido só depois de autenticar de fato.
@@ -216,6 +314,22 @@ function admin_flash_get(): ?array
     unset($_SESSION['admin_flash']);
     return $flash;
 }
+
+/**
+ * Força mínima aceitável de senha (criação/reset de administrador — nunca usado no login em si,
+ * que só verifica o hash) — comprimento mínimo + mistura básica de letra e número. Não é uma
+ * régua de complexidade elaborada (sem exigência de símbolo/maiúscula) — suficiente para esta
+ * fase sem irritar o administrador com regras excessivas; mesmo limite de comprimento já usado
+ * por database/create_admin.php.
+ */
+function admin_is_strong_password(string $password): bool
+{
+    return mb_strlen($password) >= 10
+        && preg_match('/[a-zA-Z]/', $password) === 1
+        && preg_match('/[0-9]/', $password) === 1;
+}
+
+const ADMIN_PASSWORD_HINT = 'Mínimo de 10 caracteres, com pelo menos uma letra e um número.';
 
 function admin_logout(): void
 {

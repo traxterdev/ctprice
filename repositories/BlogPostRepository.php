@@ -48,18 +48,49 @@ final class BlogPostRepository
 
         $stmt = Database::connection()->query($sql);
 
-        return array_map(static function (array $row): array {
-            return [
-                'slug' => $row['slug'],
-                'title' => $row['titulo'],
-                'category' => $row['categoria'],
-                'excerpt' => $row['excerpt'],
-                'image' => BASE_URL . '/' . ltrim($row['imagem_path'], '/'),
-                'url' => BASE_URL . '/' . $row['slug'] . '/',
-                'date' => self::dateText($row['published_at']),
-                'time' => self::timeText($row['published_at']),
-            ];
-        }, $stmt->fetchAll());
+        return array_map([self::class, 'mapPublicRow'], $stmt->fetchAll());
+    }
+
+    /**
+     * Posts relacionados a um artigo — publicados, ativos, DIFERENTES do slug atual, mais
+     * recentes primeiro, limitados a `$limit` (padrão 2 — mesmo comportamento visual original,
+     * "os outros 2 posts"; ver components/related-posts.php). Correção da pendência registrada em
+     * docs/cms.md: antes desta sprint, `blog/_post-template.php` passava TODOS os publicados para
+     * `related-posts.php`, que só filtrava o post atual — sem limite, a lista cresceria
+     * indefinidamente conforme novos posts fossem publicados. O filtro por slug agora acontece
+     * aqui (SQL), não mais só no componente — o `LIMIT` é aplicado DEPOIS de excluir o post
+     * atual, então sempre entrega até 2 relacionados de verdade (não 2 antes de filtrar, que
+     * poderiam virar 1 ou 0 caso o post atual estivesse entre eles).
+     *
+     * @return list<array<string, mixed>> mesmo formato de allPublished()
+     */
+    public function relatedTo(string $excludeSlug, int $limit = 2): array
+    {
+        $stmt = Database::connection()->prepare(
+            'SELECT slug, titulo, categoria, excerpt, imagem_path, published_at
+             FROM blog_posts
+             WHERE ativo = 1 AND published_at <= NOW() AND slug != :slug
+             ORDER BY published_at DESC, id DESC
+             LIMIT ' . max(1, $limit)
+        );
+        $stmt->execute(['slug' => $excludeSlug]);
+
+        return array_map([self::class, 'mapPublicRow'], $stmt->fetchAll());
+    }
+
+    /** @param array<string, mixed> $row */
+    private static function mapPublicRow(array $row): array
+    {
+        return [
+            'slug' => $row['slug'],
+            'title' => $row['titulo'],
+            'category' => $row['categoria'],
+            'excerpt' => $row['excerpt'],
+            'image' => BASE_URL . '/' . ltrim($row['imagem_path'], '/'),
+            'url' => BASE_URL . '/' . $row['slug'] . '/',
+            'date' => self::dateText($row['published_at']),
+            'time' => self::timeText($row['published_at']),
+        ];
     }
 
     /** Post publicado por slug — usado pela página pública do artigo (blog/_post-template.php). */
