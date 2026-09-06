@@ -30,8 +30,15 @@ $dedicationSection['image_alt'] = '';
 
 // Carrossel de logos de clientes/parceiros — mesmo carrossel da Home (confirmado idêntico por
 // inspeção direta: mesmo data-settings do widget, mesma altura/background/container). Fonte
-// compartilhada em config/clients.php (não duplicar a lista aqui).
-$clientLogos = require __DIR__ . '/../config/clients.php';
+// compartilhada: banco de dados via ClientRepository (sprint CMS) — ver index.php (Home) para o
+// mesmo padrão.
+require_once __DIR__ . '/../repositories/ClientRepository.php';
+try {
+    $clientLogos = (new ClientRepository())->allActive();
+} catch (Throwable $e) {
+    error_log('CT Price [Sobre Nós]: falha ao carregar clientes do banco — ' . $e->getMessage());
+    $clientLogos = [];
+}
 
 $missionVisionValuesSection = [
     'heading' => 'Deixe a contabilidade nas mãos de quem entende!',

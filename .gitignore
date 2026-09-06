@@ -2,6 +2,18 @@
 .env
 .env.*
 
+# CMS — credenciais locais de banco (NUNCA versionar; ver config/database.example.php)
+/config/database.local.php
+
+# CMS — uploads administrativos (logos de Clientes/Parceiros). Não dependem do Git em produção —
+# a estrutura de diretórios é preservada via .gitkeep (ver docs/cms.md). Regra explícita por
+# subpasta (só existem estas duas hoje) — mais simples e menos frágil que um padrão recursivo
+# genérico com negação de .gitkeep.
+/assets/uploads/clients/*
+!/assets/uploads/clients/.gitkeep
+/assets/uploads/partners/*
+!/assets/uploads/partners/.gitkeep
+
 # Dependencies
 node_modules/
 /vendor/

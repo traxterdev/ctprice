@@ -20,16 +20,20 @@
  * porque as duas instâncias desta página usam contagens diferentes (Ferramentas: 3/2/1;
  * Parceiros: 5/3/2 — ver assets/css/logo-grid-section.css), sem duplicar o arquivo CSS.
  *
+ * FONTE DE DADOS (sprint CMS): cada item vem de `PartnerRepository::allActiveByCategory()` —
+ * `logo_path` já é o caminho relativo à raiz do site (ex.:
+ * "assets/images/partners/companies/logo-cfc.png" para os itens migrados de config/partners.php,
+ * ou "assets/uploads/partners/<nome-aleatorio>.ext" para logos enviados pelo admin depois desta
+ * sprint) — este componente só concatena BASE_URL, nunca decide o diretório por categoria.
+ *
  * Espera, definidas pelo chamador antes do include:
  *
  *   $logoGridSection = [
  *       'items' => [
- *           ['name' => 'nome (usado só como referência/alt de apoio)', 'image' => 'arquivo.ext',
- *            'url' => 'https://... ou null', 'alt' => 'texto alternativo'],
+ *           ['nome' => 'usado como alt', 'logo_path' => 'assets/.../arquivo.ext',
+ *            'url' => 'https://... ou null'],
  *           ...
  *       ],
- *       'image_dir'        => 'assets/images/partners/tools' (ou .../companies) — caminho
- *                             relativo à raiz, sem BASE_URL e sem barra final,
  *       'columns_desktop'  => int, opcional (padrão 5),
  *       'columns_tablet'   => int, opcional (padrão 3),
  *       'columns_mobile'   => int, opcional (padrão 2),
@@ -37,7 +41,6 @@
  */
 
 $items = $logoGridSection['items'] ?? [];
-$imageDir = rtrim($logoGridSection['image_dir'] ?? '', '/');
 $colsDesktop = (int) ($logoGridSection['columns_desktop'] ?? 5);
 $colsTablet = (int) ($logoGridSection['columns_tablet'] ?? 3);
 $colsMobile = (int) ($logoGridSection['columns_mobile'] ?? 2);
@@ -47,8 +50,8 @@ $colsMobile = (int) ($logoGridSection['columns_mobile'] ?? 2);
         <div class="logo-grid">
             <?php foreach ($items as $item):
                 $url = $item['url'] ?? null;
-                $imgSrc = BASE_URL . '/' . $imageDir . '/' . $item['image'];
-                $alt = htmlspecialchars($item['alt'] ?? ($item['name'] ?? ''), ENT_QUOTES, 'UTF-8');
+                $imgSrc = BASE_URL . '/' . ltrim($item['logo_path'], '/');
+                $alt = htmlspecialchars($item['nome'] ?? '', ENT_QUOTES, 'UTF-8');
             ?>
             <?php if ($url): ?>
             <a class="logo-card" href="<?= htmlspecialchars($url, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener noreferrer">

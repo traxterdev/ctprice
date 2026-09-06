@@ -65,8 +65,13 @@ RewriteRule ^\.claude(/|$) - [F,L,NC]
 
 # --- Diretórios internos da aplicação (usados só via require/include do PHP, nunca por URL) -
 # `blog/` inclui o template compartilhado dos posts (blog/_post-template.php) — os posts em si
-# vivem em URLs próprias na raiz (ex.: /hello-world/), não em /blog/.
-RewriteRule ^(config|components|includes|content|blog)(/|$) - [F,L,NC]
+# vivem em URLs próprias na raiz (ex.: /hello-world/), não em /blog/. `database/` (migrations SQL
+# + scripts CLI do CMS) e `repositories/` (classes de acesso ao banco) são novos nesta sprint,
+# mesmo motivo: só usados via require/include do PHP, nunca por URL — ver docs/cms.md.
+# IMPORTANTE: `admin/` (painel do CMS) NÃO entra nesta lista — precisa continuar acessível por
+# HTTP normalmente (só as próprias páginas de /admin/ decidem quem entra, via sessão — ver
+# includes/AdminAuth.php).
+RewriteRule ^(config|components|includes|content|blog|database|repositories)(/|$) - [F,L,NC]
 
 # Observação: `.htaccess`/`.htpasswd` já são negados globalmente pela configuração padrão do
 # Apache (`<Files ".ht*"> Require all denied </Files>` em httpd.conf) — não duplicado aqui.

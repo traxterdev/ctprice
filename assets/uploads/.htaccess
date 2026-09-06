@@ -1,0 +1,12 @@
+# assets/uploads/.htaccess
+#
+# Defesa em profundidade: mesmo que includes/Uploads.php já garanta que só PNG/JPEG/WEBP reais
+# (MIME verificado) cheguem a este diretório com nome aleatório, esta regra impede que QUALQUER
+# arquivo aqui seja executado como script pelo servidor — cobre também o cenário de um upload
+# futuro menos cuidadoso ou uma reconfiguração acidental do servidor.
+<FilesMatch "\.(php|phtml|php\d|pl|py|cgi|sh|asp|aspx|exe)$">
+    Require all denied
+</FilesMatch>
+
+# Nunca listar o conteúdo deste diretório.
+Options -Indexes

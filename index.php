@@ -141,9 +141,17 @@ $testimonials = [
     ],
 ];
 
-// 82 logos válidos do carrossel de clientes/parceiros — fonte compartilhada com sobre-nos/index.php
-// (mesmo carrossel, confirmado idêntico nas duas páginas). Ver config/clients.php.
-$clientLogos = require __DIR__ . '/config/clients.php';
+// Clientes ativos do carrossel de clientes/parceiros — fonte compartilhada com sobre-nos/index.php
+// e informacoes/index.php (mesmo carrossel). Vem do banco (sprint CMS) — ver
+// repositories/ClientRepository.php. config/clients.php deixou de ser consumido por páginas
+// públicas (permanece só como seed histórico da importação, ver database/seed_clients_and_partners.php).
+require_once __DIR__ . '/repositories/ClientRepository.php';
+try {
+    $clientLogos = (new ClientRepository())->allActive();
+} catch (Throwable $e) {
+    error_log('CT Price [Home]: falha ao carregar clientes do banco — ' . $e->getMessage());
+    $clientLogos = [];
+}
 
 $whyChooseUsHeading = 'Por que nos escolher?';
 $whyChooseUsImage = BASE_URL . '/assets/images/content/why-choose-us.jpg';

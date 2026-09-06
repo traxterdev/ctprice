@@ -42,17 +42,20 @@
  * ORDEM: `$clientLogos` chega deste componente EXATAMENTE como o chamador passou (nenhum sort/
  * usort/shuffle é aplicado aqui) — ao contrário de components/clients-grid-section.php, que
  * embaralha uma CÓPIA local (`$displayLogos`) apenas para a página `/clientes/`. A Home continua
- * exibindo a ordem original de `config/clients.php`.
+ * exibindo a ordem cadastrada (campo `ordem` de `clients`, ver repositories/ClientRepository.php).
+ *
+ * FONTE DE DADOS (sprint CMS): `$clientLogos` vem de `ClientRepository::allActive()` — cada item
+ * é a linha da tabela `clients`, com `logo_path` já sendo o caminho relativo à raiz do site
+ * (ex.: "assets/images/clients/home-carousel/vitrine.jpg" para os 82 migrados de
+ * config/clients.php, ou "assets/uploads/clients/<nome-aleatorio>.ext" para logos enviados depois
+ * pelo admin) — este componente só concatena BASE_URL, nunca decide o diretório.
  *
  * Espera, definida pelo chamador antes do include:
  *
  *   $clientLogos = [
- *       ['file' => 'nome-do-arquivo.ext', 'alt' => 'texto alternativo'],
+ *       ['logo_path' => 'assets/.../arquivo.ext', 'nome' => 'texto usado como alt'],
  *       ...
  *   ];
- *
- * Cada arquivo é servido de assets/images/clients/home-carousel/ (BASE_URL montado aqui, não
- * pelo chamador, para manter os 82 registros de dados enxutos).
  */
 
 if (!isset($clientLogos) || !is_array($clientLogos)) {
@@ -67,8 +70,8 @@ if (!isset($clientLogos) || !is_array($clientLogos)) {
                 <div class="swiper-slide client-logo-slide logo-card">
                     <img
                         class="logo-card__img"
-                        src="<?= BASE_URL ?>/assets/images/clients/home-carousel/<?= htmlspecialchars($logo['file'], ENT_QUOTES, 'UTF-8') ?>"
-                        alt="<?= htmlspecialchars($logo['alt'], ENT_QUOTES, 'UTF-8') ?>"
+                        src="<?= BASE_URL ?>/<?= htmlspecialchars($logo['logo_path'], ENT_QUOTES, 'UTF-8') ?>"
+                        alt="<?= htmlspecialchars($logo['nome'], ENT_QUOTES, 'UTF-8') ?>"
                         loading="lazy"
                     >
                 </div>

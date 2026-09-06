@@ -29,6 +29,23 @@ $company = require __DIR__ . '/company.php';
 $menu = require __DIR__ . '/menu.php';
 
 /**
+ * Fuso horário único do projeto — America/Campo_Grande (sede da CT Price; Brasil não observa
+ * horário de verão desde 2019, deslocamento fixo -04:00 o ano todo). Antes desta sprint (CMS)
+ * nenhuma página usava `date()`/`time()` para nada exibido ao usuário (os 3 posts do blog têm
+ * data/hora como texto estático em config/blog-posts.php), por isso nenhum fuso havia sido
+ * definido ainda. Necessário agora para `admin_users.ultimo_login_em` e os timestamps de
+ * Clientes/Parceiros (ver includes/Database.php, que replica o mesmo fuso na sessão MySQL).
+ */
+if (function_exists('date_default_timezone_set')) {
+    date_default_timezone_set('America/Campo_Grande');
+}
+
+// Conexão PDO do CMS (banco `ctprice_site`) — só a CLASSE é carregada aqui (nenhuma conexão é
+// aberta até algo chamar Database::connection()); nenhuma página pública paga o custo de uma
+// conexão que não usa. Ver includes/Database.php e docs/cms.md.
+require_once __DIR__ . '/../includes/Database.php';
+
+/**
  * Configura os parâmetros do cookie de sessão ANTES de session_start() ser chamado. Centralizado
  * aqui porque é o único arquivo já incluído por toda página — hoje só `/fale-conosco/` usa sessão
  * (token CSRF + rate limit do formulário, ver fale-conosco/fale-conosco-action.php), mas qualquer

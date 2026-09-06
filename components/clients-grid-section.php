@@ -5,12 +5,12 @@
  * Grade estática de logos de clientes/parceiros — seção exclusiva de `/clientes/`
  * (ver docs/reference/clientes-audit.md, seções 3 e 4).
  *
- * DIFERENÇA TEMPORÁRIA CONHECIDA (decisão consciente de escopo, não regressão): o original em
- * WordPress usa 106 logos numa galeria justificada (Elementor "Gallery" widget). O CMS que
- * permitiria gerenciar esse catálogo completo foi adiado para uma etapa futura de manutenção de
- * conteúdo. Nesta fase, a página usa os MESMOS 82 logos já centralizados em `config/clients.php`
- * (mesma fonte do carrossel da Home/Sobre Nós) — os 72 logos exclusivos da página original
- * (uploads de 2025/2026, ver auditoria) não foram baixados nem reproduzidos.
+ * DIFERENÇA HISTÓRICA CONHECIDA (decisão consciente de escopo, não regressão): o original em
+ * WordPress usa 106 logos numa galeria justificada (Elementor "Gallery" widget). Os 82 logos
+ * migrados para o banco nesta sprint do CMS (ver `clients`, repositories/ClientRepository.php)
+ * são os mesmos já usados desde a reconstrução — os 72 logos exclusivos da página original
+ * (uploads de 2025/2026, ver auditoria) não foram baixados nem reproduzidos. A partir de agora,
+ * novos clientes podem ser cadastrados livremente em /admin/clients/, sem depender de código.
  *
  * DECISÃO DE LAYOUT (revisada na etapa de refinamento de UI): o original usa uma galeria
  * "justificada" (cada item com largura/altura próprias, calculadas por um algoritmo de
@@ -35,19 +35,9 @@
  * biblioteca externa — não é uma feature nova inventada, é a reprodução de um comportamento já
  * confirmado no original.
  *
- * Reaproveita a MESMA fonte de dados do carrossel (config/clients.php) — não duplica os 82
- * registros. Consumido tanto por components/clients-carousel-section.php (Home, Sobre Nós) quanto
- * por este componente (Clientes), cada um com sua própria apresentação visual.
- *
- * Espera, definida pelo chamador antes do include:
- *
- *   $clientLogos = [
- *       ['file' => 'nome-do-arquivo.ext', 'alt' => 'texto alternativo'],
- *       ...
- *   ];
- *
- * Cada arquivo é servido de assets/images/clients/home-carousel/ (BASE_URL montado aqui, mesma
- * convenção de clients-carousel-section.php).
+ * Reaproveita a MESMA fonte de dados do carrossel — `ClientRepository::allActive()` (ver
+ * components/clients-carousel-section.php para o formato exato de `$clientLogos` desde a sprint
+ * do CMS: `logo_path` + `nome`, caminho já relativo à raiz do site).
  */
 
 if (!isset($clientLogos) || !is_array($clientLogos)) {
@@ -76,21 +66,22 @@ if (!isset($clientLogos) || !is_array($clientLogos)) {
 $today = date('Y-m-d');
 $displayLogos = $clientLogos;
 usort($displayLogos, function ($a, $b) use ($today) {
-    $fileA = $a['file'] ?? '';
-    $fileB = $b['file'] ?? '';
-    $cmp = crc32($fileA . $today) <=> crc32($fileB . $today);
-    return $cmp !== 0 ? $cmp : strcmp($fileA, $fileB);
+    $pathA = $a['logo_path'] ?? '';
+    $pathB = $b['logo_path'] ?? '';
+    $cmp = crc32($pathA . $today) <=> crc32($pathB . $today);
+    return $cmp !== 0 ? $cmp : strcmp($pathA, $pathB);
 });
 ?>
 <section class="clients-grid-section" aria-label="Nossos clientes">
     <div class="clients-grid-section__inner">
         <div class="clients-grid">
             <?php foreach ($displayLogos as $logo): ?>
-            <button type="button" class="logo-card" data-full="<?= BASE_URL ?>/assets/images/clients/home-carousel/<?= htmlspecialchars($logo['file'], ENT_QUOTES, 'UTF-8') ?>" data-alt="<?= htmlspecialchars($logo['alt'], ENT_QUOTES, 'UTF-8') ?>">
+            <?php $src = BASE_URL . '/' . htmlspecialchars($logo['logo_path'], ENT_QUOTES, 'UTF-8'); ?>
+            <button type="button" class="logo-card" data-full="<?= $src ?>" data-alt="<?= htmlspecialchars($logo['nome'], ENT_QUOTES, 'UTF-8') ?>">
                 <img
                     class="logo-card__img"
-                    src="<?= BASE_URL ?>/assets/images/clients/home-carousel/<?= htmlspecialchars($logo['file'], ENT_QUOTES, 'UTF-8') ?>"
-                    alt="<?= htmlspecialchars($logo['alt'], ENT_QUOTES, 'UTF-8') ?>"
+                    src="<?= $src ?>"
+                    alt="<?= htmlspecialchars($logo['nome'], ENT_QUOTES, 'UTF-8') ?>"
                     loading="lazy"
                 >
             </button>

@@ -15,13 +15,19 @@ $boxedHero = [
     'image' => BASE_URL . '/assets/images/pages/clientes/clientes.jpg',
 ];
 
-// Grade de clientes — DIFERENÇA TEMPORÁRIA CONHECIDA (não é regressão): o original em WordPress
-// usa 106 logos (galeria justificada, ver docs/reference/clientes-audit.md). O CMS que
-// permitiria gerenciar esse catálogo completo foi adiado para uma fase futura de manutenção de
-// conteúdo; nesta fase, a página reaproveita os mesmos 82 logos já centralizados em
-// config/clients.php (mesma fonte do carrossel da Home/Sobre Nós) — os 72 logos exclusivos da
-// página original não foram baixados nem reproduzidos.
-$clientLogos = require __DIR__ . '/../config/clients.php';
+// Grade de clientes — DIFERENÇA HISTÓRICA CONHECIDA (não é regressão): o original em WordPress
+// usa 106 logos (galeria justificada, ver docs/reference/clientes-audit.md); os 72 logos
+// exclusivos da página original não foram baixados nem reproduzidos. Os 82 logos migrados agora
+// vêm do banco via ClientRepository (sprint CMS, mesma fonte do carrossel da Home/Sobre Nós) —
+// gerenciáveis em /admin/clients/ (cadastrar/editar/desativar/reordenar), sem precisar de novo
+// deploy de código para cada logo adicionado.
+require_once __DIR__ . '/../repositories/ClientRepository.php';
+try {
+    $clientLogos = (new ClientRepository())->allActive();
+} catch (Throwable $e) {
+    error_log('CT Price [Clientes]: falha ao carregar clientes do banco — ' . $e->getMessage());
+    $clientLogos = [];
+}
 
 $pageMeta = [
     'title' => 'Clientes — CT Price',

@@ -1,0 +1,460 @@
+/**
+ * assets/css/admin.css
+ *
+ * Visual próprio do painel administrativo (`/admin/`) — não reproduz o visual do site público
+ * (ver tarefa da sprint, §9): profissional, limpo, corporativo, claramente administrativo.
+ * Reaproveita só as cores institucionais já definidas em assets/css/variables.css (nunca inventa
+ * uma paleta nova) e assets/css/reset.css/fonts.css (carregados normalmente pelas páginas do
+ * admin) — nenhum framework CSS.
+ */
+
+.admin-body {
+    background: #F4F6F5;
+    color: #1B2B27;
+    font-family: var(--font-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Barra superior --------------------------------------------------------------------- */
+
+.admin-topbar {
+    background: linear-gradient(180deg, var(--color-dark-teal) 0%, var(--color-brand-green) 100%);
+    color: var(--color-off-white);
+    padding: 0 24px;
+}
+
+.admin-topbar__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 14px 0;
+}
+
+.admin-topbar__brand {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--color-off-white);
+    text-decoration: none;
+}
+
+.admin-topbar__brand span {
+    font-weight: 400;
+    font-size: 13px;
+    opacity: 0.8;
+}
+
+.admin-nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.admin-nav a {
+    color: var(--color-off-white);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.admin-nav a:hover,
+.admin-nav a:focus-visible {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.admin-nav a.is-active {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.admin-nav__user {
+    font-size: 13px;
+    opacity: 0.85;
+    margin-right: 4px;
+    white-space: nowrap;
+}
+
+/* --- Conteúdo ---------------------------------------------------------------------------- */
+
+.admin-main {
+    flex: 1 1 auto;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 28px 24px 60px;
+}
+
+.admin-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.admin-header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--color-dark-teal);
+    margin: 0;
+}
+
+.admin-header p {
+    color: #5B6D68;
+    font-size: 14px;
+    margin: 4px 0 0;
+}
+
+/* --- Cards / Dashboard --------------------------------------------------------------------- */
+
+.admin-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.admin-stat-card {
+    background: var(--color-white);
+    border: 1px solid #E1E7E4;
+    border-radius: 10px;
+    padding: 20px 22px;
+}
+
+.admin-stat-card__label {
+    font-size: 13px;
+    color: #5B6D68;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin: 0 0 6px;
+}
+
+.admin-stat-card__value {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--color-dark-teal);
+    margin: 0;
+}
+
+/* --- Cartão genérico de conteúdo ------------------------------------------------------------ */
+
+.admin-panel {
+    background: var(--color-white);
+    border: 1px solid #E1E7E4;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.admin-panel__toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 16px 20px;
+    border-bottom: 1px solid #E1E7E4;
+}
+
+.admin-panel__toolbar h2 {
+    font-size: 16px;
+    margin: 0;
+    color: var(--color-dark-teal);
+}
+
+/* --- Tabela ---------------------------------------------------------------------------- */
+
+.admin-table-wrap {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #EEF1F0;
+    white-space: nowrap;
+}
+
+.admin-table th {
+    color: #5B6D68;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    background: #FAFBFA;
+}
+
+.admin-table tbody tr:hover {
+    background: #FAFBFA;
+}
+
+.admin-table__logo {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    border: 1px solid #E1E7E4;
+    border-radius: 6px;
+    background: var(--color-white);
+    padding: 4px;
+    display: block;
+}
+
+.admin-table__name {
+    white-space: normal;
+    max-width: 260px;
+}
+
+.admin-table__actions {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+/* --- Badges --------------------------------------------------------------------------------- */
+
+.admin-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.admin-badge--active {
+    background: #E4F7EC;
+    color: #0C7A3D;
+}
+
+.admin-badge--inactive {
+    background: #F1F1F1;
+    color: #6B6B6B;
+}
+
+/* --- Botões ---------------------------------------------------------------------------------- */
+
+.admin-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-family: inherit;
+    line-height: 1.2;
+}
+
+.admin-btn--primary {
+    background: var(--color-brand-green);
+    color: var(--color-white);
+}
+
+.admin-btn--primary:hover {
+    background: var(--color-dark-teal);
+}
+
+.admin-btn--outline {
+    background: var(--color-white);
+    color: var(--color-dark-teal);
+    border-color: #D5DCDA;
+}
+
+.admin-btn--outline:hover {
+    background: #F4F6F5;
+}
+
+.admin-btn--danger {
+    background: var(--color-white);
+    color: #B3261E;
+    border-color: #F1C7C4;
+}
+
+.admin-btn--danger:hover {
+    background: #FDEEED;
+}
+
+.admin-btn--sm {
+    padding: 6px 10px;
+    font-size: 12px;
+}
+
+.admin-btn[disabled] {
+    opacity: 0.4;
+    cursor: default;
+    pointer-events: none;
+}
+
+/* --- Formulários ---------------------------------------------------------------------------- */
+
+.admin-form {
+    padding: 20px;
+    max-width: 560px;
+}
+
+.admin-form__group {
+    margin-bottom: 18px;
+}
+
+.admin-form__group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-dark-teal);
+    margin-bottom: 6px;
+}
+
+.admin-form__hint {
+    font-size: 12px;
+    color: #7A8A85;
+    margin-top: 4px;
+}
+
+.admin-form input[type="text"],
+.admin-form input[type="url"],
+.admin-form input[type="email"],
+.admin-form input[type="password"],
+.admin-form select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #D5DCDA;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #1B2B27;
+    background: var(--color-white);
+}
+
+.admin-form input:focus,
+.admin-form select:focus {
+    outline: 2px solid var(--color-brand-green);
+    outline-offset: 1px;
+}
+
+.admin-form__current-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.admin-form__current-logo img {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    border: 1px solid #E1E7E4;
+    border-radius: 6px;
+    padding: 4px;
+    background: var(--color-white);
+}
+
+.admin-form__actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+/* --- Login ------------------------------------------------------------------------------- */
+
+.admin-login {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.admin-login__card {
+    background: var(--color-white);
+    border: 1px solid #E1E7E4;
+    border-radius: 12px;
+    padding: 36px 32px;
+    width: 100%;
+    max-width: 380px;
+}
+
+.admin-login__title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color-dark-teal);
+    margin: 0 0 4px;
+    text-align: center;
+}
+
+.admin-login__subtitle {
+    font-size: 13px;
+    color: #5B6D68;
+    text-align: center;
+    margin: 0 0 24px;
+}
+
+.admin-login__submit {
+    width: 100%;
+    justify-content: center;
+    margin-top: 8px;
+}
+
+/* --- Alertas / flash --------------------------------------------------------------------- */
+
+.admin-alert {
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 18px;
+}
+
+.admin-alert--success {
+    background: #E4F7EC;
+    color: #0C7A3D;
+    border: 1px solid #BEE8D0;
+}
+
+.admin-alert--error {
+    background: #FDEEED;
+    color: #B3261E;
+    border: 1px solid #F1C7C4;
+}
+
+.admin-field-error {
+    color: #B3261E;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.admin-empty-state {
+    padding: 40px 20px;
+    text-align: center;
+    color: #7A8A85;
+    font-size: 14px;
+}
+
+@media (max-width: 640px) {
+    .admin-main {
+        padding: 20px 14px 40px;
+    }
+
+    .admin-form {
+        padding: 16px;
+    }
+}
