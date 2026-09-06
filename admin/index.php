@@ -15,11 +15,20 @@ $adminCurrentUser = admin_require_login();
 
 $activeClients = null;
 $activePartners = null;
+$activeJobs = null;
+$activeBenefits = null;
+$activeTestimonials = null;
+$publishedPosts = null;
 $dbError = false;
 
 try {
-    $activeClients = (int) Database::connection()->query('SELECT COUNT(*) FROM clients WHERE ativo = 1')->fetchColumn();
-    $activePartners = (int) Database::connection()->query('SELECT COUNT(*) FROM partners WHERE ativo = 1')->fetchColumn();
+    $pdo = Database::connection();
+    $activeClients = (int) $pdo->query('SELECT COUNT(*) FROM clients WHERE ativo = 1')->fetchColumn();
+    $activePartners = (int) $pdo->query('SELECT COUNT(*) FROM partners WHERE ativo = 1')->fetchColumn();
+    $activeJobs = (int) $pdo->query('SELECT COUNT(*) FROM jobs WHERE ativo = 1')->fetchColumn();
+    $activeBenefits = (int) $pdo->query('SELECT COUNT(*) FROM benefits WHERE ativo = 1')->fetchColumn();
+    $activeTestimonials = (int) $pdo->query('SELECT COUNT(*) FROM video_testimonials WHERE ativo = 1')->fetchColumn();
+    $publishedPosts = (int) $pdo->query('SELECT COUNT(*) FROM blog_posts WHERE ativo = 1 AND published_at <= NOW()')->fetchColumn();
 } catch (Throwable $e) {
     error_log('CT Price CMS [admin/index]: falha ao consultar totais — ' . $e->getMessage());
     $dbError = true;
@@ -47,6 +56,22 @@ require __DIR__ . '/includes/layout-header.php';
     <div class="admin-stat-card">
         <p class="admin-stat-card__label">Parceiros ativos</p>
         <p class="admin-stat-card__value"><?= $activePartners ?></p>
+    </div>
+    <div class="admin-stat-card">
+        <p class="admin-stat-card__label">Vagas ativas</p>
+        <p class="admin-stat-card__value"><?= $activeJobs ?></p>
+    </div>
+    <div class="admin-stat-card">
+        <p class="admin-stat-card__label">Benefícios ativos</p>
+        <p class="admin-stat-card__value"><?= $activeBenefits ?></p>
+    </div>
+    <div class="admin-stat-card">
+        <p class="admin-stat-card__label">Depoimentos ativos</p>
+        <p class="admin-stat-card__value"><?= $activeTestimonials ?></p>
+    </div>
+    <div class="admin-stat-card">
+        <p class="admin-stat-card__label">Posts publicados</p>
+        <p class="admin-stat-card__value"><?= $publishedPosts ?></p>
     </div>
 </div>
 <?php endif; ?>

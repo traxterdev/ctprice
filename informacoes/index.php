@@ -28,11 +28,16 @@ $boxedHero = [
     'background_position' => '0% 0%',
 ];
 
-// Mesmos 3 posts/destinos já usados na Home — fonte compartilhada, não duplicada (ver
-// config/blog-posts.php).
-$blogData = require __DIR__ . '/../config/blog-posts.php';
-$blogHeading = $blogData['heading'];
-$blogPosts = $blogData['posts'];
+// Mesmos posts/destinos já usados na Home — fonte compartilhada: banco via BlogPostRepository
+// (sprint CMS 02; antes, config/blog-posts.php).
+require_once __DIR__ . '/../repositories/BlogPostRepository.php';
+$blogHeading = 'Últimas notícias';
+try {
+    $blogPosts = (new BlogPostRepository())->allPublished(3);
+} catch (Throwable $e) {
+    error_log('CT Price [Informações]: falha ao carregar posts do banco — ' . $e->getMessage());
+    $blogPosts = [];
+}
 
 // Texto (heading/parágrafos/CTA) idêntico ao já implementado em /sobre-nos/ — fonte
 // compartilhada, não duplicada (ver config/dedication-section.php). Só a imagem é própria desta

@@ -170,11 +170,16 @@ $whyChooseUsItems = [
     ],
 ];
 
-// Dados compartilhados com /informacoes/ (mesmos 3 posts, mesmos destinos) — ver
-// config/blog-posts.php.
-$blogData = require __DIR__ . '/config/blog-posts.php';
-$blogHeading = $blogData['heading'];
-$blogPosts = $blogData['posts'];
+// Posts publicados — vêm do banco via BlogPostRepository (sprint CMS 02; antes,
+// config/blog-posts.php). Fonte compartilhada com /informacoes/ (mesmos posts, mesmos destinos).
+require_once __DIR__ . '/repositories/BlogPostRepository.php';
+$blogHeading = 'Últimas notícias';
+try {
+    $blogPosts = (new BlogPostRepository())->allPublished(3);
+} catch (Throwable $e) {
+    error_log('CT Price [Home]: falha ao carregar posts do banco — ' . $e->getMessage());
+    $blogPosts = [];
+}
 
 // Sessão necessária para o token CSRF do formulário "Quer receber um contato?" e para o rate
 // limit simples de home-contato-action.php — precisa iniciar antes de qualquer saída HTML.

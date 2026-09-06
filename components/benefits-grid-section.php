@@ -27,19 +27,21 @@
  * centralizada por esse mecanismo, sem precisar calcular "é o último item?" nem depender da
  * quantidade total de benefícios.
  *
+ * FONTE DE DADOS (sprint CMS 02): cada item vem de `BenefitRepository::allActive()` — `imagem_path`
+ * já é o caminho relativo à raiz do site (ex.:
+ * "assets/images/pages/trabalhe-conosco/beneficios/ben01.png" para os 14 migrados, ou
+ * "assets/uploads/benefits/<nome-aleatorio>.ext" para uploads novos pelo admin) — este componente
+ * só concatena BASE_URL, nunca decide o diretório.
+ *
  * Espera, definida pelo chamador antes do include:
  *
  *   $benefitsGridSection = [
  *       'id' => 'beneficios', // âncora HTML real da seção (id="beneficios")
- *       'items' => [ // config/benefits.php
- *           ['image' => 'ben01.png', 'alt' => '...'],
+ *       'items' => [
+ *           ['nome' => 'usado como alt', 'imagem_path' => 'assets/.../arquivo.ext'],
  *           ...
  *       ],
  *   ];
- *
- * Cada arquivo é servido de assets/images/pages/trabalhe-conosco/beneficios/ (BASE_URL montado
- * aqui, não pelo chamador, para manter os registros de dados enxutos — mesma convenção de
- * components/clients-carousel-section.php).
  */
 
 $anchorId = $benefitsGridSection['id'] ?? null;
@@ -52,8 +54,8 @@ $items = $benefitsGridSection['items'] ?? [];
             <div class="logo-card benefit-card">
                 <img
                     class="logo-card__img"
-                    src="<?= BASE_URL ?>/assets/images/pages/trabalhe-conosco/beneficios/<?= htmlspecialchars($item['image'], ENT_QUOTES, 'UTF-8') ?>"
-                    alt="<?= htmlspecialchars($item['alt'], ENT_QUOTES, 'UTF-8') ?>"
+                    src="<?= BASE_URL ?>/<?= htmlspecialchars($item['imagem_path'], ENT_QUOTES, 'UTF-8') ?>"
+                    alt="<?= htmlspecialchars($item['nome'], ENT_QUOTES, 'UTF-8') ?>"
                     loading="lazy"
                 >
             </div>

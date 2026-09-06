@@ -2,7 +2,9 @@
 /**
  * includes/Uploads.php
  *
- * Upload seguro de logos (Clientes/Parceiros) do `/admin/`. Nenhuma biblioteca externa.
+ * Upload seguro de imagens do `/admin/` — logos (Clientes/Parceiros, sprint 01), imagens de
+ * Benefícios, fotos/miniaturas de Depoimentos e thumbnails de posts do Blog (sprint 02). Nenhuma
+ * biblioteca externa.
  *
  * Requisitos de segurança implementados (ver CLAUDE.md/tarefa da sprint, §15):
  * - MIME real via `finfo` lendo o CONTEÚDO do arquivo — nunca `$_FILES[...]['type']` (esse valor
@@ -40,12 +42,12 @@ const ADMIN_UPLOAD_ALLOWED_MIMES = [
  * da raiz do site, sem BASE_URL) do arquivo salvo — ex.: "assets/uploads/clients/ab12....jpg".
  *
  * @param array<string, mixed> $file um elemento de $_FILES (ex.: $_FILES['logo'])
- * @param 'clients'|'partners' $entity subpasta de destino
+ * @param 'clients'|'partners'|'benefits'|'testimonials'|'posts' $entity subpasta de destino
  * @throws RuntimeException mensagem já segura para exibir ao administrador
  */
 function ctprice_admin_handle_logo_upload(array $file, string $entity): string
 {
-    if (!in_array($entity, ['clients', 'partners'], true)) {
+    if (!in_array($entity, ['clients', 'partners', 'benefits', 'testimonials', 'posts'], true)) {
         throw new RuntimeException('Destino de upload inválido.');
     }
 

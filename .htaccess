@@ -76,6 +76,20 @@ RewriteRule ^(config|components|includes|content|blog|database|repositories)(/|$
 # Observação: `.htaccess`/`.htpasswd` já são negados globalmente pela configuração padrão do
 # Apache (`<Files ".ht*"> Require all denied </Files>` em httpd.conf) — não duplicado aqui.
 
+# --- Roteamento de posts do blog cadastrados no CMS (banco), sem diretório físico próprio ------
+# (sprint CMS 02 — ver docs/cms.md). Os 3 posts históricos continuam com diretório físico próprio
+# na raiz (ex.: /hello-world/) e NUNCA passam por esta regra (Apache já resolve `-d` para eles
+# antes de chegar aqui). Um post NOVO, criado só no banco via /admin/posts/, não tem diretório —
+# esta regra só entra em ação quando NENHUM arquivo/diretório físico responde pela URL, então
+# nunca interfere nas 10 institucionais, nos 3 diretórios de post existentes, em admin/, assets/
+# ou em qualquer regra já tratada acima. `blog-post.php` (raiz, fora de qualquer diretório
+# bloqueado acima) consulta o banco pelo slug — se não existir/não estiver publicado, delega para
+# o MESMO 404.php de sempre (nunca inventa conteúdo, nunca transforma uma URL desconhecida em
+# artigo). Padrão de um único segmento sem ".": nunca intercepta um asset com extensão faltando.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([a-z0-9-]+)/?$ blog-post.php?slug=$1 [L,QSA,NC]
+
 # --- Página 404 própria (P1) ----------------------------------------------------------------
 # 404.php já responde HTTP 404 por si só (http_response_code(404), inclusive em acesso direto);
 # esta diretiva só manda o Apache exibi-la para qualquer URL/arquivo físico inexistente, em vez

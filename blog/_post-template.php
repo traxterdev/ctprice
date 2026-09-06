@@ -2,65 +2,75 @@
 /**
  * blog/_post-template.php
  *
- * Layout compartilhado dos 3 posts do blog — equivalente ao único template Elementor que o site
- * original já usa para os 3 posts (`elementor-page-1049`, confirmado em
- * docs/reference/site-inventory.md e reconfirmado em docs/reference/blog-posts-audit.md, seção 3:
- * classificação A, estrutura 100% comum aos 3 posts).
+ * Layout compartilhado dos posts do blog — banco (`blog_posts`) é a fonte canônica desde a sprint
+ * CMS 02 (antes: config/blog-posts.php + content/blog/{slug}.php). Ver docs/cms.md.
  *
- * NÃO é uma página pública própria — cada post vive num diretório na RAIZ do site (mesmo padrão
- * de todas as outras páginas do projeto: `/slug/index.php`), que só define `$postSlug` e inclui
- * este arquivo. A localização deste template dentro de `blog/` é só organizacional (não faz parte
- * da URL pública) — reconcilia duas menções conflitantes em docs/architecture-proposal.md: a
- * árvore de diretórios da seção 9 sugeria `blog/{slug}/index.php` (o que resultaria na URL
- * `/blog/slug/`), mas a seção 10 ("Estratégia de URLs") e a tabela de redirecionamentos 301 são
- * explícitas — a URL final é a mesma slug NA RAIZ, sem `/wp/` e sem `/blog/` — e é isso que todas
- * as outras 10 páginas já implementadas neste projeto seguem. Esta implementação segue a seção 10
- * (mais específica, e consistente com o padrão físico já adotado em todo o resto do site).
+ * NÃO é uma página pública própria — chamada por dois caminhos:
+ *   1. Os 3 diretórios físicos históricos na raiz (ex.: /hello-world/index.php), que definem
+ *      `$postSlug` e incluem este arquivo diretamente — preservados por compatibilidade, mesmo
+ *      slug/URL de sempre.
+ *   2. `blog-post.php` (raiz), o roteador de posts NOVOS cadastrados só no banco (sem diretório
+ *      físico) — ver `.htaccess`, bloco "Roteamento de posts do blog".
  *
- * Espera, definida pelo chamador (`/{slug}/index.php`) ANTES de incluir este arquivo:
+ * Post não encontrado OU não publicado (`ativo=0` ou `published_at` no futuro): delega para o
+ * MESMO handler 404 de sempre (`404.php`) — nunca lança exceção (diferente da versão anterior a
+ * esta sprint, quando $postSlug só podia vir de um diretório físico já confirmado válido; agora
+ * também chega aqui via slug arbitrário digitado na URL, então "não encontrado" é um caso
+ * ESPERADO, não uma falha de programação).
  *
- *   $postSlug = 'slug real auditado, ex.: "hello-world"';
+ * Espera, definida pelo chamador ANTES de incluir este arquivo:
+ *
+ *   $postSlug = 'slug a buscar no banco';
  *
  * (E, como toda página, `require .../config/bootstrap.php` já deve ter sido feito antes, para que
- * $company/$menu/BASE_URL já existam.)
+ * $company/$menu/BASE_URL/Database já existam.)
  */
 
 if (!isset($postSlug)) {
     throw new RuntimeException('blog/_post-template.php requer $postSlug definido pelo chamador.');
 }
 
-$ctpriceBlogData = require __DIR__ . '/../config/blog-posts.php';
+require_once __DIR__ . '/../repositories/BlogPostRepository.php';
+
 $ctpricePost = null;
-foreach ($ctpriceBlogData['posts'] as $ctpriceCandidate) {
-    if ($ctpriceCandidate['slug'] === $postSlug) {
-        $ctpricePost = $ctpriceCandidate;
-        break;
-    }
+try {
+    $ctpricePost = (new BlogPostRepository())->findPublishedBySlug($postSlug);
+} catch (Throwable $e) {
+    error_log('CT Price [blog/_post-template]: falha ao consultar post — ' . $e->getMessage());
 }
-unset($ctpriceCandidate);
 
 if ($ctpricePost === null) {
-    throw new RuntimeException('Post não encontrado em config/blog-posts.php para o slug: ' . $postSlug);
+    http_response_code(404);
+    require __DIR__ . '/../404.php';
+    exit;
 }
 
-$ctpriceBodyHtml = require __DIR__ . '/../content/blog/' . $postSlug . '.php';
-$ctpriceAbsoluteUrl = ctprice_absolute_url($ctpricePost['url']);
+$ctpriceRelatedItems = [];
+try {
+    $ctpriceRelatedItems = (new BlogPostRepository())->allPublished();
+} catch (Throwable $e) {
+    error_log('CT Price [blog/_post-template]: falha ao consultar relacionados — ' . $e->getMessage());
+}
+
+$ctpriceAbsoluteUrl = ctprice_absolute_url('/' . $ctpricePost['slug'] . '/');
+$ctpriceDateText = BlogPostRepository::dateText($ctpricePost['published_at']);
+$ctpriceTimeText = BlogPostRepository::timeText($ctpricePost['published_at']);
 
 $articleHeader = [
-    'title' => $ctpricePost['title'],
+    'title' => $ctpricePost['titulo'],
 ];
 
 $articleContentSection = [
-    'date_text' => $ctpricePost['date'],
-    'time_text' => $ctpricePost['time'],
-    'body_html' => $ctpriceBodyHtml,
+    'date_text' => $ctpriceDateText,
+    'time_text' => $ctpriceTimeText,
+    'body_html' => $ctpricePost['body_html'],
     'share' => [
         'url' => $ctpriceAbsoluteUrl,
-        'title' => $ctpricePost['title'],
+        'title' => $ctpricePost['titulo'],
     ],
     'related' => [
         'current_slug' => $postSlug,
-        'items' => $ctpriceBlogData['posts'],
+        'items' => $ctpriceRelatedItems,
     ],
 ];
 ?>
@@ -69,7 +79,7 @@ $articleContentSection = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?= htmlspecialchars($ctpricePost['title'], ENT_QUOTES, 'UTF-8') ?> — CT Price</title>
+    <title><?= htmlspecialchars($ctpricePost['titulo'], ENT_QUOTES, 'UTF-8') ?> — CT Price</title>
     <meta name="description" content="<?= htmlspecialchars($ctpricePost['excerpt'], ENT_QUOTES, 'UTF-8') ?>">
     <link rel="canonical" href="<?= htmlspecialchars($ctpriceAbsoluteUrl, ENT_QUOTES, 'UTF-8') ?>">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/reset.css">

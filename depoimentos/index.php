@@ -19,12 +19,20 @@ $boxedHero = [
     'background_position' => '0% 0%',
 ];
 
-// Os 7 depoimentos em vídeo — conteúdo estático em config/video-testimonials.php (independente
-// dos 4 depoimentos da Home, ver comentário desse arquivo).
+// Os depoimentos em vídeo — vêm do banco via TestimonialRepository (sprint CMS 02; antes,
+// config/video-testimonials.php). Independente dos depoimentos de texto da Home (ver comentário
+// original do config antigo — os dois conjuntos não se sobrepõem).
+require_once __DIR__ . '/../repositories/TestimonialRepository.php';
+try {
+    $testimonialItems = (new TestimonialRepository())->allActive();
+} catch (Throwable $e) {
+    error_log('CT Price [Depoimentos]: falha ao carregar depoimentos do banco — ' . $e->getMessage());
+    $testimonialItems = [];
+}
 $videoTestimonialsSection = [
     'heading' => 'Quem confia, recomenda.',
     'intro_html' => '<p>Há anos a <strong>CT Price</strong> constrói relações de confiança com nossos clientes oferecendo soluções transparentes, atendimento dedicado e resultados que realmente fazem a diferença.</p><p>Acreditamos que o respeito, a ética e a responsabilidade em cada projeto são os pilares do nosso trabalho — e é isso que faz nossos clientes continuarem escolhendo a CT Price e recomendando nossos serviços.</p>',
-    'items' => require __DIR__ . '/../config/video-testimonials.php',
+    'items' => $testimonialItems,
 ];
 
 $pageMeta = [

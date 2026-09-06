@@ -33,6 +33,10 @@
             <a href="<?= BASE_URL ?>/admin/" class="<?= ($adminActiveMenu ?? '') === 'dashboard' ? 'is-active' : '' ?>">Dashboard</a>
             <a href="<?= BASE_URL ?>/admin/clients/" class="<?= ($adminActiveMenu ?? '') === 'clients' ? 'is-active' : '' ?>">Clientes</a>
             <a href="<?= BASE_URL ?>/admin/partners/" class="<?= ($adminActiveMenu ?? '') === 'partners' ? 'is-active' : '' ?>">Parceiros</a>
+            <a href="<?= BASE_URL ?>/admin/jobs/" class="<?= ($adminActiveMenu ?? '') === 'jobs' ? 'is-active' : '' ?>">Vagas</a>
+            <a href="<?= BASE_URL ?>/admin/benefits/" class="<?= ($adminActiveMenu ?? '') === 'benefits' ? 'is-active' : '' ?>">Benefícios</a>
+            <a href="<?= BASE_URL ?>/admin/testimonials/" class="<?= ($adminActiveMenu ?? '') === 'testimonials' ? 'is-active' : '' ?>">Depoimentos</a>
+            <a href="<?= BASE_URL ?>/admin/posts/" class="<?= ($adminActiveMenu ?? '') === 'posts' ? 'is-active' : '' ?>">Notícias</a>
             <a href="<?= BASE_URL ?>/admin/logout.php">Sair</a>
         </nav>
     </div>

@@ -20,11 +20,18 @@ $boxedHero = [
     'background_position' => '0% 0%',
 ];
 
-// Vagas — conteúdo estático em config/jobs.php. O destino de candidatura vem exclusivamente de
-// config/company.php (nunca duplicado em config/jobs.php nem hardcoded aqui) — ver
-// components/jobs-section.php.
+// Vagas — vêm do banco via JobRepository (sprint CMS 02; antes, config/jobs.php). O destino de
+// candidatura continua exclusivamente de config/company.php (nunca duplicado em `jobs` nem
+// hardcoded aqui) — ver components/jobs-section.php.
+require_once __DIR__ . '/../repositories/JobRepository.php';
+try {
+    $jobsList = (new JobRepository())->allActive();
+} catch (Throwable $e) {
+    error_log('CT Price [Trabalhe Conosco]: falha ao carregar vagas do banco — ' . $e->getMessage());
+    $jobsList = [];
+}
 $jobsSection = [
-    'jobs' => require __DIR__ . '/../config/jobs.php',
+    'jobs' => $jobsList,
     'apply_url' => $company['sistemas_externos']['recrutamento'] ?? '',
 ];
 
@@ -41,8 +48,16 @@ $benefitsTitleBand = [
     'id' => 'beneficios',
 ];
 
+// Benefícios — vêm do banco via BenefitRepository (sprint CMS 02; antes, config/benefits.php).
+require_once __DIR__ . '/../repositories/BenefitRepository.php';
+try {
+    $benefitsItems = (new BenefitRepository())->allActive();
+} catch (Throwable $e) {
+    error_log('CT Price [Trabalhe Conosco]: falha ao carregar benefícios do banco — ' . $e->getMessage());
+    $benefitsItems = [];
+}
 $benefitsGridSection = [
-    'items' => require __DIR__ . '/../config/benefits.php',
+    'items' => $benefitsItems,
 ];
 
 $pageMeta = [
