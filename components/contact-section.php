@@ -18,11 +18,12 @@
  * empilha em max-width:767px (mesmo breakpoint de conteúdo das demais seções — confirmado
  * testando 767/768, diferente do breakpoint próprio de blog-section).
  *
- * Formulário: reproduzido apenas como marcação estática (Nome, E-mail, Telefone, Mensagem,
- * botão "Enviar"), fiel ao original visualmente. NÃO inclui reCAPTCHA nem processamento de
- * envio — o projeto ainda não tem backend definido (docs/architecture-proposal.md) e o campo de
- * reCAPTCHA do original ocupa apenas 1px de layout (v3, invisível), então omiti-lo não altera a
- * fidelidade visual. O <form> não tem `action` funcional até uma decisão de backend.
+ * Formulário: campos (Nome, E-mail, Telefone, Mensagem, botão "Enviar") e layout fiéis ao
+ * original visualmente — ver "FORMULÁRIO FUNCIONAL" abaixo para o processamento real de envio,
+ * adicionado numa sprint posterior à implementação visual inicial. NÃO inclui reCAPTCHA — o campo
+ * do original ocupa apenas 1px de layout (v3, invisível), então omiti-lo não altera a fidelidade
+ * visual; a proteção anti-spam usada é honeypot + rate limit (mesmo padrão já aprovado em
+ * Fale Conosco/Ouvidoria).
  *
  * Sem animação de entrada: nenhum data-settings de animação nos widgets desta seção (confirmado
  * por inspeção direta) — não usa assets/js/scroll-reveal.js. O ícone do WhatsApp tem uma
@@ -31,7 +32,26 @@
  *
  * Medições: docs/reference/home-desktop-audit.md e reinspeção direta via Chrome DevTools MCP em
  * 1440x900/900x1200/390x844 (ver relatório final).
+ *
+ * FORMULÁRIO FUNCIONAL (correção do P1 registrado em docs/reference/global-final-audit.md —
+ * detalhe completo em docs/reference/home-contact-form-validation.md): CSRF, honeypot,
+ * autocomplete, indicação visual de campo obrigatório, erro por campo, banner de sucesso/erro,
+ * envio via home-contato-action.php (endpoint PRÓPRIO — os campos daqui, Nome/E-mail/Telefone/
+ * Mensagem, são diferentes dos de Fale Conosco, Nome/E-mail/Empresa/Mensagem, e NÃO reutilizam o
+ * mesmo endpoint nem o mesmo JS). Nenhum campo novo foi inventado, nenhum texto jurídico/checkbox
+ * de consentimento foi adicionado (ver docs/reference/home-contact-form-validation.md).
+ *
+ * Novas props esperadas do chamador (index.php), além das já documentadas acima:
+ *   $contactFormAction (string) — URL do endpoint de envio (com BASE_URL)
+ *   $contactCsrfToken  (string) — token da sessão atual, gerado pelo chamador
+ *   $contactStatus     (null|['type'=>'success'|'error','message'=>string]) — banner de fallback
+ *                      sem JavaScript, preenchido a partir de `?status=` (mesmo padrão de
+ *                      components/contact-form-section.php)
  */
+
+$contactFormAction = $contactFormAction ?? '';
+$contactCsrfToken = $contactCsrfToken ?? '';
+$contactStatus = $contactStatus ?? null;
 ?>
 <section class="contact-section">
     <div class="contact-section__container">
@@ -46,25 +66,53 @@
         </div>
 
         <div class="contact-section__form-box">
-            <form class="contact-form">
-                <div class="contact-form__field">
-                    <label for="contact-name">Nome <span class="contact-form__required">*</span></label>
-                    <input type="text" id="contact-name" name="name" placeholder="Nome" required>
+            <?php if ($contactStatus): ?>
+            <p class="contact-form__static-banner contact-form__static-banner--<?= htmlspecialchars($contactStatus['type'], ENT_QUOTES, 'UTF-8') ?>" role="status">
+                <?= htmlspecialchars($contactStatus['message'], ENT_QUOTES, 'UTF-8') ?>
+            </p>
+            <?php endif; ?>
+
+            <form class="contact-form" method="post" action="<?= htmlspecialchars($contactFormAction, ENT_QUOTES, 'UTF-8') ?>" novalidate>
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($contactCsrfToken, ENT_QUOTES, 'UTF-8') ?>">
+
+                <!-- Honeypot anti-spam: campo invisível para humanos (escondido por CSS, não por
+                     display:none — permanece focável por padrão do navegador se não fosse pelo
+                     tabindex="-1" abaixo), visível para bots que preenchem todo campo de
+                     formulário indiscriminadamente. `aria-hidden` + `tabindex="-1"` removem
+                     qualquer efeito para leitores de tela/navegação por teclado. Mesma técnica já
+                     aprovada em components/contact-form-section.php. -->
+                <div class="contact-form__hp" aria-hidden="true">
+                    <label for="contact-website">Deixe este campo em branco</label>
+                    <input type="text" id="contact-website" name="website" tabindex="-1" autocomplete="off">
                 </div>
-                <div class="contact-form__field">
-                    <label for="contact-email">E-mail <span class="contact-form__required">*</span></label>
-                    <input type="email" id="contact-email" name="email" placeholder="E-mail" required>
+
+                <div class="contact-form__field" data-field="name">
+                    <label for="contact-name">Nome <span class="contact-form__required" aria-hidden="true">*</span><span class="sr-only"> (obrigatório)</span></label>
+                    <input type="text" id="contact-name" name="name" placeholder="Nome" required autocomplete="name" maxlength="150" aria-describedby="contact-name-error">
+                    <span class="contact-form__error" id="contact-name-error" role="alert"></span>
                 </div>
-                <div class="contact-form__field">
-                    <label for="contact-phone">Telefone <span class="contact-form__required">*</span></label>
-                    <input type="tel" id="contact-phone" name="phone" placeholder="Telefone" required>
+                <div class="contact-form__field" data-field="email">
+                    <label for="contact-email">E-mail <span class="contact-form__required" aria-hidden="true">*</span><span class="sr-only"> (obrigatório)</span></label>
+                    <input type="email" id="contact-email" name="email" placeholder="E-mail" required autocomplete="email" maxlength="190" aria-describedby="contact-email-error">
+                    <span class="contact-form__error" id="contact-email-error" role="alert"></span>
                 </div>
-                <div class="contact-form__field">
-                    <label for="contact-message">Mensagem <span class="contact-form__required">*</span></label>
-                    <textarea id="contact-message" name="message" rows="4" placeholder="Mensagem" required></textarea>
+                <div class="contact-form__field" data-field="phone">
+                    <label for="contact-phone">Telefone <span class="contact-form__required" aria-hidden="true">*</span><span class="sr-only"> (obrigatório)</span></label>
+                    <input type="tel" id="contact-phone" name="phone" placeholder="Telefone" required autocomplete="tel" maxlength="30" aria-describedby="contact-phone-error">
+                    <span class="contact-form__error" id="contact-phone-error" role="alert"></span>
                 </div>
+                <div class="contact-form__field" data-field="message">
+                    <label for="contact-message">Mensagem <span class="contact-form__required" aria-hidden="true">*</span><span class="sr-only"> (obrigatório)</span></label>
+                    <textarea id="contact-message" name="message" rows="4" placeholder="Mensagem" required maxlength="5000" aria-describedby="contact-message-error"></textarea>
+                    <span class="contact-form__error" id="contact-message-error" role="alert"></span>
+                </div>
+
+                <div class="contact-form__feedback" role="status" aria-live="polite" hidden></div>
+
                 <div class="contact-form__submit">
-                    <button type="submit" class="btn btn--filled">Enviar</button>
+                    <button type="submit" class="btn btn--filled contact-form__submit-btn">
+                        <span class="contact-form__submit-label">Enviar</span>
+                    </button>
                 </div>
             </form>
         </div>

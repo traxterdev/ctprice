@@ -168,9 +168,37 @@ $blogData = require __DIR__ . '/config/blog-posts.php';
 $blogHeading = $blogData['heading'];
 $blogPosts = $blogData['posts'];
 
+// Sessão necessária para o token CSRF do formulário "Quer receber um contato?" e para o rate
+// limit simples de home-contato-action.php — precisa iniciar antes de qualquer saída HTML.
+// Chaves de sessão PRÓPRIAS (home_contact_*, nunca fale_conosco_*/ouvidoria_*) — ver
+// docs/reference/home-contact-form-validation.md.
+ctprice_configure_session_cookie();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+if (empty($_SESSION['home_contact_csrf'])) {
+    $_SESSION['home_contact_csrf'] = bin2hex(random_bytes(32));
+}
+$contactCsrfToken = $_SESSION['home_contact_csrf'];
+
+// Banner de fallback sem JavaScript — ver home-contato-action.php e
+// components/contact-section.php ("continuar funcional... caso JavaScript falhe").
+$contactStatus = null;
+$homeStatusParam = $_GET['status'] ?? null;
+if ($homeStatusParam === 'success') {
+    $contactStatus = ['type' => 'success', 'message' => 'Mensagem enviada com sucesso! Em breve entraremos em contato.'];
+} elseif ($homeStatusParam === 'rate_limited') {
+    $contactStatus = ['type' => 'error', 'message' => 'Aguarde alguns segundos antes de enviar novamente.'];
+} elseif ($homeStatusParam === 'invalid') {
+    $contactStatus = ['type' => 'error', 'message' => 'Verifique os dados informados e tente novamente.'];
+} elseif ($homeStatusParam === 'error') {
+    $contactStatus = ['type' => 'error', 'message' => 'Não foi possível enviar sua mensagem no momento. Tente novamente mais tarde ou use o WhatsApp.'];
+}
+
 $contactHeading = 'Quer receber um contato?';
 $contactText = 'Gostaria de falar com um de nossos especialistas? Basta enviar seus dados e entraremos em contato em breve. <br>Você também pode nos enviar um e-mail se preferir. <br> Ou envie uma mensagem em nosso WhatsApp.<br><br>';
 $contactWhatsapp = $company['whatsapp_principal']['url'];
+$contactFormAction = BASE_URL . '/home-contato-action.php';
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -228,5 +256,6 @@ $contactWhatsapp = $company['whatsapp_principal']['url'];
 <script src="<?= BASE_URL ?>/assets/js/clients-carousel-init.js" defer></script>
 <script src="<?= BASE_URL ?>/assets/js/hero-init.js" defer></script>
 <script src="<?= BASE_URL ?>/assets/js/scroll-reveal.js" defer></script>
+<script src="<?= BASE_URL ?>/assets/js/home-contact-form.js" defer></script>
 </body>
 </html>

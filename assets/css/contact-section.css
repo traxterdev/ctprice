@@ -173,3 +173,79 @@
         margin-left: 0;
     }
 }
+
+/**
+ * Formulário funcional (correção do P1 — docs/reference/home-contact-form-validation.md): só o
+ * necessário para honeypot/erro por campo/feedback, sem alterar nenhuma regra acima. Mesma
+ * técnica/paleta já aprovada em assets/css/contact-form-section.css (Fale Conosco).
+ */
+
+.contact-form__hp {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    left: -9999px;
+}
+
+.contact-form__field--invalid input,
+.contact-form__field--invalid textarea {
+    border-color: #E15554;
+}
+
+.contact-form__error {
+    display: block;
+    min-height: 15px;
+    margin-top: 3px;
+    font-family: var(--font-primary);
+    font-size: 12px;
+    color: #FFD5D5;
+}
+
+.contact-form__feedback {
+    margin: 0;
+    padding: 10px 14px;
+    border-radius: 3px;
+    font-family: var(--font-primary);
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.contact-form__feedback--success {
+    background: rgba(16, 227, 107, 0.15);
+    color: var(--color-off-white);
+    border: 1px solid var(--color-accent-green);
+}
+
+.contact-form__feedback--error {
+    background: rgba(225, 85, 84, 0.15);
+    color: var(--color-off-white);
+    border: 1px solid #E15554;
+}
+
+/* Banner estático equivalente (fallback sem JavaScript) — mesmas cores do feedback acima. */
+.contact-form__static-banner {
+    margin: 0 0 10px;
+    padding: 10px 14px;
+    border-radius: 3px;
+    font-family: var(--font-primary);
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.contact-form__static-banner--success {
+    background: rgba(16, 227, 107, 0.15);
+    color: var(--color-off-white);
+    border: 1px solid var(--color-accent-green);
+}
+
+.contact-form__static-banner--error {
+    background: rgba(225, 85, 84, 0.15);
+    color: var(--color-off-white);
+    border: 1px solid #E15554;
+}
+
+.contact-form--submitting .contact-form__submit-btn {
+    opacity: 0.7;
+    cursor: default;
+}
