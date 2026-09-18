@@ -108,6 +108,60 @@
     display: block;
 }
 
+/*
+ * Seletor de idioma funcional (ajuste pontual, 2026-09-17) — as bandeiras já existiam só
+ * visualmente; viraram <button> reais (includes/topbar.php). Reset do botão nativo + estado
+ * ativo discreto (item 7 do pedido: "não exagerar" — só um contorno sutil, sem preencher fundo
+ * nem redesenhar o tamanho/posição já medidos da bandeira).
+ */
+.topbar__language-btn {
+    display: block;
+    padding: 3px;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    background: none;
+    cursor: pointer;
+    line-height: 0;
+    transition: border-color 0.2s ease, opacity 0.2s ease;
+}
+
+.topbar__language-btn:not(.is-active) {
+    opacity: 0.6;
+}
+
+.topbar__language-btn:hover,
+.topbar__language-btn:focus-visible {
+    opacity: 1;
+}
+
+.topbar__language-btn.is-active {
+    border-color: var(--color-accent-green);
+    opacity: 1;
+}
+
+.topbar__language-btn:focus-visible {
+    outline: 2px solid var(--color-accent-green);
+    outline-offset: 1px;
+}
+
+/* Motor de tradução (includes/translate-widget.php): o widget nativo do GTranslate nunca é
+   exibido — só o seletor de bandeiras já existente da CT Price acima. */
+.gtranslate_wrapper {
+    display: none !important;
+}
+
+/* O Google Website Translator (por trás do GTranslate) insere uma barra própria no topo da
+   página ao traduzir — escondida para não duplicar/conflitar com o header fixo do site (o
+   seletor de idioma da CT Price já dá o mesmo feedback, de forma discreta). */
+.goog-te-banner-frame,
+body > .skiptranslate {
+    display: none !important;
+}
+
+body {
+    top: 0 !important;
+}
+
 /* =========================================================================
    Header (logo + navegação + CTA)
    ========================================================================= */

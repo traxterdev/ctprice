@@ -79,7 +79,7 @@ if (!isset($testimonials) || !is_array($testimonials)) {
                                     <?php if ($photoUrl !== ''): ?>
                                     <img class="testimonial-card__avatar" src="<?= htmlspecialchars($photoUrl, ENT_QUOTES, 'UTF-8') ?>" alt="Foto de <?= htmlspecialchars($name, ENT_QUOTES, 'UTF-8') ?>" loading="lazy" width="56" height="56">
                                     <?php endif; ?>
-                                    <cite class="testimonial-card__cite">
+                                    <cite class="testimonial-card__cite notranslate" translate="no">
                                         <span class="testimonial-card__name"><?= htmlspecialchars($name, ENT_QUOTES, 'UTF-8') ?></span>
                                         <span class="testimonial-card__company"><?= htmlspecialchars($clientCompany, ENT_QUOTES, 'UTF-8') ?></span>
                                     </cite>

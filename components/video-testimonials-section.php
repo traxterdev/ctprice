@@ -94,7 +94,7 @@ $items = $videoTestimonialsSection['items'] ?? [];
                 <div class="video-testimonial-card__body">
                     <div class="video-testimonial-card__person">
                         <img class="video-testimonial-card__photo" src="<?= htmlspecialchars($photoUrl, ENT_QUOTES, 'UTF-8') ?>" alt="Foto de <?= htmlspecialchars($name, ENT_QUOTES, 'UTF-8') ?>" loading="lazy" width="200" height="200">
-                        <div class="video-testimonial-card__identity">
+                        <div class="video-testimonial-card__identity notranslate" translate="no">
                             <span class="video-testimonial-card__name"><?= htmlspecialchars($name, ENT_QUOTES, 'UTF-8') ?></span>
                             <span class="video-testimonial-card__company"><?= htmlspecialchars($clientCompany, ENT_QUOTES, 'UTF-8') ?></span>
                         </div>

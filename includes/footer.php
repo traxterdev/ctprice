@@ -29,6 +29,14 @@
  * Crédito "Desenvolvido por" (ajuste pontual, 2026-09-17): fonte única em
  * $company['desenvolvido_por'] (config/company.php) — substituiu "Agência Lester" por TRAXTER.
  * Mesmo posicionamento de sempre na bottom bar, só texto + link (sem logo).
+ *
+ * Tradução automática (2026-09-17, pedido explícito do cliente): includes/footer.php é incluído
+ * SOMENTE pelas páginas do site público (nunca por `/admin/`, que usa
+ * admin/includes/layout-footer.php próprio) — por isso é o único ponto necessário para carregar
+ * o motor de tradução (includes/translate-widget.php) e o script que liga as bandeiras do
+ * topbar a ele (assets/js/language-switcher.js), cobrindo as 12 páginas públicas sem editar cada
+ * uma. Marcas próprias (razão social, crédito de desenvolvimento) recebem `translate="no"` —
+ * ver item 11 do pedido ("CT Price"/"TRAXTER" não devem ser traduzidos).
  */
 
 $endereco = $company['endereco'] ?? [];
@@ -61,7 +69,7 @@ $redesSociais = array_filter($company['redes_sociais'] ?? []);
                     <?php endif; ?>
                     <br><small><?= htmlspecialchars($endereco['cidade'] ?? '', ENT_QUOTES, 'UTF-8') ?> – <strong><?= htmlspecialchars($endereco['uf'] ?? '', ENT_QUOTES, 'UTF-8') ?></strong></small>
                 </p>
-                <p>
+                <p class="notranslate" translate="no">
                     <a href="mailto:<?= htmlspecialchars($company['emails']['contato'] ?? '', ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($company['emails']['contato'] ?? '', ENT_QUOTES, 'UTF-8') ?></a>
                     <br>
                     <a href="mailto:<?= htmlspecialchars($company['emails']['protecao_dados'] ?? '', ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($company['emails']['protecao_dados'] ?? '', ENT_QUOTES, 'UTF-8') ?></a>
@@ -69,7 +77,7 @@ $redesSociais = array_filter($company['redes_sociais'] ?? []);
                 <p>
                     Responsável Técnico
                     <br>
-                    <?= htmlspecialchars($company['responsavel_tecnico']['nome'] ?? '', ENT_QUOTES, 'UTF-8') ?> | <strong><?= htmlspecialchars($company['responsavel_tecnico']['registro'] ?? '', ENT_QUOTES, 'UTF-8') ?></strong>
+                    <span class="notranslate" translate="no"><?= htmlspecialchars($company['responsavel_tecnico']['nome'] ?? '', ENT_QUOTES, 'UTF-8') ?> | <strong><?= htmlspecialchars($company['responsavel_tecnico']['registro'] ?? '', ENT_QUOTES, 'UTF-8') ?></strong></span>
                 </p>
             </div>
 
@@ -128,16 +136,19 @@ $redesSociais = array_filter($company['redes_sociais'] ?? []);
         <div class="site-footer__bottom-bar-container">
             <p class="site-footer__copyright">
                 © Copyright <?= htmlspecialchars((string) ($company['copyright_ano'] ?? date('Y')), ENT_QUOTES, 'UTF-8') ?>
-                <a href="<?= BASE_URL ?>/"><?= htmlspecialchars($company['razao_social'] ?? '', ENT_QUOTES, 'UTF-8') ?></a>.
+                <a href="<?= BASE_URL ?>/" class="notranslate" translate="no"><?= htmlspecialchars($company['razao_social'] ?? '', ENT_QUOTES, 'UTF-8') ?></a>.
             </p>
             <p class="site-footer__credit">
                 Desenvolvido por
                 <?php if (!empty($desenvolvidoPor['url'])): ?>
-                    <a href="<?= htmlspecialchars($desenvolvidoPor['url'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener noreferrer" aria-label="<?= htmlspecialchars($desenvolvidoPor['nome'] ?? '', ENT_QUOTES, 'UTF-8') ?> (abre em nova aba)"><?= htmlspecialchars($desenvolvidoPor['nome'] ?? '', ENT_QUOTES, 'UTF-8') ?></a>
+                    <a href="<?= htmlspecialchars($desenvolvidoPor['url'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener noreferrer" aria-label="<?= htmlspecialchars($desenvolvidoPor['nome'] ?? '', ENT_QUOTES, 'UTF-8') ?> (abre em nova aba)" class="notranslate" translate="no"><?= htmlspecialchars($desenvolvidoPor['nome'] ?? '', ENT_QUOTES, 'UTF-8') ?></a>
                 <?php else: ?>
-                    <?= htmlspecialchars($desenvolvidoPor['nome'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+                    <span class="notranslate" translate="no"><?= htmlspecialchars($desenvolvidoPor['nome'] ?? '', ENT_QUOTES, 'UTF-8') ?></span>
                 <?php endif; ?>
             </p>
         </div>
     </div>
+
+    <?php require __DIR__ . '/translate-widget.php'; ?>
 </footer>
+<script src="<?= BASE_URL ?>/assets/js/language-switcher.js" defer></script>
