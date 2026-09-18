@@ -60,8 +60,15 @@ $items = $videoTestimonialsSection['items'] ?? [];
                 $name = $t['name'] ?? '';
                 $clientCompany = $t['company'] ?? '';
                 $quote = $t['quote'] ?? '';
-                $photoUrl = BASE_URL . '/assets/images/pages/depoimentos/people/' . ($t['photo'] ?? '');
-                $thumbUrl = BASE_URL . '/assets/images/pages/depoimentos/thumbnails/' . ($t['thumbnail'] ?? '');
+                // `photo`/`thumbnail` (foto_path/thumbnail_path em `video_testimonials`) já vêm do
+                // banco como caminho relativo completo (ex.: "assets/images/pages/depoimentos/
+                // people/aline-zacarini.jpeg") — mesma convenção de `logo_path` em
+                // repositories/ClientRepository.php/components/clients-carousel-section.php.
+                // Bugfix (2026-09-17): esta linha prefixava a pasta de novo por cima do caminho já
+                // completo, dobrando-a e quebrando as 7 fotos/miniaturas em produção (404) — achado
+                // durante o reaproveitamento desta mesma fonte de dados para o carrossel da Home.
+                $photoUrl = BASE_URL . '/' . ($t['photo'] ?? '');
+                $thumbUrl = BASE_URL . '/' . ($t['thumbnail'] ?? '');
                 $videoId = $t['video_id'] ?? '';
                 $videoList = $t['video_list'] ?? '';
                 $websiteUrl = $t['website_url'] ?? '';

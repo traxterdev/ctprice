@@ -7,7 +7,9 @@
  *
  * Reflete a estrutura real confirmada em docs/reference/site-inventory.md (tabela da seção 1
  * e menu principal descrito em docs/reference/home-desktop-audit.md, seção 2.2): 8 itens de
- * topo, 2 deles com submenu, mais o botão "Área Restrita" fora do menu principal.
+ * topo, 2 deles com submenu. O botão "Área Restrita", que ficava fora do menu principal, foi
+ * removido do site público a pedido do cliente (2026-09-17) — ver histórico em
+ * docs/reference/arearestrita-audit.md e docs/reference/site-inventory.md.
  *
  * IMPORTANTE: esta é a ÚNICA estrutura de navegação do projeto — nenhum link de menu deve ser
  * escrito manualmente em nenhuma página. Isso é o que elimina, por construção, a divergência de
@@ -99,12 +101,11 @@ return [
 
     'primary' => $primary,
 
-    // Botão "Área Restrita" — fora do menu principal, exibido separadamente no header
-    // (ver docs/reference/site-inventory.md e docs/reference/home-desktop-audit.md, seção 2.2).
-    'area_restrita' => [
-        'label' => 'Área Restrita',
-        'url' => '/arearestrita/',
-    ],
+    // Botão "Área Restrita" removido do site público a pedido do cliente (2026-09-17): "Retirar
+    // a parte 'Área restrita' não utilizaremos mais." — ver arearestrita-audit.md/site-inventory.md
+    // para o histórico de como o botão existia antes desta decisão. includes/header.php já só
+    // renderiza o botão quando `$menu['area_restrita']` existe (`!empty()`), então removida a
+    // chave, nenhuma alteração adicional é necessária lá.
 
     // Lista curada do rodapé — ver comentário no topo do arquivo. URLs reaproveitadas de
     // $primary onde o destino é o mesmo; rótulos e seleção de itens são próprios do rodapé

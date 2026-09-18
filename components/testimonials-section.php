@@ -2,38 +2,43 @@
 /**
  * components/testimonials-section.php
  *
- * Seção "O que dizem nossos clientes" da Home, entre services-section e why-choose-us-section
- * (posição confirmada no DOM original: 6ª seção de nível superior — logo após "Nossos Serviços"
- * e antes do carrossel de clientes/parceiros, ainda não implementado).
+ * Seção "O que dizem nossos clientes" da Home, entre services-section e o carrossel de
+ * clientes/parceiros (posição confirmada no DOM original: 6ª seção de nível superior).
  *
- * Carrossel de depoimentos via Swiper (assets/vendor/swiper/) — configuração própria desta
- * seção, medida diretamente no `data-settings` do widget original ("Testimonial Carousel"), NÃO
- * reaproveitada do Hero: `speed:500`, `autoplay: 5000ms`, `loop:yes`, setas + paginação por
- * bolinhas visíveis, `space_between:10px` (idêntico em desktop/tablet/mobile — sem breakpoint
- * responsivo próprio no `data-settings`). Inicializado por assets/js/testimonials-init.js.
+ * AJUSTE (2026-09-17, pedido explícito do cliente — ver "Alterações para o site da CT Price"):
+ * deixou de ser um carrossel Swiper de 1 slide de texto estático por vez (comportamento
+ * original desta seção) e passou a seguir o MESMO conceito visual já aprovado em
+ * components/video-testimonials-section.php (/depoimentos/): foto do depoente, nome, empresa,
+ * depoimento e links de site/Instagram quando existirem — em cards lado a lado (3 no desktop,
+ * 2 no tablet, 1 no mobile), com paginação discreta ("aqueles botões embaixo", nas palavras do
+ * cliente) abaixo do carrossel.
+ *
+ * NÃO recria a arquitetura de depoimentos: os dados vêm da MESMA fonte de
+ * components/video-testimonials-section.php (`video_testimonials` via
+ * TestimonialRepository::allActive(), ver index.php) — este componente só monta o card de
+ * texto/foto/links; a miniatura de vídeo com lightbox continua exclusiva de /depoimentos/ (ver
+ * comentário de video-testimonials-section.php sobre por que os dois não compartilham
+ * componente: aqui é só a citação, sem vídeo).
+ *
+ * Continua usando o Swiper já carregado pela Home (assets/vendor/swiper/) — nenhuma biblioteca
+ * nova. Setas + paginação por bolinhas preservadas (mesmo padrão visual já existente nesta
+ * seção); só o número de slides visíveis e o conteúdo do card mudam — ver
+ * assets/js/testimonials-init.js e assets/css/testimonials-section.css.
  *
  * Espera, definida pelo chamador antes do include:
  *
- *   $testimonials = [
+ *   $testimonials = [ // mesmo formato retornado por TestimonialRepository::allActive()
  *       [
- *           'text'    => 'depoimento completo, com as aspas já incluídas como no original
- *                         (caracteres literais, não geradas por CSS) — pode conter "\n" para
- *                         quebras de parágrafo do texto original; sem white-space especial no
- *                         CSS, colapsam visualmente como no site original (confirmado)',
- *           'avatar'  => 'URL da foto do depoente',
- *           'name'    => 'nome do depoente',
- *           'company' => 'cargo/empresa do depoente',
+ *           'name'          => 'nome do depoente',
+ *           'company'       => 'empresa do depoente',
+ *           'quote'         => 'depoimento (texto puro, sem aspas — adicionadas via CSS/markup)',
+ *           'photo'         => 'caminho relativo completo da foto (ex.: assets/images/pages/
+ *                                depoimentos/people/arquivo.jpg)',
+ *           'website_url'   => 'URL do site do cliente, ou "" quando não houver',
+ *           'instagram_url' => 'URL do Instagram do cliente, ou "" quando não houver',
  *       ],
  *       ...
  *   ];
- *
- * Tipografia: nome em Roboto (--font-primary); cargo/empresa em Roboto Slab
- * (--font-tertiary) — confirmado via inspeção direta que SOMENTE o campo de cargo/empresa usa
- * essa família nesta seção (widget original usa a tipografia "secundária" do Elementor só nesse
- * elemento). Não aplicada a mais nada na seção.
- *
- * Medições: reinspeção direta via Chrome DevTools MCP em 1440x900/900x1200/390x844 (ver relatório
- * final de validação da Home).
  */
 
 if (!isset($testimonials) || !is_array($testimonials)) {
@@ -50,15 +55,43 @@ if (!isset($testimonials) || !is_array($testimonials)) {
                 <div class="testimonials-swiper swiper" aria-label="Depoimentos de clientes" aria-roledescription="carrossel">
                     <div class="swiper-wrapper">
                         <?php foreach ($testimonials as $t): ?>
-                        <div class="swiper-slide testimonial-card">
-                            <p class="testimonial-card__text"><?= htmlspecialchars($t['text'], ENT_QUOTES, 'UTF-8') ?></p>
-                            <div class="testimonial-card__footer">
-                                <img class="testimonial-card__avatar" src="<?= htmlspecialchars($t['avatar'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($t['name'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" width="65" height="65">
-                                <cite class="testimonial-card__cite">
-                                    <span class="testimonial-card__name"><?= htmlspecialchars($t['name'], ENT_QUOTES, 'UTF-8') ?></span>
-                                    <span class="testimonial-card__company"><?= htmlspecialchars($t['company'], ENT_QUOTES, 'UTF-8') ?></span>
-                                </cite>
-                            </div>
+                        <?php
+                            $name = $t['name'] ?? '';
+                            $clientCompany = $t['company'] ?? '';
+                            $quote = $t['quote'] ?? '';
+                            $photoUrl = ($t['photo'] ?? '') !== '' ? BASE_URL . '/' . $t['photo'] : '';
+                            $websiteUrl = $t['website_url'] ?? '';
+                            $instagramUrl = $t['instagram_url'] ?? '';
+                        ?>
+                        <div class="swiper-slide">
+                            <article class="testimonial-card">
+                                <div class="testimonial-card__person">
+                                    <?php if ($photoUrl !== ''): ?>
+                                    <img class="testimonial-card__avatar" src="<?= htmlspecialchars($photoUrl, ENT_QUOTES, 'UTF-8') ?>" alt="Foto de <?= htmlspecialchars($name, ENT_QUOTES, 'UTF-8') ?>" loading="lazy" width="56" height="56">
+                                    <?php endif; ?>
+                                    <cite class="testimonial-card__cite">
+                                        <span class="testimonial-card__name"><?= htmlspecialchars($name, ENT_QUOTES, 'UTF-8') ?></span>
+                                        <span class="testimonial-card__company"><?= htmlspecialchars($clientCompany, ENT_QUOTES, 'UTF-8') ?></span>
+                                    </cite>
+                                </div>
+
+                                <p class="testimonial-card__text">&ldquo;<?= htmlspecialchars($quote, ENT_QUOTES, 'UTF-8') ?>&rdquo;</p>
+
+                                <?php if ($websiteUrl !== '' || $instagramUrl !== ''): ?>
+                                <div class="testimonial-card__links">
+                                    <?php if ($websiteUrl !== ''): ?>
+                                    <a class="testimonial-card__link" href="<?= htmlspecialchars($websiteUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener noreferrer" aria-label="Visitar site de <?= htmlspecialchars($clientCompany, ENT_QUOTES, 'UTF-8') ?>">
+                                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 3h6v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 14L21 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    </a>
+                                    <?php endif; ?>
+                                    <?php if ($instagramUrl !== ''): ?>
+                                    <a class="testimonial-card__link" href="<?= htmlspecialchars($instagramUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener noreferrer" aria-label="Instagram de <?= htmlspecialchars($clientCompany, ENT_QUOTES, 'UTF-8') ?>">
+                                        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.15" fill="currentColor"/></svg>
+                                    </a>
+                                    <?php endif; ?>
+                                </div>
+                                <?php endif; ?>
+                            </article>
                         </div>
                         <?php endforeach; ?>
                     </div>

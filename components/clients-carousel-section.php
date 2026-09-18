@@ -50,19 +50,26 @@
  * config/clients.php, ou "assets/uploads/clients/<nome-aleatorio>.ext" para logos enviados depois
  * pelo admin) — este componente só concatena BASE_URL, nunca decide o diretório.
  *
+ * CTA (2026-09-17, pedido explícito do cliente): abaixo do carrossel, um link estilizado para
+ * `/clientes/` — mesmo padrão `.btn.btn--filled` já usado em components/services-section.php
+ * ("Fale Conosco"), para parecer parte da seção em vez de um elemento improvisado. Não altera
+ * `/clientes/` em si.
+ *
  * Espera, definida pelo chamador antes do include:
  *
  *   $clientLogos = [
  *       ['logo_path' => 'assets/.../arquivo.ext', 'nome' => 'texto usado como alt'],
  *       ...
  *   ];
+ *   $clientsCarouselCta = ['label' => ..., 'url' => ...]; // opcional
  */
 
 if (!isset($clientLogos) || !is_array($clientLogos)) {
     $clientLogos = [];
 }
+$hasCta = !empty($clientsCarouselCta['url']);
 ?>
-<section class="clients-carousel-section" aria-label="Clientes e parceiros">
+<section class="clients-carousel-section<?= $hasCta ? ' clients-carousel-section--with-cta' : '' ?>" aria-label="Clientes e parceiros">
     <div class="clients-carousel-section__inner">
         <div class="clients-carousel swiper">
             <div class="swiper-wrapper">
@@ -78,5 +85,13 @@ if (!isset($clientLogos) || !is_array($clientLogos)) {
                 <?php endforeach; ?>
             </div>
         </div>
+
+        <?php if ($hasCta): ?>
+        <div class="clients-carousel-section__cta">
+            <a class="btn btn--filled" href="<?= htmlspecialchars($clientsCarouselCta['url'], ENT_QUOTES, 'UTF-8') ?>">
+                <?= htmlspecialchars($clientsCarouselCta['label'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+            </a>
+        </div>
+        <?php endif; ?>
     </div>
 </section>

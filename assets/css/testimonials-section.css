@@ -1,19 +1,24 @@
 /**
  * assets/css/testimonials-section.css
  *
- * Seção "O que dizem nossos clientes" — 6ª seção de nível superior da Home no original (entre
- * services-section e o carrossel de clientes/parceiros, ainda não implementado).
+ * Seção "O que dizem nossos clientes" — 6ª seção de nível superior da Home (entre
+ * services-section e o carrossel de clientes/parceiros).
  *
- * Fonte de medição: reinspeção direta via Chrome DevTools MCP em 1440x900/900x1200/390x844.
+ * AJUSTE (2026-09-17, pedido explícito do cliente — ver "Alterações para o site da CT Price"):
+ * a seção deixou de mostrar 1 depoimento de texto centralizado por vez e passou a mostrar cards
+ * lado a lado (3 desktop / 2 tablet / 1 mobile), no mesmo conceito visual já aprovado em
+ * assets/css/video-testimonials-section.css (/depoimentos/): foto circular + nome/empresa no
+ * topo do card, depoimento como bloco de citação com borda de destaque, ícones de links
+ * (site/Instagram) no rodapé do card — mesma identidade de sombra/hover/radius já usada em
+ * `.video-testimonial-card`/`.logo-card`/`.job-card`/`.benefit-card` em todo o site, com classe
+ * própria (`.testimonial-card`) porque o contexto (dentro do Swiper, com setas/paginação
+ * próprias desta seção) é diferente de uma grade estática.
  *
- * Container: 1200px (token global --container-width). Sem breakpoint próprio: o carrossel é
- * fluido (1 depoimento visível em qualquer largura, confirmado idêntico em 1440/900/390px) — o
- * único reflow vem do texto quebrando mais linhas em containers mais estreitos, aumentando a
- * altura do slide (a altura de TODOS os slides acompanha o mais alto, via
- * `align-items:stretch` nativo do `display:flex` do Swiper — sem `autoHeight`, sem JS extra).
+ * Setas + paginação por bolinhas ("aqueles botões embaixo", nas palavras do cliente)
+ * preservadas do comportamento já existente nesta seção antes do ajuste — só o conteúdo do
+ * slide e o número de slides visíveis mudam (ver assets/js/testimonials-init.js).
  *
- * Tipografia "Roboto Slab" usada apenas em `.testimonial-card__company` (cargo/empresa do
- * depoente) — confirmado que nome, texto e heading usam Roboto normalmente.
+ * Container: 1200px (token global --container-width).
  */
 
 .testimonials-section {
@@ -52,60 +57,115 @@
     margin: 0 30px;
 }
 
-.swiper-slide.testimonial-card {
+.testimonials-swiper .swiper-slide {
     height: auto;
-    padding: 20px;
     box-sizing: border-box;
 }
 
-.testimonial-card__text {
-    margin: 0;
-    font-family: var(--font-primary);
-    font-size: 20.8px;
-    font-weight: 400;
-    font-style: italic;
-    line-height: 31.2px;
-    color: var(--color-text-gray);
-    text-align: center;
+/* Card: mesma linguagem visual de `.video-testimonial-card` (sombra leve, radius, hover com
+   elevação/borda verde) — ver assets/css/video-testimonials-section.css. */
+.testimonial-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    background: var(--color-white);
+    border: 1px solid rgba(0, 34, 44, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 34, 44, 0.06);
+    box-sizing: border-box;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-.testimonial-card__footer {
+@media (hover: hover) {
+    .testimonial-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0, 34, 44, 0.12);
+        border-color: rgba(5, 112, 56, 0.35);
+    }
+}
+
+.testimonial-card__person {
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin-top: 25px;
+    gap: 12px;
+    margin-bottom: 16px;
 }
 
 .testimonial-card__avatar {
     flex: none;
-    width: 65px;
-    height: 65px;
-    border-radius: 10px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
     object-fit: cover;
 }
 
 .testimonial-card__cite {
     display: flex;
     flex-direction: column;
-    margin-left: 20px;
-    text-align: left;
+    min-width: 0;
     font-style: normal;
 }
 
 .testimonial-card__name {
     font-family: var(--font-primary);
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 21px;
-    color: #2A3855;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--color-dark-teal);
 }
 
 .testimonial-card__company {
-    font-family: var(--font-tertiary);
+    font-family: var(--font-primary);
     font-size: 14px;
     font-weight: 400;
-    line-height: 21px;
-    color: #3D4C6F;
+    line-height: 1.3;
+    color: var(--color-brand-green);
+}
+
+.testimonial-card__text {
+    margin: 0;
+    padding-left: 18px;
+    border-left: 3px solid rgba(5, 112, 56, 0.25);
+    font-family: var(--font-primary);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--color-text-gray);
+}
+
+.testimonial-card__links {
+    margin-top: auto;
+    padding-top: 16px;
+    display: flex;
+    gap: 10px;
+}
+
+.testimonial-card__link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--color-dark-teal);
+    color: var(--color-off-white);
+    transition: background 0.2s ease;
+}
+
+.testimonial-card__link svg {
+    width: 16px;
+    height: 16px;
+}
+
+.testimonial-card__link:hover,
+.testimonial-card__link:focus-visible {
+    background: var(--color-brand-green);
+}
+
+.testimonial-card__link:focus-visible {
+    outline: 2px solid var(--color-accent-green);
+    outline-offset: 2px;
 }
 
 .testimonials-swiper__nav {
@@ -147,16 +207,12 @@
     /* O Swiper aplica a classe "swiper-pagination-bullets" a este elemento (via `pagination.el`
        na inicialização), que por padrão o posiciona como position:absolute (swiper-bundle.min.css)
        — sobrescrito aqui porque a paginação desta seção fica em fluxo normal, abaixo do
-       carrossel (não sobreposta), como medido no original. */
+       carrossel (não sobreposta). */
     position: static;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
-    /* 34px + 6px (altura das bolinhas) = 40px de espaço total reservado abaixo do carrossel —
-       igual ao padding-bottom:40px medido no widget original (validação final da Home:
-       diferença de ~19px na altura total da seção corrigida aqui, não era um "hack" de altura
-       artificial, era espaçamento subdimensionado). */
     margin-top: 34px;
 }
 
@@ -171,4 +227,10 @@
 
 .testimonials-swiper__pagination .swiper-pagination-bullet-active {
     background: #2A3855;
+}
+
+@media (max-width: 767px) {
+    .testimonials-swiper-wrap {
+        margin: 0 24px;
+    }
 }

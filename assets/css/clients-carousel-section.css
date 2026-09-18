@@ -51,6 +51,21 @@
     align-items: center;
 }
 
+/*
+ * Variante COM CTA (2026-09-17, pedido explícito do cliente): só a Home passa
+ * `$clientsCarouselCta` para components/clients-carousel-section.php (ver index.php) — em
+ * /informacoes/ e /sobre-nos/, que reaproveitam o MESMO componente sem essa variável, a seção
+ * continua com a altura fixa de 200px de sempre, sem nenhuma mudança visual. Aqui a altura passa
+ * a ser só um mínimo (a seção cresce para caber o CTA abaixo do carrossel) — o carrossel em si
+ * (autoplay/loop/velocidade/logos visíveis) não muda em nenhum dos dois casos.
+ */
+.clients-carousel-section--with-cta {
+    display: block;
+    height: auto;
+    min-height: 200px;
+    padding: 40px 10px 48px;
+}
+
 .clients-carousel-section__inner {
     width: 100%;
     max-width: var(--container-width);
@@ -59,6 +74,12 @@
 
 .clients-carousel {
     width: 100%;
+}
+
+.clients-carousel-section__cta {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
 }
 
 .client-logo-slide.logo-card {

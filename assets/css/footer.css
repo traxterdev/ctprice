@@ -118,6 +118,73 @@
     border: 0;
 }
 
+/*
+ * Faixa social (2026-09-17, pedido explícito do cliente) — includes/footer.php. Banda própria
+ * entre o footer principal (.site-footer__main, altura medida preservada) e a bottom bar
+ * (copyright), não uma modificação das 3 colunas originais. Fundo levemente mais escuro que
+ * `--color-dark-teal` da bottom bar para não competir com ela e manter a leitura discreta
+ * pedida pelo cliente ("discreto, elegante, corporativo").
+ */
+.site-footer__social {
+    background: #062730;
+    padding: 18px 10px;
+}
+
+.site-footer__social-container {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.site-footer__social-label {
+    font-family: var(--font-primary);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-off-white);
+    text-align: center;
+}
+
+.site-footer__social-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 10px;
+}
+
+.site-footer__social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(254, 254, 254, 0.1);
+    color: var(--color-off-white);
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.site-footer__social-link svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+.site-footer__social-link:hover,
+.site-footer__social-link:focus-visible {
+    background: var(--color-accent-green);
+    color: var(--color-dark-teal);
+}
+
+.site-footer__social-link:focus-visible {
+    outline: 2px solid var(--color-accent-green);
+    outline-offset: 2px;
+}
+
 .site-footer__bottom-bar {
     background: var(--color-dark-teal);
     padding: 0 10px;

@@ -110,25 +110,27 @@ return [
         ],
     ],
 
-    // Investigado nesta revisão: nenhuma rede social oficial da CT Price foi encontrada em
-    // nenhuma página do site atual. Os únicos links de redes sociais existentes no site (na
-    // página Depoimentos) pertencem a clientes individuais citados nos depoimentos, não à CT
-    // Price — não devem ser confundidos com este campo. Ver global-data-conflicts.md, seção 4.
-    'redes_sociais' => [],
+    // Canais oficiais fornecidos pelo cliente (2026-09-17) — antes desta data nenhuma rede
+    // social oficial da CT Price havia sido confirmada (ver global-data-conflicts.md, seção 4;
+    // os links de redes sociais que já existiam na página Depoimentos pertencem a clientes
+    // individuais citados nos depoimentos, não à CT Price — não confundir com este campo).
+    // Consumido por includes/footer.php (seção "Acompanhe a CT Price nas Redes Sociais").
+    'redes_sociais' => [
+        'instagram' => 'https://www.instagram.com/ctpriceoficial',
+        'youtube' => 'https://www.youtube.com/@ctpriceoficial',
+        'facebook' => 'https://www.facebook.com/ctpriceoficial',
+    ],
 
     'sistemas_externos' => [
         // Confirmado funcional (aberto nesta revisão — carrega normalmente, título
         // "CT Price - Gestão de Currículos").
         'recrutamento' => 'https://recrutamento.ctprice.com.br/vagas',
 
-        'area_restrita_clientes' => null,
-        // TODO: destino atual (ctprice.com.br/documentos) confirmado QUEBRADO (404 puro de
-        // servidor) nesta revisão — não registrado como válido. Aguardando URL correta.
-
-        'area_restrita_colaboradores' => null,
-        // TODO: destino atual (ctprice.com.br/sh-admin) confirmado QUEBRADO/EXPOSTO (listagem
-        // crua de diretório, sem aplicação funcional) nesta revisão — não registrado como válido.
-        // Aguardando URL correta.
+        // 'area_restrita_clientes'/'area_restrita_colaboradores' removidas (2026-09-17): a
+        // Área Restrita saiu do site público a pedido do cliente ("não utilizaremos mais") —
+        // ambos os destinos externos que estas chaves resolviam (ctprice.com.br/documentos e
+        // /sh-admin) já estavam confirmados quebrados/expostos e não foram substituídos por
+        // nenhum novo destino aprovado. Histórico em docs/reference/arearestrita-audit.md.
 
         'agencia_desenvolvimento' => null,
         // TODO: agencialester.com.br — tentativa de acesso resultou em timeout de navegação

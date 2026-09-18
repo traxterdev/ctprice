@@ -20,6 +20,13 @@
  *
  * Com esta seção, todas as 13 seções de nível superior documentadas no baseline
  * (docs/reference/home-desktop-audit.md, seção 1) estão implementadas.
+ *
+ * AJUSTE (2026-09-17, pedido explícito do cliente): "O que dizem nossos clientes" deixou de ser
+ * um carrossel de 1 depoimento estático por vez e passou a seguir o mesmo conceito visual já
+ * aprovado em /depoimentos/ (foto, nome, empresa, depoimento, redes/links quando existirem),
+ * em cards lado a lado (3 desktop / 2 tablet / 1 mobile) — mesmos dados de
+ * `video_testimonials` (via TestimonialRepository, já usado por /depoimentos/), não mais o texto
+ * estático que existia aqui antes. Ver components/testimonials-section.php.
  */
 require __DIR__ . '/config/bootstrap.php';
 
@@ -114,32 +121,19 @@ $servicesCta = [
     'url' => '/fale-conosco/',
 ];
 
-$testimonials = [
-    [
-        'text' => "\"Nossa história com a CT Price começa com a necessidade de mudanças e essa oportunidade de trilhar novos caminhos. Há quase 30 anos no ramo de alimentação, a Roasted Potato – Campo Grande precisava de uma Empresa Contábil capaz de visualizar, planejar, organizar, orientar e conduzir as mudanças necessárias com segurança e profissionalismo.\nA CT Price, sob a coordenação do Marcelo procura entender o negócio da empresa com suas características particulares e estrategicamente projeta caminhos e possibilidades seguras de crescimento.\nEstamos certos e confiantes de que, juntos, continuaremos a avançar com ainda mais segurança e inovação.\nSomos gratos a todos da Equipe CT Price pelo empenho e profissionalismo.\"",
-        'avatar' => BASE_URL . '/assets/images/testimonials/roasted-potato.jpg',
-        'name' => 'Edvaldo Cezar Germiniani',
-        'company' => 'ROASTED POTATO',
-    ],
-    [
-        'text' => '"Quero agradecer à família CT Price pela parceria há mais de 10 anos. Sempre tivemos um atendimento especial de todos os setores, RH, Fiscal, dentre outros. Podemos contar com uma consultoria de alto nível."',
-        'avatar' => BASE_URL . '/assets/images/testimonials/agrotouro.jpg',
-        'name' => 'Mário Jorge',
-        'company' => 'AgroTouro',
-    ],
-    [
-        'text' => "\"A CT PRICE ORGANIZAÇÃO CONTÁBIL é uma empresa que respira e vive na qualidade.\nCom seus princípios fundamentados na defesa da empresa e do empresário frente as adversidades todas, com uma equipe coesa e participativa que atua de maneira firme e ágil, instrumentalizada na participação de cada um como membro de uma equipe que se propõe e alcança os resultados finais.\nCapitaneada pelo contabilista Marcelo Barbosa da Silva, você pode acreditar, compromisso e confiança são seus ideais e se você tem um problema, CT PRICE é a sua solução.\"",
-        'avatar' => BASE_URL . '/assets/images/testimonials/mauro-cesar-senna.png',
-        'name' => 'Mauro César Senna',
-        'company' => 'INTELECTA SOLUÇÕES EMPRESARIAIS',
-    ],
-    [
-        'text' => '"A CT PRICE se destaca pelo seu profissionalismo na prestação de serviços contábeis e de planejamento tributário. Com uma equipe dedicada e competente, a empresa tem proporcionado ganhos significativos para os empresários, comprovados pelo sucesso dos clientes atendidos ao longo dos anos. A precisão, ética e agilidade da CT PRICE garantem resultados positivos e a confiança de todos que trabalham com eles."',
-        'avatar' => BASE_URL . '/assets/images/testimonials/dieter-augusto-dreyer.png',
-        'name' => 'Dieter Augusto Dreyer',
-        'company' => 'PLANER SOLUÇÕES EMPRESARIAIS',
-    ],
-];
+// Depoimentos do carrossel "O que dizem nossos clientes" — fonte compartilhada com /depoimentos/
+// (mesmo `video_testimonials` via TestimonialRepository::allActive(), mesmo formato de item
+// esperado por components/video-testimonials-section.php: name/company/quote/photo/website_url/
+// instagram_url). Antes desta sprint (pedido do cliente, 2026-09-17) esta seção usava um texto
+// estático próprio, sem foto/redes — substituído para reutilizar os dados e o conceito visual já
+// aprovados em /depoimentos/, sem duplicar conteúdo.
+require_once __DIR__ . '/repositories/TestimonialRepository.php';
+try {
+    $testimonials = (new TestimonialRepository())->allActive();
+} catch (Throwable $e) {
+    error_log('CT Price [Home]: falha ao carregar depoimentos do banco — ' . $e->getMessage());
+    $testimonials = [];
+}
 
 // Clientes ativos do carrossel de clientes/parceiros — fonte compartilhada com sobre-nos/index.php
 // e informacoes/index.php (mesmo carrossel). Vem do banco (sprint CMS) — ver
@@ -152,6 +146,14 @@ try {
     error_log('CT Price [Home]: falha ao carregar clientes do banco — ' . $e->getMessage());
     $clientLogos = [];
 }
+
+// CTA abaixo do carrossel de clientes/parceiros (2026-09-17, pedido explícito do cliente) —
+// exclusivo da Home: /informacoes/ e /sobre-nos/ reaproveitam o mesmo componente sem definir
+// esta variável, então continuam sem o CTA (ver components/clients-carousel-section.php).
+$clientsCarouselCta = [
+    'label' => 'Conheça as empresas que confiam na CT Price',
+    'url' => '/clientes/',
+];
 
 $whyChooseUsHeading = 'Por que nos escolher?';
 $whyChooseUsImage = BASE_URL . '/assets/images/content/why-choose-us.jpg';

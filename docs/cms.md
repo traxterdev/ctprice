@@ -199,9 +199,12 @@ preservados exatamente, sem nenhuma mudança de URL. Um post **novo**, criado s�
 
 - `.htaccess` (bloco "Roteamento de posts do blog"): só entra em ação quando **nenhum**
   arquivo/diretório físico responde pela URL (`RewriteCond ... !-f`/`!-d`) — nunca interfere nas
-  10 institucionais, nos 3 posts históricos, em `admin/`, `assets/` ou qualquer regra já existente
-  (redirects `/wp/`, bloqueios de `.git`/`docs`/etc.). Padrão de um único segmento sem "."
-  (`^([a-z0-9-]+)/?$`), nunca intercepta um asset com extensão faltando.
+  9 institucionais (a Área Restrita saiu do site público em 2026-09-17, a pedido do cliente — ver
+  docs/reference/arearestrita-audit.md; `/arearestrita/` passou a cair exatamente nesta regra de
+  roteamento, como qualquer URL desconhecida, e chega ao mesmo 404 de sempre), nos 3 posts
+  históricos, em `admin/`, `assets/` ou qualquer regra já existente (redirects `/wp/`, bloqueios
+  de `.git`/`docs`/etc.). Padrão de um único segmento sem "." (`^([a-z0-9-]+)/?$`), nunca
+  intercepta um asset com extensão faltando.
 - `blog-post.php` (raiz): recebe o slug, revalida o formato (defesa em profundidade, nunca confia
   só na regra do servidor) e delega a `blog/_post-template.php`, que busca o post no banco. Não
   encontrado/não publicado → delega para o **mesmo** `404.php` de sempre (nunca inventa conteúdo,
