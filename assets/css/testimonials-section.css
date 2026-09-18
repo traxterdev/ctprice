@@ -135,48 +135,18 @@
 }
 
 /*
- * Rodapé do card (ajuste pontual, 2026-09-17): agrupa os ícones de site/Instagram (quando
- * existem) e o link "Ver depoimento" — sempre empurrado para o fim do card via
- * `margin-top:auto` no CONTAINER (não em cada filho), para os dois não competirem pelo mesmo
- * espaço quando ambos existem.
+ * Ícones do rodapé do card: site/Instagram quando existem + "ver depoimento" (sempre presente,
+ * aponta para /depoimentos/ — não existe página individual por depoimento). Ajuste pontual
+ * (2026-09-17): o "ver depoimento" já foi um link de TEXTO sublinhado aqui — removido por
+ * destoar do padrão visual do site (parecia link HTML cru); agora é só mais um ícone dentro do
+ * MESMO grupo `.testimonial-card__link`, com o acabamento idêntico aos outros dois (nenhum
+ * terceiro estilo novo). O grupo inteiro é empurrado para o fim do card via `margin-top:auto`.
  */
-.testimonial-card__footer {
+.testimonial-card__links {
     margin-top: auto;
     padding-top: 16px;
     display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.testimonial-card__links {
-    display: flex;
     gap: 10px;
-}
-
-/* Link discreto "Ver depoimento" — mesmo padrão visual de link discreto já usado em
-   `.blog-card__read-more` (uppercase, 12px, sem fundo, só sublinha no hover/foco). Nunca cobre
-   o card inteiro; não interfere nos ícones de `.testimonial-card__links` acima. */
-.testimonial-card__more {
-    align-self: flex-start;
-    display: inline-block;
-    font-family: var(--font-primary);
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 18px;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-    color: var(--color-dark-green);
-    text-decoration: none;
-}
-
-.testimonial-card__more:hover,
-.testimonial-card__more:focus-visible {
-    text-decoration: underline;
-}
-
-.testimonial-card__more:focus-visible {
-    outline: 2px solid var(--color-accent-green);
-    outline-offset: 2px;
 }
 
 .testimonial-card__link {
@@ -251,7 +221,7 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
-    margin-top: 34px;
+    margin-top: 30px;
 }
 
 .testimonials-swiper__pagination .swiper-pagination-bullet {
@@ -273,11 +243,22 @@
     }
 }
 
-/* CTA abaixo do carrossel (ajuste pontual, 2026-09-17) — mesmo padrão `.btn.btn--filled` já
-   usado em components/services-section.php e no CTA do carrossel de clientes/parceiros
-   (assets/css/clients-carousel-section.css), para manter aparência corporativa e discreta. */
+/*
+ * CTA abaixo da paginação (ajuste pontual, 2026-09-17) — mesmo padrão `.btn.btn--filled` já
+ * usado em components/services-section.php e no CTA do carrossel de clientes/parceiros
+ * (assets/css/clients-carousel-section.css). Estrutura: cards -> paginação -> CTA centralizado.
+ * `justify-content:center` no container (filho flex de `.testimonials-section__inner`, que
+ * naturalmente ocupa 100% da largura) + `margin:0 auto` e `width:fit-content` no próprio botão
+ * são reforço redundante contra qualquer regra externa de largura total — o `.btn--filled` do
+ * projeto nunca deve preencher a largura do container aqui, só o texto do CTA.
+ */
 .testimonials-section__cta {
-    margin-top: 30px;
+    margin-top: 36px;
     display: flex;
     justify-content: center;
+}
+
+.testimonials-section__cta .btn--filled {
+    width: fit-content;
+    margin: 0 auto;
 }
