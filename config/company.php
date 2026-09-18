@@ -131,11 +131,17 @@ return [
         // ambos os destinos externos que estas chaves resolviam (ctprice.com.br/documentos e
         // /sh-admin) já estavam confirmados quebrados/expostos e não foram substituídos por
         // nenhum novo destino aprovado. Histórico em docs/reference/arearestrita-audit.md.
+    ],
 
-        'agencia_desenvolvimento' => null,
-        // TODO: agencialester.com.br — tentativa de acesso resultou em timeout de navegação
-        // nesta revisão (mesmo resultado da auditoria anterior); não confirmado como destino
-        // válido, portanto não registrado.
+    // Crédito "Desenvolvido por" do rodapé (includes/footer.php) — fonte única, sem hardcode no
+    // footer. Ajuste pontual (2026-09-17): a chave anterior ('agencia_desenvolvimento', dentro de
+    // 'sistemas_externos') apontava para "Agência Lester"/agencialester.com.br e nunca chegou a
+    // ser preenchida (destino não confirmado — ver histórico em docs/reference/global-data-
+    // conflicts.md). O cliente pediu a substituição do crédito por TRAXTER — nada relacionado a
+    // Agência Lester permanece no rodapé.
+    'desenvolvido_por' => [
+        'nome' => 'TRAXTER. Automações e Sistemas',
+        'url' => 'https://traxter.com.br/',
     ],
 
     // Ano de copyright: calculado dinamicamente para não "envelhecer" como o site atual (que

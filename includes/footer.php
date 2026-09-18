@@ -25,11 +25,15 @@
  * do footer original, só adiciona uma faixa nova. Ícones em SVG inline (mesma convenção já usada
  * em includes/topbar.php e components/video-testimonials-section.php) — sem Font Awesome nem
  * nenhuma biblioteca de ícones nova.
+ *
+ * Crédito "Desenvolvido por" (ajuste pontual, 2026-09-17): fonte única em
+ * $company['desenvolvido_por'] (config/company.php) — substituiu "Agência Lester" por TRAXTER.
+ * Mesmo posicionamento de sempre na bottom bar, só texto + link (sem logo).
  */
 
 $endereco = $company['endereco'] ?? [];
 $temBairroCep = !empty($endereco['bairro']) && !empty($endereco['cep']);
-$agenciaUrl = $company['sistemas_externos']['agencia_desenvolvimento'] ?? null;
+$desenvolvidoPor = $company['desenvolvido_por'] ?? null;
 $redesSociais = array_filter($company['redes_sociais'] ?? []);
 ?>
 <footer class="site-footer">
@@ -128,10 +132,10 @@ $redesSociais = array_filter($company['redes_sociais'] ?? []);
             </p>
             <p class="site-footer__credit">
                 Desenvolvido por
-                <?php if ($agenciaUrl): ?>
-                    <a href="<?= htmlspecialchars($agenciaUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Agência Lester</a>
+                <?php if (!empty($desenvolvidoPor['url'])): ?>
+                    <a href="<?= htmlspecialchars($desenvolvidoPor['url'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener noreferrer" aria-label="<?= htmlspecialchars($desenvolvidoPor['nome'] ?? '', ENT_QUOTES, 'UTF-8') ?> (abre em nova aba)"><?= htmlspecialchars($desenvolvidoPor['nome'] ?? '', ENT_QUOTES, 'UTF-8') ?></a>
                 <?php else: ?>
-                    Agência Lester
+                    <?= htmlspecialchars($desenvolvidoPor['nome'] ?? '', ENT_QUOTES, 'UTF-8') ?>
                 <?php endif; ?>
             </p>
         </div>
