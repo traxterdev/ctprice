@@ -85,7 +85,7 @@ $redesSociais = array_filter($company['redes_sociais'] ?? []);
                 <ul>
                     <?php foreach ($menu['footer'] as $item): ?>
                     <li>
-                        <a href="<?= htmlspecialchars($item['url'] ?? '#', ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8') ?></a>
+                        <a href="<?= htmlspecialchars($item['url'] ?? '#', ENT_QUOTES, 'UTF-8') ?>"><?= ct_protect_brand($item['label']) ?></a>
                     </li>
                     <?php endforeach; ?>
                 </ul>

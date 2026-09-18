@@ -50,7 +50,7 @@ $heroSlides = [
 ];
 
 $videoSectionHeading = 'Ética, agilidade, segurança nos processos e respeito ao cliente';
-$videoSectionHtml = 'A <strong class="video-section__highlight">CT Price</strong> nasceu determinada a conquistar o mercado com eficiência e dedicação, valorizando sempre o cliente e preocupando-se em encontrar soluções adequadas para cada situação.';
+$videoSectionHtml = 'A <strong class="video-section__highlight" translate="no">CT Price</strong> nasceu determinada a conquistar o mercado com eficiência e dedicação, valorizando sempre o cliente e preocupando-se em encontrar soluções adequadas para cada situação.';
 $videoSectionSrc = BASE_URL . '/assets/videos/institucional-ct-price.mp4';
 $videoSectionCover = BASE_URL . '/assets/images/content/institucional-video-cover.jpg';
 

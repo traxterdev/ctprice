@@ -8,19 +8,18 @@
  * includes/translate-widget.php).
  *
  * NÃO é o antigo "Google Website Translator Widget" (`translate.google.com/translate_a/
- * element.js` embutido diretamente) — este projeto usa o widget hospedado do GTranslate
- * (`cdn.gtranslate.net`), que é a solução suportada atualmente para sites customizados fora de
- * WordPress/plugins.
+ * element.js` embutido diretamente, hoje descontinuado) — este projeto usa o widget HTML
+ * gratuito do GTranslate (`cdn.gtranslate.net/widgets/latest/dropdown.js`), a solução atual
+ * documentada para sites customizados fora de WordPress/plugins:
+ * https://gtranslate.io/blog/google-translate-website-widget-discontinued
  *
- * IMPORTANTE (pendência operacional, não técnica): o GTranslate exige o domínio de produção
- * cadastrado na conta GTranslate (plano gratuito ou pago) antes do widget funcionar de verdade —
- * sem isso, o script carrega mas não traduz nada (Google não reconhece o domínio). Preencher
- * `website_id` abaixo com o ID gerado no painel do GTranslate para o domínio
- * `ctprice.com.br`/`ctprice.traxter.com.br` antes do go-live. Enquanto `website_id` for null,
- * `enabled` abaixo mantém o widget DESLIGADO (nenhum script externo é carregado) — o site
- * continua 100% funcional em português, sem nenhum elemento quebrado ou pendente visualmente
- * (item 14 do pedido do cliente: "se o serviço estiver indisponível, o site deve continuar
- * funcionando normalmente em português").
+ * CORREÇÃO (2026-09-17): a versão anterior desta config condicionava o carregamento do script a
+ * um `website_id` (ex.: `cdn.gtranslate.net/widgets/latest/<ID>.js`), supondo que o widget
+ * exigisse uma conta/domínio cadastrado no GTranslate antes de traduzir — por isso o motor nunca
+ * chegava a carregar e a tradução não acontecia de verdade (só o estado visual das bandeiras e o
+ * cookie mudavam). O widget HTML GRATUITO do GTranslate para tradução on-the-fly NÃO usa
+ * website_id na URL do script — é sempre `.../widgets/latest/dropdown.js` (nome de arquivo
+ * fixo), sem cadastro prévio. Não é necessário assinar plano pago para PT/EN/ES funcionar.
  *
  * Traduz somente a CAMADA VISUAL do DOM já renderizado pelo PHP — nunca o banco (MariaDB),
  * nunca o CMS/admin, nunca as URLs/rotas. Ver includes/translate-widget.php e
@@ -28,9 +27,9 @@
  */
 
 return [
-    // Desligado por padrão até o Website ID real ser preenchido (ver comentário acima). Quando
-    // true SEM website_id preenchido, o include ainda não carrega nada (dupla trava de segurança
-    // — ver includes/translate-widget.php).
+    // Liga/desliga o motor de tradução no site público. `false` aqui (ou remover este arquivo)
+    // volta o site a 100% português sem nenhum script externo carregado — não depende de
+    // nenhuma credencial (item 14 do pedido do cliente: falha graciosa quando desligado).
     'enabled' => true,
 
     // Idioma original do conteúdo (fonte oficial, nunca alterado pela tradução).
@@ -38,10 +37,6 @@ return [
 
     // Ordem de ciclo pedida pelo cliente: PT -> EN -> ES -> PT. A ordem aqui não decide o
     // comportamento das bandeiras (cada bandeira do topbar já é fixa: Brasil=pt, EUA=en,
-    // Espanha=es) — é só a lista de idiomas habilitados no motor de tradução.
+    // Espanha=es) — é a lista de idiomas habilitados no motor de tradução (window.gtranslateSettings.languages).
     'languages' => ['pt', 'en', 'es'],
-
-    // Website ID do GTranslate (painel GTranslate -> Websites -> domínio -> "Widget Code") —
-    // preencher antes de ativar em produção. Formato típico: string alfanumérica curta.
-    'website_id' => null,
 ];

@@ -2,118 +2,71 @@
  * assets/js/language-switcher.js
  *
  * Liga o seletor visual JÁ EXISTENTE no topbar (bandeiras Brasil/Estados Unidos/Espanha —
- * includes/topbar.php) ao motor de tradução do GTranslate (includes/translate-widget.php),
- * carregado escondido (`.gtranslate_wrapper { display:none }`). O visitante nunca vê o seletor
- * nativo do serviço — só o da CT Price.
+ * includes/topbar.php) à API pública do GTranslate Website Translator Widget (widget gratuito
+ * "dropdown.js", carregado escondido por includes/translate-widget.php —
+ * `.gtranslate_wrapper { display:none }`). O visitante nunca vê o dropdown nativo do serviço —
+ * só o seletor da CT Price.
  *
- * `doGTranslate`/`GTranslateFireEvent`/`GTranslateSetCookie`/`GTranslateGetCookie` abaixo
- * reproduzem o mecanismo padrão e publicamente documentado pelo GTranslate para disparar a troca
- * de idioma a partir de um controle próprio (em vez do dropdown nativo deles) — não é o antigo
- * "Google Website Translator Widget" usado diretamente; é a forma suportada de customizar o
- * widget do GTranslate. Por baixo, o motor de tradução ainda é o elemento `goog-te-combo`
- * injetado pelo script deles — só a UI é 100% da CT Price.
+ * CORREÇÃO (2026-09-17): a versão anterior deste arquivo reimplementava manualmente o mecanismo
+ * de troca de idioma (procurando um `<select class="goog-te-combo">` e disparando eventos
+ * `change`), replicando uma versão antiga/desatualizada do widget. A build atual do GTranslate
+ * (dropdown.js) já expõe `window.doGTranslate(lang_pair)` pronta — é essa API pública oficial
+ * que este arquivo chama agora, sem depender da estrutura interna do DOM deles (que já mudou
+ * pelo menos uma vez e pode mudar de novo sem aviso).
  *
- * PERSISTÊNCIA (item 8 do pedido — "usar mecanismo compatível com o próprio widget"): o cookie
- * `googtrans` (formato "/pt/en") é o mecanismo NATIVO do motor de tradução por trás do
- * GTranslate — lido automaticamente em cada carregamento de página, sem precisar de sessão PHP
- * nem de um localStorage próprio. Este arquivo só o lê/escreve, nunca duplica o estado em outro
- * lugar.
+ * PERSISTÊNCIA (item 8 do pedido — "usar mecanismo compatível com o próprio widget"): a build
+ * atual do GTranslate guarda o idioma escolhido em `localStorage['__GT_TRANSLATE_LANGS']`
+ * (`{"srcLang":"pt","tgtLang":"en"}`) e o PRÓPRIO script já relê essa chave sozinho a cada
+ * carregamento de página, reaplicando a tradução automaticamente — confirmado navegando entre
+ * páginas sem nenhuma chamada manual daqui. Este arquivo só LÊ essa mesma chave (nunca duplica o
+ * estado em outro lugar) para saber qual bandeira marcar como ativa.
  *
  * RETORNO AO PORTUGUÊS (item 9): clicar na bandeira do Brasil chama doGTranslate('pt|pt') —
  * padrão documentado do GTranslate para restaurar o idioma original (source === target desfaz a
  * camada de tradução). Nenhum reload de domínio, nenhuma rota /pt/.
  *
- * FALHA GRACIOSA (itens 14/17): se o widget do GTranslate não estiver configurado
- * (config/translate.php sem `website_id` — ver includes/translate-widget.php, que nesse caso
- * nem imprime o script) ou o serviço externo estiver indisponível, `doGTranslate` desiste em
- * silêncio após um tempo limite — nenhum erro é lançado no console, nenhuma função trava, e o
- * site continua 100% utilizável em português (as bandeiras simplesmente não produzem efeito
- * visível até o serviço responder).
+ * FALHA GRACIOSA (itens 14/17): se o widget do GTranslate estiver desligado
+ * (config/translate.php['enabled'] = false — ver includes/translate-widget.php, que nesse caso
+ * nem imprime o script) ou o CDN estiver indisponível, `window.doGTranslate` nunca aparece — o
+ * clique é ignorado em silêncio após um tempo limite, sem nenhum erro no console, e o site
+ * continua 100% utilizável em português.
  */
 (function () {
     'use strict';
 
     var LANG_ATTR = 'data-lang';
-    var COOKIE_NAME = 'googtrans';
+    var STORAGE_KEY = '__GT_TRANSLATE_LANGS';
     var DEFAULT_LANG = 'pt';
-    var RETRY_DELAY_MS = 400;
-    var MAX_ATTEMPTS = 12; // ~4.8s de tentativas antes de desistir silenciosamente
+    var RETRY_DELAY_MS = 300;
+    var MAX_ATTEMPTS = 15; // ~4.5s de tentativas antes de desistir silenciosamente
 
-    function GTranslateGetCookie(name) {
-        var value = '; ' + document.cookie;
-        var parts = value.split('; ' + name + '=');
-        if (parts.length === 2) {
-            return decodeURIComponent(parts.pop().split(';').shift());
-        }
-        return null;
-    }
-
-    function GTranslateSetCookie(name, value) {
-        // Cookie "host-only" (sem atributo `domain`) — mesmo padrão do cookie `googtrans` nativo
-        // do motor de tradução. Bug corrigido nesta rodada: uma tentativa anterior de também
-        // setar em `domain=.<2 últimos segmentos do host>` duplicava o cookie e, para domínios
-        // com TLD composto (ex.: "ctprice.com.br"), calculava um domínio-base ERRADO
-        // ("com.br", um sufixo público — o navegador rejeita ou o valor fica incorreto). Sem
-        // subdomínios envolvidos neste projeto, host-only já é suficiente e correto.
-        document.cookie = name + '=' + value + ';path=/';
-    }
-
-    function GTranslateFireEvent(element, event) {
-        try {
-            if (document.createEventObject) {
-                var evt = document.createEventObject();
-                element.fireEvent('on' + event, evt);
-            } else {
-                var evt2 = document.createEvent('HTMLEvents');
-                evt2.initEvent(event, true, true);
-                element.dispatchEvent(evt2);
-            }
-        } catch (e) { /* ambiente sem o motor de tradução carregado — tratado pelo timeout de doGTranslate */ }
-    }
-
-    function findGoogleCombo() {
-        var selects = document.getElementsByTagName('select');
-        for (var i = 0; i < selects.length; i++) {
-            if (selects[i].className && selects[i].className.indexOf('goog-te-combo') !== -1) {
-                return selects[i];
-            }
-        }
-        return null;
-    }
-
-    function doGTranslate(langPair, attempt) {
+    function callDoGTranslate(langPair, attempt) {
         attempt = attempt || 0;
-        if (!langPair) {
+        if (typeof window.doGTranslate === 'function') {
+            window.doGTranslate(langPair);
             return;
         }
-        var target = langPair.split('|')[1];
-
-        GTranslateSetCookie(COOKIE_NAME, '/' + DEFAULT_LANG + '/' + target);
-
-        var combo = findGoogleCombo();
-        if (!combo) {
-            // Motor ainda não carregou (ou o widget não está configurado — ver
-            // includes/translate-widget.php). Tenta de novo por um tempo limitado; depois
-            // desiste em silêncio (falha graciosa, sem erro de console).
-            if (attempt < MAX_ATTEMPTS) {
-                setTimeout(function () { doGTranslate(langPair, attempt + 1); }, RETRY_DELAY_MS);
-            }
-            return;
+        // Script do widget ainda não terminou de carregar (ou não está configurado/disponível —
+        // ver includes/translate-widget.php). Tenta de novo por um tempo limitado; depois
+        // desiste em silêncio (falha graciosa, sem erro de console).
+        if (attempt < MAX_ATTEMPTS) {
+            setTimeout(function () { callDoGTranslate(langPair, attempt + 1); }, RETRY_DELAY_MS);
         }
-
-        combo.value = target;
-        GTranslateFireEvent(combo, 'change');
-        GTranslateFireEvent(combo, 'change');
     }
 
-    function currentLangFromCookie() {
-        var raw = GTranslateGetCookie(COOKIE_NAME);
-        if (!raw) {
+    function currentLangFromStorage() {
+        try {
+            var raw = window.localStorage.getItem(STORAGE_KEY);
+            if (!raw) {
+                return DEFAULT_LANG;
+            }
+            var parsed = JSON.parse(raw);
+            return parsed && parsed.tgtLang ? parsed.tgtLang : DEFAULT_LANG;
+        } catch (e) {
+            // localStorage indisponível (modo privado restrito, etc.) — trata como português,
+            // nunca quebra a leitura do estado visual das bandeiras.
             return DEFAULT_LANG;
         }
-        var parts = raw.split('/').filter(Boolean); // ["pt", "en"]
-        var target = parts[1] || DEFAULT_LANG;
-        return target === DEFAULT_LANG ? DEFAULT_LANG : target;
     }
 
     function setActiveButton(buttons, lang) {
@@ -130,17 +83,7 @@
             return;
         }
 
-        var persistedLang = currentLangFromCookie();
-        setActiveButton(buttons, persistedLang);
-
-        // Persistência entre páginas (item 8 do pedido): o motor de tradução por trás do
-        // GTranslate normalmente já lê o cookie `googtrans` sozinho ao inicializar, mas disparar
-        // aqui também garante a reaplicação em CADA página nova mesmo que essa leitura automática
-        // não aconteça a tempo — sem isso, a Home em inglês -> Clientes poderia voltar para
-        // português brevemente até o motor reagir por conta própria.
-        if (persistedLang !== DEFAULT_LANG) {
-            doGTranslate(DEFAULT_LANG + '|' + persistedLang);
-        }
+        setActiveButton(buttons, currentLangFromStorage());
 
         buttons.forEach(function (btn) {
             btn.addEventListener('click', function () {
@@ -148,7 +91,7 @@
                 if (!lang) {
                     return;
                 }
-                doGTranslate(DEFAULT_LANG + '|' + lang);
+                callDoGTranslate(DEFAULT_LANG + '|' + lang);
                 setActiveButton(buttons, lang);
             });
         });

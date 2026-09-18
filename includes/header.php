@@ -26,6 +26,23 @@ if (!function_exists('ct_slug')) {
         return trim($texto, '-');
     }
 }
+
+if (!function_exists('ct_protect_brand')) {
+    /**
+     * Protege a marca "CT Price" de tradução automática (GTranslate — ver includes/
+     * translate-widget.php) quando aparece DENTRO de um texto maior que continua traduzível
+     * normalmente (ex.: item de menu "A CT Price" — só "CT Price" precisa ficar intocado, "A"
+     * pode traduzir junto com o resto do texto da página). Achado desta correção: sem isso, o
+     * GTranslate reescrevia a frase inteira e chegou a traduzir "CT Price" para "Precio de CT"
+     * em espanhol. Reutilizada por includes/header.php e includes/footer.php (definida aqui
+     * porque header.php é sempre incluído antes do footer em todas as páginas do site).
+     */
+    function ct_protect_brand(string $texto): string
+    {
+        $escaped = htmlspecialchars($texto, ENT_QUOTES, 'UTF-8');
+        return str_replace('CT Price', '<span translate="no" class="notranslate">CT Price</span>', $escaped);
+    }
+}
 ?>
 <header class="site-header">
     <div class="site-header__bar">
@@ -87,7 +104,7 @@ if (!function_exists('ct_slug')) {
                                 </ul>
                             <?php else: ?>
                                 <a class="primary-nav__link" href="<?= htmlspecialchars($item['url'] ?? '#', ENT_QUOTES, 'UTF-8') ?>">
-                                    <?= htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8') ?>
+                                    <?= ct_protect_brand($item['label']) ?>
                                 </a>
                             <?php endif; ?>
                         </li>
