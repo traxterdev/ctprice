@@ -135,6 +135,14 @@ try {
     $testimonials = [];
 }
 
+// CTA abaixo do carrossel de depoimentos (ajuste pontual, 2026-09-17) — mesmo destino do link
+// "Ver depoimento" de cada card: não existe página individual por depoimento, então ambos
+// apontam para a página geral /depoimentos/.
+$testimonialsCta = [
+    'label' => 'Ver todos os depoimentos',
+    'url' => '/depoimentos/',
+];
+
 // Clientes ativos do carrossel de clientes/parceiros — fonte compartilhada com sobre-nos/index.php
 // e informacoes/index.php (mesmo carrossel). Vem do banco (sprint CMS) — ver
 // repositories/ClientRepository.php. config/clients.php deixou de ser consumido por páginas

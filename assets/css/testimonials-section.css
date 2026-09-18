@@ -134,11 +134,49 @@
     color: var(--color-text-gray);
 }
 
-.testimonial-card__links {
+/*
+ * Rodapé do card (ajuste pontual, 2026-09-17): agrupa os ícones de site/Instagram (quando
+ * existem) e o link "Ver depoimento" — sempre empurrado para o fim do card via
+ * `margin-top:auto` no CONTAINER (não em cada filho), para os dois não competirem pelo mesmo
+ * espaço quando ambos existem.
+ */
+.testimonial-card__footer {
     margin-top: auto;
     padding-top: 16px;
     display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.testimonial-card__links {
+    display: flex;
     gap: 10px;
+}
+
+/* Link discreto "Ver depoimento" — mesmo padrão visual de link discreto já usado em
+   `.blog-card__read-more` (uppercase, 12px, sem fundo, só sublinha no hover/foco). Nunca cobre
+   o card inteiro; não interfere nos ícones de `.testimonial-card__links` acima. */
+.testimonial-card__more {
+    align-self: flex-start;
+    display: inline-block;
+    font-family: var(--font-primary);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 18px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--color-dark-green);
+    text-decoration: none;
+}
+
+.testimonial-card__more:hover,
+.testimonial-card__more:focus-visible {
+    text-decoration: underline;
+}
+
+.testimonial-card__more:focus-visible {
+    outline: 2px solid var(--color-accent-green);
+    outline-offset: 2px;
 }
 
 .testimonial-card__link {
@@ -233,4 +271,13 @@
     .testimonials-swiper-wrap {
         margin: 0 24px;
     }
+}
+
+/* CTA abaixo do carrossel (ajuste pontual, 2026-09-17) — mesmo padrão `.btn.btn--filled` já
+   usado em components/services-section.php e no CTA do carrossel de clientes/parceiros
+   (assets/css/clients-carousel-section.css), para manter aparência corporativa e discreta. */
+.testimonials-section__cta {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
 }

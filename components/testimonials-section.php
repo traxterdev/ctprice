@@ -25,6 +25,12 @@
  * seção); só o número de slides visíveis e o conteúdo do card mudam — ver
  * assets/js/testimonials-init.js e assets/css/testimonials-section.css.
  *
+ * AJUSTE (2026-09-17, ajuste pontual do cliente): cada card ganhou um link discreto "Ver
+ * depoimento" ao final do conteúdo, e a seção ganhou um CTA "Ver todos os depoimentos" abaixo do
+ * carrossel — ambos apontam para a página geral `/depoimentos/` (não existe página individual
+ * por depoimento, então nenhuma URL/slug individual é inventada aqui). O link do card fica num
+ * `<a>` próprio, separado dos ícones de site/Instagram — nunca o card inteiro vira link.
+ *
  * Espera, definida pelo chamador antes do include:
  *
  *   $testimonials = [ // mesmo formato retornado por TestimonialRepository::allActive()
@@ -39,6 +45,7 @@
  *       ],
  *       ...
  *   ];
+ *   $testimonialsCta = ['label' => ..., 'url' => ...]; // opcional — CTA abaixo do carrossel
  */
 
 if (!isset($testimonials) || !is_array($testimonials)) {
@@ -77,20 +84,24 @@ if (!isset($testimonials) || !is_array($testimonials)) {
 
                                 <p class="testimonial-card__text">&ldquo;<?= htmlspecialchars($quote, ENT_QUOTES, 'UTF-8') ?>&rdquo;</p>
 
-                                <?php if ($websiteUrl !== '' || $instagramUrl !== ''): ?>
-                                <div class="testimonial-card__links">
-                                    <?php if ($websiteUrl !== ''): ?>
-                                    <a class="testimonial-card__link" href="<?= htmlspecialchars($websiteUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener noreferrer" aria-label="Visitar site de <?= htmlspecialchars($clientCompany, ENT_QUOTES, 'UTF-8') ?>">
-                                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 3h6v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 14L21 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                    </a>
+                                <div class="testimonial-card__footer">
+                                    <?php if ($websiteUrl !== '' || $instagramUrl !== ''): ?>
+                                    <div class="testimonial-card__links">
+                                        <?php if ($websiteUrl !== ''): ?>
+                                        <a class="testimonial-card__link" href="<?= htmlspecialchars($websiteUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener noreferrer" aria-label="Visitar site de <?= htmlspecialchars($clientCompany, ENT_QUOTES, 'UTF-8') ?>">
+                                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 3h6v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 14L21 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        </a>
+                                        <?php endif; ?>
+                                        <?php if ($instagramUrl !== ''): ?>
+                                        <a class="testimonial-card__link" href="<?= htmlspecialchars($instagramUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener noreferrer" aria-label="Instagram de <?= htmlspecialchars($clientCompany, ENT_QUOTES, 'UTF-8') ?>">
+                                            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.15" fill="currentColor"/></svg>
+                                        </a>
+                                        <?php endif; ?>
+                                    </div>
                                     <?php endif; ?>
-                                    <?php if ($instagramUrl !== ''): ?>
-                                    <a class="testimonial-card__link" href="<?= htmlspecialchars($instagramUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener noreferrer" aria-label="Instagram de <?= htmlspecialchars($clientCompany, ENT_QUOTES, 'UTF-8') ?>">
-                                        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.15" fill="currentColor"/></svg>
-                                    </a>
-                                    <?php endif; ?>
+
+                                    <a class="testimonial-card__more" href="/depoimentos/">Ver depoimento</a>
                                 </div>
-                                <?php endif; ?>
                             </article>
                         </div>
                         <?php endforeach; ?>
@@ -107,5 +118,13 @@ if (!isset($testimonials) || !is_array($testimonials)) {
 
             <div class="testimonials-swiper__pagination" aria-hidden="true"></div>
         </div>
+
+        <?php if (!empty($testimonialsCta['url'])): ?>
+        <div class="testimonials-section__cta">
+            <a class="btn btn--filled" href="<?= htmlspecialchars($testimonialsCta['url'], ENT_QUOTES, 'UTF-8') ?>">
+                <?= htmlspecialchars($testimonialsCta['label'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+            </a>
+        </div>
+        <?php endif; ?>
     </div>
 </section>
