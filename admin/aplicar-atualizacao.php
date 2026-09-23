@@ -48,8 +48,8 @@ declare(strict_types=1);
 
 require __DIR__ . '/../config/bootstrap.php';
 require __DIR__ . '/../includes/AdminAuth.php';
-require __DIR__ . '/../database/MigrationRunner.php';
-require __DIR__ . '/../database/seed_hero_slides.php';
+require_once __DIR__ . '/../database/MigrationRunner.php';
+require_once __DIR__ . '/../database/seed_hero_slides.php';
 
 $adminCurrentUser = admin_require_login();
 $csrfToken = admin_csrf_token();
@@ -120,6 +120,21 @@ if (!$dbError && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             } catch (Throwable $e) {
                 error_log('CT Price CMS [admin/aplicar-atualizacao]: falha ao executar o seed — ' . $e->getMessage());
                 $seedError = 'As migrations foram aplicadas, mas não foi possível executar o seed dos banners agora.';
+            }
+
+            // Validação final: o seed não lançou exceção, mas isso não garante por si só que os 4
+            // banners iniciais realmente ficaram no banco (ex.: UPDATE parcial, replicação
+            // atrasada) — confere o estado real da tabela antes de declarar sucesso.
+            if ($seedError === null) {
+                try {
+                    $postSeedStatus = ctprice_temp_hero_seed_status($pdo);
+                    if (!$postSeedStatus['seedApplied']) {
+                        $seedError = 'O seed rodou, mas o banco não ficou com os 4 banners iniciais esperados. Tente aplicar novamente — a operação é segura e não duplica registros.';
+                    }
+                } catch (Throwable $e) {
+                    error_log('CT Price CMS [admin/aplicar-atualizacao]: falha ao validar o seed — ' . $e->getMessage());
+                    $seedError = 'Não foi possível confirmar se os banners iniciais foram gravados corretamente. Tente novamente.';
+                }
             }
         }
 
