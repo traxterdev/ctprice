@@ -23,8 +23,8 @@
  *
  * Espera, definidas pelo chamador ANTES do include:
  *   $adminPageTitle    — string, título da aba/página (ex.: "Clientes").
- *   $adminActiveMenu   — 'dashboard'|'clients'|'partners'|'testimonials'|'posts'|'users', para
- *                         destacar o item ativo da sidebar.
+ *   $adminActiveMenu   — 'dashboard'|'hero'|'clients'|'partners'|'testimonials'|'posts'|'users',
+ *                         para destacar o item ativo da sidebar.
  *   $adminCurrentUser  — array retornado por admin_require_login() (nome/email/id).
  */
 
@@ -34,6 +34,12 @@ $adminNavItems = [
         'label' => 'Dashboard',
         'url' => BASE_URL . '/admin/',
         'icon' => '<rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/>',
+    ],
+    [
+        'key' => 'hero',
+        'label' => 'Banners da Home',
+        'url' => BASE_URL . '/admin/hero/',
+        'icon' => '<rect x="2.5" y="5" width="19" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.8"/><path d="M2.5 16l5-4 4 3 3-3 6 5"/>',
     ],
     [
         'key' => 'clients',

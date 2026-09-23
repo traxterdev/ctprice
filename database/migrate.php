@@ -2,10 +2,11 @@
 /**
  * database/migrate.php
  *
- * Runner de migrations minimalista — NÃO é um framework de migrations (sem down/rollback, sem
- * geração de arquivo, sem dependências entre migrations além da ordem alfabética do nome do
- * arquivo). Cada migration é um `.sql` puro em database/migrations/, numerado por data
- * (AAAA_MM_DD_NNNNNN_descricao.sql) para ordem determinística.
+ * Wrapper CLI — a lógica de aplicar migrations foi extraída para database/MigrationRunner.php
+ * (idêntica à anterior, só reorganizada) para ser reaproveitada também por
+ * admin/aplicar-atualizacao.php (ferramenta TEMPORÁRIA de implantação — ver seu cabeçalho).
+ * Este script continua CLI-only e é a única forma de rodar migrations via terminal, exatamente
+ * como antes.
  *
  * Idempotente: uma tabela própria `schema_migrations` registra o que já foi aplicado — rodar este
  * script várias vezes só aplica o que ainda não rodou.
@@ -25,60 +26,27 @@ if (PHP_SAPI !== 'cli') {
 }
 
 require __DIR__ . '/../config/bootstrap.php';
-
-$pdo = Database::connection();
-
-$pdo->exec(
-    'CREATE TABLE IF NOT EXISTS schema_migrations (
-        migration VARCHAR(255) NOT NULL,
-        applied_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        PRIMARY KEY (migration)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
-);
-
-$applied = $pdo->query('SELECT migration FROM schema_migrations')->fetchAll(PDO::FETCH_COLUMN);
-$appliedSet = array_flip($applied);
+require __DIR__ . '/MigrationRunner.php';
 
 $migrationsDir = __DIR__ . '/migrations';
-$files = glob($migrationsDir . '/*.sql');
-sort($files, SORT_STRING);
 
-if (!$files) {
+try {
+    $result = MigrationRunner::run(Database::connection(), $migrationsDir);
+} catch (Throwable $e) {
+    fwrite(STDERR, "FALHOU\n" . $e->getMessage() . "\n");
+    exit(1);
+}
+
+if ($result['total'] === 0) {
     echo "Nenhum arquivo de migration encontrado em database/migrations/.\n";
     exit(0);
 }
 
-$ranCount = 0;
-
-foreach ($files as $file) {
-    $name = basename($file);
-
-    if (isset($appliedSet[$name])) {
-        echo "  já aplicada: $name\n";
-        continue;
-    }
-
-    $sql = file_get_contents($file);
-    if ($sql === false || trim($sql) === '') {
-        fwrite(STDERR, "  ERRO: não foi possível ler $name\n");
-        exit(1);
-    }
-
-    echo "  aplicando: $name ... ";
-
-    try {
-        // Sem transação: DDL (CREATE TABLE) do MySQL/MariaDB provoca commit implícito por si só
-        // (não é transacional) — envolver isto num BEGIN/COMMIT não protegeria nada e só
-        // mascararia o erro real num eventual ROLLBACK sem transação ativa.
-        $pdo->exec($sql);
-        $stmt = $pdo->prepare('INSERT INTO schema_migrations (migration) VALUES (:migration)');
-        $stmt->execute(['migration' => $name]);
-        echo "OK\n";
-        $ranCount++;
-    } catch (Throwable $e) {
-        fwrite(STDERR, "FALHOU\n" . $e->getMessage() . "\n");
-        exit(1);
-    }
+foreach ($result['already'] as $name) {
+    echo "  já aplicada: $name\n";
+}
+foreach ($result['applied'] as $name) {
+    echo "  aplicando: $name ... OK\n";
 }
 
-echo "\n$ranCount migration(s) aplicada(s) agora. " . count($files) . " no total.\n";
+echo "\n" . count($result['applied']) . ' migration(s) aplicada(s) agora. ' . $result['total'] . " no total.\n";

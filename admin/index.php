@@ -22,10 +22,12 @@ $activePartners = null;
 $activeTestimonials = null;
 $publishedPosts = null;
 $activeAdmins = null;
+$activeHeroSlides = null;
 $totalClients = null;
 $totalPartners = null;
 $totalTestimonials = null;
 $totalPosts = null;
+$totalHeroSlides = null;
 $dbError = false;
 
 try {
@@ -35,10 +37,12 @@ try {
     $activeTestimonials = (int) $pdo->query('SELECT COUNT(*) FROM video_testimonials WHERE ativo = 1')->fetchColumn();
     $publishedPosts = (int) $pdo->query('SELECT COUNT(*) FROM blog_posts WHERE ativo = 1 AND published_at <= NOW()')->fetchColumn();
     $activeAdmins = (int) $pdo->query('SELECT COUNT(*) FROM admin_users WHERE ativo = 1')->fetchColumn();
+    $activeHeroSlides = (int) $pdo->query('SELECT COUNT(*) FROM hero_slides WHERE ativo = 1')->fetchColumn();
     $totalClients = (int) $pdo->query('SELECT COUNT(*) FROM clients')->fetchColumn();
     $totalPartners = (int) $pdo->query('SELECT COUNT(*) FROM partners')->fetchColumn();
     $totalTestimonials = (int) $pdo->query('SELECT COUNT(*) FROM video_testimonials')->fetchColumn();
     $totalPosts = (int) $pdo->query('SELECT COUNT(*) FROM blog_posts')->fetchColumn();
+    $totalHeroSlides = (int) $pdo->query('SELECT COUNT(*) FROM hero_slides')->fetchColumn();
 } catch (Throwable $e) {
     error_log('CT Price CMS [admin/index]: falha ao consultar totais — ' . $e->getMessage());
     $dbError = true;
@@ -59,6 +63,10 @@ require __DIR__ . '/includes/layout-header.php';
 <div class="admin-alert admin-alert--error">Não foi possível carregar os totais agora. Tente novamente em instantes.</div>
 <?php else: ?>
 <div class="admin-stats">
+    <div class="admin-stat-card">
+        <p class="admin-stat-card__label">Banners ativos</p>
+        <p class="admin-stat-card__value"><?= $activeHeroSlides ?></p>
+    </div>
     <div class="admin-stat-card">
         <p class="admin-stat-card__label">Clientes ativos</p>
         <p class="admin-stat-card__value"><?= $activeClients ?></p>
@@ -83,6 +91,11 @@ require __DIR__ . '/includes/layout-header.php';
 
 <h2 class="admin-section-title">Conteúdo do site</h2>
 <div class="admin-module-list">
+    <div class="admin-module-row">
+        <span class="admin-module-row__name">Banners da Home</span>
+        <span class="admin-module-row__count"><strong><?= $totalHeroSlides ?></strong> cadastrados</span>
+        <a href="<?= BASE_URL ?>/admin/hero/" class="admin-btn admin-btn--outline admin-btn--sm">Gerenciar</a>
+    </div>
     <div class="admin-module-row">
         <span class="admin-module-row__name">Clientes</span>
         <span class="admin-module-row__count"><strong><?= $totalClients ?></strong> cadastrados</span>

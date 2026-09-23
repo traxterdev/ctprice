@@ -42,12 +42,12 @@ const ADMIN_UPLOAD_ALLOWED_MIMES = [
  * da raiz do site, sem BASE_URL) do arquivo salvo — ex.: "assets/uploads/clients/ab12....jpg".
  *
  * @param array<string, mixed> $file um elemento de $_FILES (ex.: $_FILES['logo'])
- * @param 'clients'|'partners'|'benefits'|'testimonials'|'posts' $entity subpasta de destino
+ * @param 'clients'|'partners'|'benefits'|'testimonials'|'posts'|'hero' $entity subpasta de destino
  * @throws RuntimeException mensagem já segura para exibir ao administrador
  */
 function ctprice_admin_handle_logo_upload(array $file, string $entity): string
 {
-    if (!in_array($entity, ['clients', 'partners', 'benefits', 'testimonials', 'posts'], true)) {
+    if (!in_array($entity, ['clients', 'partners', 'benefits', 'testimonials', 'posts', 'hero'], true)) {
         throw new RuntimeException('Destino de upload inválido.');
     }
 

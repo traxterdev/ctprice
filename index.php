@@ -30,24 +30,17 @@
  */
 require __DIR__ . '/config/bootstrap.php';
 
-$heroSlides = [
-    [
-        'image' => BASE_URL . '/assets/images/hero/caroussel01.jpg',
-        'html' => '<span class="hero-slide__highlight">Cuide da sua empresa,</span> <br>e deixe a contabilidade nas <br>mãos de quem entende',
-    ],
-    [
-        'image' => BASE_URL . '/assets/images/hero/csinicial02.jpg',
-        'html' => 'Trabalhamos <span class="hero-slide__highlight">integrados </span>aos<br> colaboradores de sua empresa, <br>para que juntos possamos obter <br><span class="hero-slide__highlight">os melhores resultados</span>',
-    ],
-    [
-        'image' => BASE_URL . '/assets/images/hero/caroussel02.jpg',
-        'html' => 'Atuamos nos ramos de<br> contabilidade e planejamento<br> tributário em formato digital <br><span class="hero-slide__highlight">sem papel e sem burocracia</span>.',
-    ],
-    [
-        'image' => BASE_URL . '/assets/images/hero/caroussel03a.jpg',
-        'html' => 'Fornecemos informações <br> <span class="hero-slide__highlight">precisas e seguras</span> para <br>que você possa tomar <br>as <span class="hero-slide__highlight">melhores decisões </span><br>para seu negócio',
-    ],
-];
+// Hero/banners da Home (2026-09-22): fonte passou de array estático para o MariaDB via
+// HeroSlideRepository — ver admin/hero/ para o CRUD. Sem slide ativo (ou falha do banco), a
+// seção Hero simplesmente não é renderizada (components/hero-slider.php trata array vazio) —
+// nunca um erro/stack trace visível ao visitante (item 13 da tarefa desta sprint).
+require_once __DIR__ . '/repositories/HeroSlideRepository.php';
+try {
+    $heroSlides = (new HeroSlideRepository())->activeOrdered();
+} catch (Throwable $e) {
+    error_log('CT Price [Home]: falha ao carregar slides do Hero — ' . $e->getMessage());
+    $heroSlides = [];
+}
 
 $videoSectionHeading = 'Ética, agilidade, segurança nos processos e respeito ao cliente';
 $videoSectionHtml = 'A <strong class="video-section__highlight" translate="no">CT Price</strong> nasceu determinada a conquistar o mercado com eficiência e dedicação, valorizando sempre o cliente e preocupando-se em encontrar soluções adequadas para cada situação.';

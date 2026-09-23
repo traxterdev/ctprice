@@ -57,6 +57,39 @@
     font-weight: 700;
 }
 
+/*
+ * Subtítulo e botão (2026-09-22) — elementos NOVOS pedidos nesta sprint para o CMS de banners;
+ * os 4 slides originais não tinham nenhum dos dois (só aparecem quando o admin preenche
+ * texto/botão em admin/hero/). Tipografia do subtítulo reaproveita a família/cor já usada no
+ * Hero, só reduzida; botão reaproveita `.btn`/`.btn--filled` (globais, mesmos já usados no CTA
+ * "Fale Conosco" de services-section.css — `.btn--filled` não é uma classe global no projeto,
+ * cada seção define sua própria cópia escopada, mesmo padrão de error-page.css/jobs-section.css).
+ */
+.hero-slide__subtitle {
+    margin: 8px 0 0;
+    max-width: 600px;
+    font-family: var(--font-secondary);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 22px;
+    color: var(--color-dark-teal);
+    text-align: left;
+}
+
+.hero-slide__cta.btn--filled {
+    margin-top: 20px;
+    padding: 12px 24px;
+    line-height: 15px;
+    border-radius: 3px;
+    color: var(--color-dark-green);
+    background: #61CE70;
+}
+
+.hero-slide__cta.btn--filled:hover,
+.hero-slide__cta.btn--filled:focus-visible {
+    background: var(--color-accent-green);
+}
+
 /* Correção do defeito conhecido (ver cabeçalho do arquivo): coluna e fonte reduzidas para o
    texto caber sem quebra excessiva, mantendo altura, imagem e hierarquia do Hero. */
 @media (max-width: 767px) {
@@ -68,5 +101,11 @@
         max-width: 100%;
         font-size: 21px;
         line-height: 26px;
+    }
+
+    .hero-slide__subtitle {
+        max-width: 100%;
+        font-size: 14px;
+        line-height: 19px;
     }
 }

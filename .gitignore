@@ -5,8 +5,8 @@
 # CMS — credenciais locais de banco (NUNCA versionar; ver config/database.example.php)
 /config/database.local.php
 
-# CMS — uploads administrativos (Clientes/Parceiros/Benefícios/Depoimentos/Posts). Não dependem
-# do Git em produção — a estrutura de diretórios é preservada via .gitkeep (ver docs/cms.md).
+# CMS — uploads administrativos (Clientes/Parceiros/Benefícios/Depoimentos/Posts/Hero). Não
+# dependem do Git em produção — a estrutura de diretórios é preservada via .gitkeep (ver docs/cms.md).
 # Regra explícita por subpasta — mais simples e menos frágil que um padrão recursivo genérico com
 # negação de .gitkeep.
 /assets/uploads/clients/*
@@ -19,6 +19,8 @@
 !/assets/uploads/testimonials/.gitkeep
 /assets/uploads/posts/*
 !/assets/uploads/posts/.gitkeep
+/assets/uploads/hero/*
+!/assets/uploads/hero/.gitkeep
 
 # Dependencies
 node_modules/

@@ -565,6 +565,15 @@
     max-width: 560px;
 }
 
+/* Toolbar de edição assistida (admin/hero/form.php — botões "Destaque"/"Quebra de linha" acima
+   do textarea de título, ver assets/js/admin.js). Reaproveita .admin-btn/.admin-btn--outline/
+   .admin-btn--sm já existentes — nenhum botão novo, só o agrupamento com espaçamento. */
+.admin-toolbar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
 .admin-form__group {
     margin-bottom: 18px;
 }

@@ -2,11 +2,19 @@
 /**
  * includes/HtmlSanitizer.php
  *
- * Sanitização do corpo dos artigos do blog (`blog_posts.body_html`) — NÃO é um framework de
- * sanitização genérico: uma única função, uma allowlist fixa de tags baseada no conteúdo REAL dos
- * 3 artigos atuais (`<p>`, `<a>`, `<ol>`, `<li>`) mais um pequeno conjunto de formatação básica
- * igualmente segura e claramente útil para textos futuros (`<strong>`, `<em>`, `<ul>`, `<h2>`,
- * `<h3>`, `<br>`) — a mesma lista sugerida na tarefa desta sprint.
+ * Sanitização de HTML gerado por admins autenticados antes de chegar ao banco — NÃO é um
+ * framework de sanitização genérico. Duas funções, cada uma com sua própria allowlist fixa e
+ * escopada ao conteúdo real que sanitiza (nunca compartilham allowlist entre si):
+ *   - ctprice_sanitize_article_html(): corpo dos artigos do blog (`blog_posts.body_html`).
+ *   - ctprice_sanitize_hero_title_html(): título dos slides do Hero (`hero_slides.titulo`,
+ *     ver database/migrations/2026_09_22_000001_create_hero_slides_table.sql).
+ * Ambas usam a mesma técnica (DOMDocument, nunca regex — regex não trata HTML aninhado/malformado
+ * com segurança).
+ *
+ * ctprice_sanitize_article_html(): allowlist fixa de tags baseada no conteúdo REAL dos 3 artigos
+ * atuais (`<p>`, `<a>`, `<ol>`, `<li>`) mais um pequeno conjunto de formatação básica igualmente
+ * segura e claramente útil para textos futuros (`<strong>`, `<em>`, `<ul>`, `<h2>`, `<h3>`,
+ * `<br>`) — a mesma lista sugerida na tarefa desta sprint.
  *
  * Estratégia: parseia o HTML com `DOMDocument` (nunca regex — regex não consegue tratar HTML
  * aninhado/malformado com segurança) e percorre a árvore:
@@ -120,6 +128,94 @@ function ctprice_strip_all_attributes_except(DOMElement $node, array $keep): voi
         if (!in_array(strtolower($attr->name), $keep, true)) {
             $node->removeAttribute($attr->name);
         }
+    }
+}
+
+/**
+ * Sanitiza o título de um slide do Hero (`hero_slides.titulo`) — mesma técnica de
+ * `ctprice_sanitize_article_html()` (DOMDocument, nunca regex), allowlist própria e muito mais
+ * restrita: só `<br>` e `<span class="hero-slide__highlight">`, o único HTML que os slides do
+ * Hero realmente usam para destacar um trecho da frase (ver components/hero-slider.php e
+ * assets/css/hero.css). NÃO é um editor de rich text genérico — o admin (admin/hero/form.php)
+ * continua sendo um `<textarea>` simples, sem toolbar; isto só impede que o texto digitado quebre
+ * o layout ou injete algo perigoso, preservando a identidade visual já aprovada do Hero atual
+ * (trechos em negrito/cor de destaque no meio da frase).
+ *
+ * `<span>` só sobrevive com `class="hero-slide__highlight"` EXATA — qualquer outro valor (ou
+ * span sem classe) é desembrulhado (perde a tag, mantém o texto), igual ao comportamento de tag
+ * fora da allowlist em ctprice_sanitize_children().
+ */
+function ctprice_sanitize_hero_title_html(string $html): string
+{
+    if (trim($html) === '') {
+        return '';
+    }
+
+    $doc = new DOMDocument();
+    libxml_use_internal_errors(true);
+    $doc->loadHTML(
+        '<?xml encoding="utf-8"?><div id="ctprice-sanitize-root">' . $html . '</div>',
+        LIBXML_NOERROR | LIBXML_NOWARNING
+    );
+    libxml_clear_errors();
+
+    $root = $doc->getElementById('ctprice-sanitize-root');
+    if (!$root instanceof DOMElement) {
+        return '';
+    }
+
+    ctprice_sanitize_hero_title_children($doc, $root);
+
+    $result = '';
+    foreach (iterator_to_array($root->childNodes) as $child) {
+        $result .= $doc->saveHTML($child);
+    }
+
+    return trim($result);
+}
+
+function ctprice_sanitize_hero_title_children(DOMDocument $doc, DOMNode $parent): void
+{
+    foreach (iterator_to_array($parent->childNodes) as $node) {
+        if ($node instanceof DOMComment) {
+            $parent->removeChild($node);
+            continue;
+        }
+
+        if ($node instanceof DOMText) {
+            continue;
+        }
+
+        if (!$node instanceof DOMElement) {
+            $parent->removeChild($node);
+            continue;
+        }
+
+        $tag = strtolower($node->tagName);
+
+        if (in_array($tag, CTPRICE_ARTICLE_STRIP_WITH_CONTENT, true)) {
+            $parent->removeChild($node);
+            continue;
+        }
+
+        ctprice_sanitize_hero_title_children($doc, $node);
+
+        if ($tag === 'br') {
+            ctprice_strip_all_attributes_except($node, []);
+            continue;
+        }
+
+        if ($tag === 'span' && $node->getAttribute('class') === 'hero-slide__highlight') {
+            ctprice_strip_all_attributes_except($node, ['class']);
+            $node->setAttribute('class', 'hero-slide__highlight');
+            continue;
+        }
+
+        // Qualquer outra tag (incluindo <span> sem a classe exata): desembrulha.
+        while ($node->firstChild) {
+            $parent->insertBefore($node->firstChild, $node);
+        }
+        $parent->removeChild($node);
     }
 }
 
