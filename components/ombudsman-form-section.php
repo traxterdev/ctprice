@@ -3,31 +3,18 @@
  * components/ombudsman-form-section.php
  *
  * Bloco final de `/ouvidoria/`: heading + texto introdutório + botão de WhatsApp exclusivo da
- * Ouvidoria (esquerda) + formulário de manifestação com upload de evidências (direita), sobre
- * fundo sólido `--color-dark-teal` (#00222C) com marca d'água decorativa
- * (`assets/images/logo/Isotipolinear.png`, via `::before` em CSS — ver
- * assets/css/ombudsman-form-section.css). Padrão identificado em
+ * Ouvidoria (esquerda) + vídeo institucional do Dr. Luis Otávio e CTA para o formulário externo
+ * (Google Forms, direita), sobre fundo sólido `--color-dark-teal` (#00222C) com marca d'água
+ * decorativa (`assets/images/logo/Isotipolinear.png`). Padrão identificado em
  * docs/reference/ouvidoria-audit.md, seções 1, 4 e 11 (seção `821402c` da referência).
  *
- * NÃO reutiliza components/contact-form-section.php: campos diferentes (Contato/telefone e
- * Empresa obrigatórios aqui, upload de arquivo, nenhuma foto/logomarca sobreposta do mesmo jeito),
- * layout diferente (heading full-width + WhatsApp exclusivo em vez de foto), e processado por um
- * endpoint próprio (ouvidoria/ouvidoria-action.php) com regras de validação/segurança distintas
- * (rate limit e token CSRF em chaves de sessão próprias, nunca compartilhadas com Fale Conosco) —
- * ver docs/reference/ouvidoria-audit.md, seção 16. Reaproveita, sim, a MESMA filosofia de
- * segurança já validada em Fale Conosco (CSRF por sessão, honeypot, rate limit, validação
- * server-side, envio via endpoint PHP próprio sem WordPress/Elementor/admin-ajax.php).
- *
- * IDENTIFICAÇÃO OBRIGATÓRIA PRESERVADA (decisão desta fase, não corrigida por iniciativa
- * própria): Nome, Contato, E-mail e Empresa continuam obrigatórios, exatamente como no original
- * — não existe opção de manifestação anônima. "Possibilidade de manifestação anônima depende de
- * decisão formal da CT Price" (ver docs/reference/ouvidoria-final-validation.md quando existir).
- *
- * UPLOAD: cliente informa apenas os limites já aplicados pelo endpoint (PDF/JPG/PNG, até 3
- * arquivos, 5MB cada, 10MB no total) — a validação real e definitiva é sempre server-side (MIME
- * verificado via `finfo`, nunca a extensão/`type` informados pelo navegador). O texto de limites
- * é informativo, não uma promessa de UX avançada (sem barra de progresso, sem preview de
- * imagem).
+ * AJUSTE A PEDIDO DO CLIENTE (2026-10-28): o formulário próprio de manifestação (upload de
+ * evidências, endpoint ouvidoria/ouvidoria-action.php) deixou de ser exibido publicamente nesta
+ * coluna, substituído pelo vídeo do Dr. Luis Otávio (youtu.be/zNEnqSi1PmQ, embed
+ * youtube-nocookie.com) e por um botão que abre o Google Forms oficial em nova aba. O endpoint
+ * PHP (ouvidoria/ouvidoria-action.php) e o token CSRF em ouvidoria/index.php foram mantidos
+ * intactos (histórico/validação já implementada), apenas sem um `<form>` nesta página para
+ * consumi-los — nada foi apagado do backend.
  *
  * Espera, definidas pelo chamador antes do include:
  *
@@ -37,12 +24,9 @@
  *       'whatsapp_label' => 'texto visível do botão (ex.: "(67) 99110-3140")',
  *       'whatsapp_url'   => 'URL do WhatsApp exclusivo (vinda de config/company.php, nunca
  *                            hardcoded aqui nem duplicada no componente)',
- *       'form_action'    => 'URL do endpoint (ouvidoria/ouvidoria-action.php)',
- *       'csrf_token'     => 'token da sessão atual',
+ *       'video_embed_url' => 'URL do embed do YouTube (youtube-nocookie.com)',
+ *       'form_url'       => 'URL do Google Forms externo',
  *       'decorative_image' => 'URL da marca d\'água (com BASE_URL) — ver comentário abaixo',
- *       'status'         => null | ['type' => 'success'|'error', 'message' => '...'] — banner de
- *                           fallback sem JavaScript (ver ouvidoria/index.php e
- *                           ouvidoria/ouvidoria-action.php)
  *   ];
  *
  * `decorative_image` é recebido como URL (montada pelo chamador com BASE_URL), não hardcoded
@@ -58,10 +42,9 @@ $heading = $ombudsmanFormSection['heading'] ?? '';
 $introHtml = $ombudsmanFormSection['intro_html'] ?? '';
 $whatsappLabel = $ombudsmanFormSection['whatsapp_label'] ?? '';
 $whatsappUrl = $ombudsmanFormSection['whatsapp_url'] ?? '';
-$formAction = $ombudsmanFormSection['form_action'] ?? '';
-$csrfToken = $ombudsmanFormSection['csrf_token'] ?? '';
+$videoEmbedUrl = $ombudsmanFormSection['video_embed_url'] ?? '';
+$formUrl = $ombudsmanFormSection['form_url'] ?? '';
 $decorativeImage = $ombudsmanFormSection['decorative_image'] ?? '';
-$status = $ombudsmanFormSection['status'] ?? null;
 ?>
 <section class="ombudsman-form-section">
     <?php if ($decorativeImage !== ''): ?>
@@ -84,67 +67,17 @@ $status = $ombudsmanFormSection['status'] ?? null;
             </div>
 
             <div class="ombudsman-form-section__form-col">
-                <?php if ($status): ?>
-                <div class="ombudsman-form__banner ombudsman-form__banner--<?= htmlspecialchars($status['type'], ENT_QUOTES, 'UTF-8') ?>" role="status">
-                    <?= htmlspecialchars($status['message'], ENT_QUOTES, 'UTF-8') ?>
+                <?php if ($videoEmbedUrl !== ''): ?>
+                <div class="ombudsman-form-section__video">
+                    <iframe src="<?= htmlspecialchars($videoEmbedUrl, ENT_QUOTES, 'UTF-8') ?>" title="Mensagem do Dr. Luis Otávio — Ouvidoria CT Price" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </div>
                 <?php endif; ?>
 
-                <form class="ombudsman-form" action="<?= htmlspecialchars($formAction, ENT_QUOTES, 'UTF-8') ?>" method="post" enctype="multipart/form-data" novalidate>
-                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
-
-                    <!-- Honeypot: campo isca invisível para humanos e leitores de tela (ver
-                         ouvidoria/ouvidoria-action.php) — um humano nunca preenche isto. -->
-                    <div class="ombudsman-form__hp" aria-hidden="true">
-                        <label for="ouv-website">Deixe este campo em branco</label>
-                        <input type="text" id="ouv-website" name="website" tabindex="-1" autocomplete="off">
-                    </div>
-
-                    <div class="ombudsman-form__field" data-field="name">
-                        <label for="ouv-name">Nome <span class="ombudsman-form__required" aria-hidden="true">*</span><span class="sr-only"> (obrigatório)</span></label>
-                        <input type="text" id="ouv-name" name="name" autocomplete="name" maxlength="150" required aria-describedby="ouv-name-error">
-                        <span class="ombudsman-form__error" id="ouv-name-error" role="alert"></span>
-                    </div>
-
-                    <div class="ombudsman-form__row-split">
-                        <div class="ombudsman-form__field" data-field="contact">
-                            <label for="ouv-contact">Contato <span class="ombudsman-form__required" aria-hidden="true">*</span><span class="sr-only"> (obrigatório)</span></label>
-                            <input type="tel" id="ouv-contact" name="contact" autocomplete="tel" maxlength="30" required aria-describedby="ouv-contact-error">
-                            <span class="ombudsman-form__error" id="ouv-contact-error" role="alert"></span>
-                        </div>
-
-                        <div class="ombudsman-form__field" data-field="email">
-                            <label for="ouv-email">E-mail <span class="ombudsman-form__required" aria-hidden="true">*</span><span class="sr-only"> (obrigatório)</span></label>
-                            <input type="email" id="ouv-email" name="email" autocomplete="email" maxlength="190" required aria-describedby="ouv-email-error">
-                            <span class="ombudsman-form__error" id="ouv-email-error" role="alert"></span>
-                        </div>
-                    </div>
-
-                    <div class="ombudsman-form__field" data-field="company">
-                        <label for="ouv-company">Empresa <span class="ombudsman-form__required" aria-hidden="true">*</span><span class="sr-only"> (obrigatório)</span></label>
-                        <input type="text" id="ouv-company" name="company" autocomplete="organization" maxlength="150" required aria-describedby="ouv-company-error">
-                        <span class="ombudsman-form__error" id="ouv-company-error" role="alert"></span>
-                    </div>
-
-                    <div class="ombudsman-form__field" data-field="message">
-                        <label for="ouv-message">Mensagem <span class="ombudsman-form__required" aria-hidden="true">*</span><span class="sr-only"> (obrigatório)</span></label>
-                        <textarea id="ouv-message" name="message" rows="4" maxlength="5000" required aria-describedby="ouv-message-error" placeholder="Descreva sua manifestação"></textarea>
-                        <span class="ombudsman-form__error" id="ouv-message-error" role="alert"></span>
-                    </div>
-
-                    <div class="ombudsman-form__field" data-field="attachments">
-                        <label for="ouv-attachments">Anexar evidências (opcional)</label>
-                        <input type="file" id="ouv-attachments" name="anexos[]" multiple accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" aria-describedby="ouv-attachments-hint ouv-attachments-error">
-                        <span class="ombudsman-form__hint" id="ouv-attachments-hint">Formatos aceitos: PDF, JPG ou PNG. Máximo de 3 arquivos, até 5&nbsp;MB cada (10&nbsp;MB no total).</span>
-                        <span class="ombudsman-form__error" id="ouv-attachments-error" role="alert"></span>
-                    </div>
-
-                    <div class="ombudsman-form__feedback" role="status" aria-live="polite" hidden></div>
-
-                    <button class="ombudsman-form__submit-btn" type="submit">
-                        <span class="ombudsman-form__submit-label">Enviar</span>
-                    </button>
-                </form>
+                <?php if ($formUrl !== ''): ?>
+                <a class="btn btn--pill-outline ombudsman-form-section__video-btn" href="<?= htmlspecialchars($formUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener noreferrer">
+                    Preencher o formulário
+                </a>
+                <?php endif; ?>
             </div>
         </div>
     </div>

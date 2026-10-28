@@ -27,6 +27,7 @@ if (!defined('BASE_URL')) {
 
 $company = require __DIR__ . '/company.php';
 $menu = require __DIR__ . '/menu.php';
+$tracking = require __DIR__ . '/tracking.php';
 
 /**
  * Fuso horário único do projeto — America/Campo_Grande (sede da CT Price; Brasil não observa

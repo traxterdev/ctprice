@@ -18,6 +18,12 @@
  * no original, o botão de fechar (o "X") tem aria-label="Não" mesmo executando a mesma
  * ação do botão "Ok" (data-cookie-set="accept") — um bug real do plugin de terceiros.
  * Aqui o rótulo do botão de fechar descreve a ação que ele realmente executa.
+ *
+ * Meta Pixel (2026-10-28): o projeto agora possui um script de marketing a controlar — o Pixel
+ * ID (config/tracking.php, nunca hardcoded) é exposto aqui como window.CTPRICE_TRACKING para
+ * assets/js/tracking.js, que só carrega o Pixel depois que assets/js/cookie-banner.js emitir o
+ * evento 'ctprice:cookie-consent' com choice === 'accept'. Sem consentimento, nada de terceiros
+ * é carregado — continua verdadeiro o restante do comentário acima sobre o banner em si.
  */
 ?>
 <div id="cookie-banner" class="cookie-banner" role="dialog" aria-label="Aviso de cookies" hidden>
@@ -30,3 +36,4 @@
         <button type="button" id="cookie-banner-close" class="cookie-banner__close" data-cookie-choice="accept" aria-label="Fechar e aceitar"></button>
     </div>
 </div>
+<script>window.CTPRICE_TRACKING = { metaPixelId: <?= json_encode($tracking['meta_pixel_id'] ?? '', JSON_UNESCAPED_SLASHES) ?> };</script>

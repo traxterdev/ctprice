@@ -73,6 +73,7 @@ $pageMeta = [
 
 <script src="<?= BASE_URL ?>/assets/js/header.js" defer></script>
 <script src="<?= BASE_URL ?>/assets/js/cookie-banner.js" defer></script>
+<script src="<?= BASE_URL ?>/assets/js/tracking.js" defer></script>
 <script src="<?= BASE_URL ?>/assets/js/video-testimonials-lightbox.js" defer></script>
 </body>
 </html>

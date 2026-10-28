@@ -16,19 +16,6 @@
  */
 require __DIR__ . '/../config/bootstrap.php';
 
-// Sessão necessária para o token CSRF do formulário e para o rate limit do endpoint
-// (ouvidoria-action.php) — precisa iniciar antes de qualquer saída HTML. Parâmetros do cookie
-// centralizados em config/bootstrap.php. Chave de sessão PRÓPRIA desta página
-// ('ouvidoria_csrf') — nunca a mesma de Fale Conosco ('fale_conosco_csrf').
-ctprice_configure_session_cookie();
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-if (empty($_SESSION['ouvidoria_csrf'])) {
-    $_SESSION['ouvidoria_csrf'] = bin2hex(random_bytes(32));
-}
-$csrfToken = $_SESSION['ouvidoria_csrf'];
-
 // Banner de fallback sem JavaScript — ver ouvidoria-action.php e ombudsman-form-section.php.
 $formStatus = null;
 $statusParam = $_GET['status'] ?? null;
@@ -75,10 +62,9 @@ $ombudsmanFormSection = [
     'intro_html' => '<p><strong>Envie sua manifestação</strong> pelo formulário ao lado ou pelo nosso <strong>Canal Exclusivo</strong> de atendimento.</p>',
     'whatsapp_label' => $company['ouvidoria']['whatsapp']['numero'] ?? '',
     'whatsapp_url' => $company['ouvidoria']['whatsapp']['url'] ?? '',
-    'form_action' => BASE_URL . '/ouvidoria/ouvidoria-action.php',
-    'csrf_token' => $csrfToken,
+    'video_embed_url' => 'https://www.youtube-nocookie.com/embed/zNEnqSi1PmQ',
+    'form_url' => 'https://docs.google.com/forms/d/e/1FAIpQLSfFl0SlTmqLl-NdyFxLK4xZdJUV1SN6lm0vMqDaTa_OjqDzsg/viewform',
     'decorative_image' => BASE_URL . '/assets/images/logo/Isotipolinear.png',
-    'status' => $formStatus,
 ];
 
 $pageMeta = [
@@ -123,6 +109,6 @@ $pageMeta = [
 
 <script src="<?= BASE_URL ?>/assets/js/header.js" defer></script>
 <script src="<?= BASE_URL ?>/assets/js/cookie-banner.js" defer></script>
-<script src="<?= BASE_URL ?>/assets/js/ouvidoria-form.js" defer></script>
+<script src="<?= BASE_URL ?>/assets/js/tracking.js" defer></script>
 </body>
 </html>

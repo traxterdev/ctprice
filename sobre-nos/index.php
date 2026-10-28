@@ -108,6 +108,7 @@ $pageMeta = [
 <script src="<?= BASE_URL ?>/assets/vendor/swiper/swiper-bundle.min.js" defer></script>
 <script src="<?= BASE_URL ?>/assets/js/header.js" defer></script>
 <script src="<?= BASE_URL ?>/assets/js/cookie-banner.js" defer></script>
+<script src="<?= BASE_URL ?>/assets/js/tracking.js" defer></script>
 <script src="<?= BASE_URL ?>/assets/js/clients-carousel-init.js" defer></script>
 </body>
 </html>
